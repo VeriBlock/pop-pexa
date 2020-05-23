@@ -344,7 +344,7 @@ public:
         consensus.hashGenesisBlock = genesis.GetX16RHash();
 
         //Test MerkleRoot and GenesisBlock
-        assert(consensus.hashGenesisBlock == uint256S("0x500d7bfd140e3cb24681d334a000d898057250513dc975894009146c61293b3b"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000000e5c51eb049ef52013df58667cdcdf9fb6a34bc2fdd70a0ea576c207f2a"));
         assert(genesis.hashMerkleRoot == uint256S("4e5951cce11bbe8d10e3f9e8b584ee2ed3c80583311e06f40d7e6146f2087f9d"));
 
         vFixedSeeds.clear();
