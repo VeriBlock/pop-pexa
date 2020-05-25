@@ -3,11 +3,11 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "qvalidatedlineedit.h"
+#include <qt/qvalidatedlineedit.h>
 
-#include "pexaaddressvalidator.h"
-#include "guiconstants.h"
-#include "platformstyle.h"
+#include <qt/pexaaddressvalidator.h>
+#include <qt/guiconstants.h>
+#include <qt/platformstyle.h>
 
 QValidatedLineEdit::QValidatedLineEdit(QWidget *parent) :
     QLineEdit(parent),

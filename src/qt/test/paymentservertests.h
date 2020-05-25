@@ -6,7 +6,7 @@
 #ifndef PEXA_QT_TEST_PAYMENTSERVERTESTS_H
 #define PEXA_QT_TEST_PAYMENTSERVERTESTS_H
 
-#include "../paymentserver.h"
+#include <qt/test/../paymentserver.h>
 
 #include <QObject>
 #include <QTest>

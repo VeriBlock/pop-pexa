@@ -7,10 +7,10 @@
 #define PEXA_QT_PEXAGUI_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/pexa-config.h"
+#include <config/pexa-config.h>
 #endif
 
-#include "amount.h"
+#include <amount.h>
 
 #include <QLabel>
 #include <QMainWindow>

@@ -7,7 +7,7 @@
 #ifndef PEXA_SCRIPT_SIGN_H
 #define PEXA_SCRIPT_SIGN_H
 
-#include "script/interpreter.h"
+#include <script/interpreter.h>
 
 class CKeyID;
 class CKeyStore;

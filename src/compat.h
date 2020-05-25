@@ -8,7 +8,7 @@
 #define PEXA_COMPAT_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/pexa-config.h"
+#include <config/pexa-config.h>
 #endif
 
 #ifdef WIN32
@@ -50,7 +50,7 @@
 
 #ifndef WIN32
 typedef unsigned int SOCKET;
-#include "errno.h"
+#include <errno.h>
 #define WSAGetLastError()   errno
 #define WSAEINVAL           EINVAL
 #define WSAEALREADY         EALREADY

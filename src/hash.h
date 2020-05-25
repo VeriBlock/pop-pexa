@@ -8,16 +8,16 @@
 #define PEXA_HASH_H
 #include <iostream>
 #include <chrono>
-#include "crypto/ripemd160.h"
-#include "crypto/sha256.h"
-#include "prevector.h"
-#include "serialize.h"
-#include "uint256.h"
-#include "version.h"
+#include <crypto/ripemd160.h>
+#include <crypto/sha256.h>
+#include <prevector.h>
+#include <serialize.h>
+#include <uint256.h>
+#include <version.h>
 
 
 extern "C" {
-#include "crypto/sph_sha2.h"
+#include <crypto/sph_sha2.h>
 }
 #include <vector>
 

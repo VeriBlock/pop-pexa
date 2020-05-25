@@ -5,14 +5,14 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <util.h>
-#include "ismine.h"
+#include <script/ismine.h>
 
-#include "key.h"
-#include "keystore.h"
-#include "script/script.h"
-#include "script/standard.h"
-#include "script/sign.h"
-#include "validation.h"
+#include <key.h>
+#include <keystore.h>
+#include <script/script.h>
+#include <script/standard.h>
+#include <script/sign.h>
+#include <validation.h>
 
 
 typedef std::vector<unsigned char> valtype;

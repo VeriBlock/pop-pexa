@@ -6,7 +6,7 @@
 #ifndef PEXA_WALLET_TEST_FIXTURE_H
 #define PEXA_WALLET_TEST_FIXTURE_H
 
-#include "test/test_pexa.h"
+#include <test/test_pexa.h>
 
 /** Testing setup and teardown for wallet.
  */

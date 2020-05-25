@@ -3,24 +3,24 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "wallet/wallet.h"
-#include "chainparams.h"
+#include <wallet/wallet.h>
+#include <chainparams.h>
 
 #include <set>
 #include <stdint.h>
 #include <utility>
 #include <vector>
 
-#include "consensus/validation.h"
-#include "rpc/server.h"
-#include "test/test_pexa.h"
-#include "validation.h"
-#include "wallet/coincontrol.h"
-#include "wallet/test/wallet_test_fixture.h"
+#include <consensus/validation.h>
+#include <rpc/server.h>
+#include <test/test_pexa.h>
+#include <validation.h>
+#include <wallet/coincontrol.h>
+#include <wallet/test/wallet_test_fixture.h>
 
 #include <boost/test/unit_test.hpp>
 #include <univalue.h>
-#include "util.h"
+#include <util.h>
 
 extern CWallet *pwalletMain;
 

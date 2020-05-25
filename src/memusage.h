@@ -6,7 +6,7 @@
 #ifndef PEXA_MEMUSAGE_H
 #define PEXA_MEMUSAGE_H
 
-#include "indirectmap.h"
+#include <indirectmap.h>
 
 #include <stdlib.h>
 

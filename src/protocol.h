@@ -11,10 +11,10 @@
 #ifndef PEXA_PROTOCOL_H
 #define PEXA_PROTOCOL_H
 
-#include "netaddress.h"
-#include "serialize.h"
-#include "uint256.h"
-#include "version.h"
+#include <netaddress.h>
+#include <serialize.h>
+#include <uint256.h>
+#include <version.h>
 
 #include <stdint.h>
 #include <string>

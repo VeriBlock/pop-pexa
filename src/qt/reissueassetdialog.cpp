@@ -4,22 +4,22 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 
-#include "reissueassetdialog.h"
-#include "ui_reissueassetdialog.h"
-#include "platformstyle.h"
-#include "walletmodel.h"
-#include "assettablemodel.h"
-#include "addresstablemodel.h"
-#include "core_io.h"
-#include "univalue.h"
-#include "assets/assettypes.h"
-#include "pexaunits.h"
-#include "optionsmodel.h"
-#include "sendcoinsdialog.h"
-#include "coincontroldialog.h"
-#include "guiutil.h"
-#include "clientmodel.h"
-#include "guiconstants.h"
+#include <qt/reissueassetdialog.h>
+#include <ui_reissueassetdialog.h>
+#include <qt/platformstyle.h>
+#include <qt/walletmodel.h>
+#include <qt/assettablemodel.h>
+#include <qt/addresstablemodel.h>
+#include <core_io.h>
+#include <univalue.h>
+#include <assets/assettypes.h>
+#include <qt/pexaunits.h>
+#include <qt/optionsmodel.h>
+#include <qt/sendcoinsdialog.h>
+#include <qt/coincontroldialog.h>
+#include <qt/guiutil.h>
+#include <qt/clientmodel.h>
+#include <qt/guiconstants.h>
 
 #include <validation.h>
 #include <script/standard.h>
@@ -27,9 +27,9 @@
 #include <policy/policy.h>
 #include <base58.h>
 
-#include "wallet/coincontrol.h"
-#include "policy/fees.h"
-#include "wallet/fees.h"
+#include <wallet/coincontrol.h>
+#include <policy/fees.h>
+#include <wallet/fees.h>
 
 #include <QGraphicsDropShadowEffect>
 #include <QModelIndex>

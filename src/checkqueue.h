@@ -6,7 +6,7 @@
 #ifndef PEXA_CHECKQUEUE_H
 #define PEXA_CHECKQUEUE_H
 
-#include "sync.h"
+#include <sync.h>
 
 #include <algorithm>
 #include <vector>

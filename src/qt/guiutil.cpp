@@ -3,21 +3,21 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "guiutil.h"
+#include <qt/guiutil.h>
 
-#include "pexaaddressvalidator.h"
-#include "pexaunits.h"
-#include "qvalidatedlineedit.h"
-#include "walletmodel.h"
+#include <qt/pexaaddressvalidator.h>
+#include <qt/pexaunits.h>
+#include <qt/qvalidatedlineedit.h>
+#include <qt/walletmodel.h>
 
-#include "fs.h"
-#include "primitives/transaction.h"
-#include "init.h"
-#include "policy/policy.h"
-#include "protocol.h"
-#include "script/script.h"
-#include "script/standard.h"
-#include "util.h"
+#include <fs.h>
+#include <primitives/transaction.h>
+#include <init.h>
+#include <policy/policy.h>
+#include <protocol.h>
+#include <script/script.h>
+#include <script/standard.h>
+#include <util.h>
 
 #ifdef WIN32
 #ifdef _WIN32_WINNT
@@ -32,9 +32,9 @@
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
-#include "shellapi.h"
-#include "shlobj.h"
-#include "shlwapi.h"
+#include <shellapi.h>
+#include <shlobj.h>
+#include <shlwapi.h>
 #endif
 
 #include <boost/scoped_array.hpp>
@@ -78,8 +78,8 @@ extern double NSAppKitVersionNumber;
 #endif
 
 #include <QGraphicsDropShadowEffect>
-#include "guiconstants.h"
-#include "platformstyle.h"
+#include <qt/guiconstants.h>
+#include <qt/platformstyle.h>
 
 namespace GUIUtil {
 

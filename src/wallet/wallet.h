@@ -7,19 +7,19 @@
 #ifndef PEXA_WALLET_WALLET_H
 #define PEXA_WALLET_WALLET_H
 
-#include "amount.h"
-#include "policy/feerate.h"
-#include "streams.h"
-#include "tinyformat.h"
-#include "ui_interface.h"
-#include "utilstrencodings.h"
-#include "validationinterface.h"
-#include "script/ismine.h"
-#include "script/sign.h"
-#include "wallet/crypter.h"
-#include "wallet/walletdb.h"
-#include "wallet/rpcwallet.h"
-#include "assets/assettypes.h"
+#include <amount.h>
+#include <policy/feerate.h>
+#include <streams.h>
+#include <tinyformat.h>
+#include <ui_interface.h>
+#include <utilstrencodings.h>
+#include <validationinterface.h>
+#include <script/ismine.h>
+#include <script/sign.h>
+#include <wallet/crypter.h>
+#include <wallet/walletdb.h>
+#include <wallet/rpcwallet.h>
+#include <assets/assettypes.h>
 
 #include <algorithm>
 #include <atomic>

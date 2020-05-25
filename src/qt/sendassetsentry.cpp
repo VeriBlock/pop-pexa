@@ -2,21 +2,21 @@
 // Copyright (c) 2019 The Pexa Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#include "sendassetsentry.h"
-#include "ui_sendassetsentry.h"
-//#include "sendcoinsentry.h"
-//#include "ui_sendcoinsentry.h"
+#include <qt/sendassetsentry.h>
+#include <ui_sendassetsentry.h>
 
-#include "addressbookpage.h"
-#include "addresstablemodel.h"
-#include "guiutil.h"
-#include "optionsmodel.h"
-#include "platformstyle.h"
-#include "walletmodel.h"
-#include "assetcontroldialog.h"
-#include "guiconstants.h"
 
-#include "wallet/coincontrol.h"
+
+#include <qt/addressbookpage.h>
+#include <qt/addresstablemodel.h>
+#include <qt/guiutil.h>
+#include <qt/optionsmodel.h>
+#include <qt/platformstyle.h>
+#include <qt/walletmodel.h>
+#include <qt/assetcontroldialog.h>
+#include <qt/guiconstants.h>
+
+#include <wallet/coincontrol.h>
 
 #include <QGraphicsDropShadowEffect>
 #include <QApplication>

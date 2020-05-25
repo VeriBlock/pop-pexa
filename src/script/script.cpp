@@ -3,14 +3,14 @@
 // Copyright (c) 2019 The Pexa Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#include "streams.h"
-#include "version.h"
-#include "assets/assets.h"
-#include "script.h"
+#include <streams.h>
+#include <version.h>
+#include <assets/assets.h>
+#include <script/script.h>
 
-#include "tinyformat.h"
-#include "utilstrencodings.h"
-#include "standard.h"
+#include <tinyformat.h>
+#include <utilstrencodings.h>
+#include <script/standard.h>
 
 const char* GetOpName(opcodetype opcode)
 {

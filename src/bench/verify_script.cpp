@@ -3,14 +3,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "bench.h"
-#include "key.h"
+#include <bench/bench.h>
+#include <key.h>
 #if defined(HAVE_CONSENSUS_LIB)
-#include "script/pexaconsensus.h"
+#include <script/pexaconsensus.h>
 #endif
-#include "script/script.h"
-#include "script/sign.h"
-#include "streams.h"
+#include <script/script.h>
+#include <script/sign.h>
+#include <streams.h>
 
 #include <array>
 

@@ -3,14 +3,14 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "coins.h"
+#include <coins.h>
 
-#include "consensus/consensus.h"
-#include "memusage.h"
-#include "random.h"
-#include "util.h"
-#include "validation.h"
-#include "tinyformat.h"
+#include <consensus/consensus.h>
+#include <memusage.h>
+#include <random.h>
+#include <util.h>
+#include <validation.h>
+#include <tinyformat.h>
 
 #include <assert.h>
 #include <assets/assets.h>

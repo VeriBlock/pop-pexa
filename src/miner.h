@@ -7,8 +7,8 @@
 #ifndef PEXA_MINER_H
 #define PEXA_MINER_H
 
-#include "primitives/block.h"
-#include "txmempool.h"
+#include <primitives/block.h>
+#include <txmempool.h>
 
 #include <stdint.h>
 #include <memory>

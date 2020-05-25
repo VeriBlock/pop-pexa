@@ -3,21 +3,21 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "overviewpage.h"
-#include "ui_overviewpage.h"
+#include <qt/overviewpage.h>
+#include <ui_overviewpage.h>
 
-#include "pexaunits.h"
-#include "clientmodel.h"
-#include "guiconstants.h"
-#include "guiutil.h"
-#include "optionsmodel.h"
-#include "platformstyle.h"
-#include "transactionfilterproxy.h"
-#include "transactiontablemodel.h"
-#include "assetfilterproxy.h"
-#include "assettablemodel.h"
-#include "walletmodel.h"
-#include "assetrecord.h"
+#include <qt/pexaunits.h>
+#include <qt/clientmodel.h>
+#include <qt/guiconstants.h>
+#include <qt/guiutil.h>
+#include <qt/optionsmodel.h>
+#include <qt/platformstyle.h>
+#include <qt/transactionfilterproxy.h>
+#include <qt/transactiontablemodel.h>
+#include <qt/assetfilterproxy.h>
+#include <qt/assettablemodel.h>
+#include <qt/walletmodel.h>
+#include <qt/assetrecord.h>
 
 #include <QAbstractItemDelegate>
 #include <QPainter>
@@ -275,8 +275,8 @@ public:
     const PlatformStyle *platformStyle;
 
 };
-#include "overviewpage.moc"
-#include "pexagui.h"
+#include <overviewpage.moc>
+#include <qt/pexagui.h>
 #include <QFontDatabase>
 
 OverviewPage::OverviewPage(const PlatformStyle *platformStyle, QWidget *parent) :

@@ -6,7 +6,7 @@
 #ifndef PEXA_BLOOM_H
 #define PEXA_BLOOM_H
 
-#include "serialize.h"
+#include <serialize.h>
 
 #include <vector>
 

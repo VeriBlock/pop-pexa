@@ -6,7 +6,7 @@
 #ifndef PEXA_QT_REISSUEASSETDIALOG_H
 #define PEXA_QT_REISSUEASSETDIALOG_H
 
-#include "walletmodel.h"
+#include <qt/walletmodel.h>
 
 #include <QDialog>
 

@@ -20,14 +20,14 @@
 #include <consensus/validation.h>
 #include <rpc/protocol.h>
 #include <net.h>
-#include "assets.h"
-#include "assetdb.h"
-#include "assettypes.h"
-#include "protocol.h"
-#include "wallet/coincontrol.h"
-#include "utilmoneystr.h"
-#include "coins.h"
-#include "wallet/wallet.h"
+#include <assets/assets.h>
+#include <assets/assetdb.h>
+#include <assets/assettypes.h>
+#include <protocol.h>
+#include <wallet/coincontrol.h>
+#include <utilmoneystr.h>
+#include <coins.h>
+#include <wallet/wallet.h>
 
 std::map<uint256, std::string> mapReissuedTx;
 std::map<std::string, uint256> mapReissuedAssets;

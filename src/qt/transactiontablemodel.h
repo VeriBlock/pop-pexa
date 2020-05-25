@@ -6,7 +6,7 @@
 #ifndef PEXA_QT_TRANSACTIONTABLEMODEL_H
 #define PEXA_QT_TRANSACTIONTABLEMODEL_H
 
-#include "pexaunits.h"
+#include <qt/pexaunits.h>
 
 #include <QAbstractTableModel>
 #include <QStringList>

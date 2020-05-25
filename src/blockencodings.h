@@ -6,7 +6,7 @@
 #ifndef PEXA_BLOCK_ENCODINGS_H
 #define PEXA_BLOCK_ENCODINGS_H
 
-#include "primitives/block.h"
+#include <primitives/block.h>
 
 #include <memory>
 

@@ -6,7 +6,7 @@
 #ifndef PEXA_QT_ASSETTABLEMODEL_H
 #define PEXA_QT_ASSETTABLEMODEL_H
 
-#include "amount.h"
+#include <amount.h>
 
 #include <QAbstractTableModel>
 #include <QStringList>

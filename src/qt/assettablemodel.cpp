@@ -3,20 +3,20 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "assettablemodel.h"
-#include "assetrecord.h"
+#include <qt/assettablemodel.h>
+#include <qt/assetrecord.h>
 
-#include "guiconstants.h"
-#include "guiutil.h"
-#include "walletmodel.h"
-#include "wallet/wallet.h"
+#include <qt/guiconstants.h>
+#include <qt/guiutil.h>
+#include <qt/walletmodel.h>
+#include <wallet/wallet.h>
 
-#include "core_io.h"
+#include <core_io.h>
 
-#include "amount.h"
-#include "assets/assets.h"
-#include "validation.h"
-#include "platformstyle.h"
+#include <amount.h>
+#include <assets/assets.h>
+#include <validation.h>
+#include <qt/platformstyle.h>
 
 #include <QDebug>
 #include <QStringList>

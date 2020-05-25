@@ -6,7 +6,7 @@
 #ifndef PEXA_CORE_IO_H
 #define PEXA_CORE_IO_H
 
-#include "amount.h"
+#include <amount.h>
 
 #include <string>
 #include <vector>

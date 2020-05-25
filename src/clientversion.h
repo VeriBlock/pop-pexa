@@ -7,7 +7,7 @@
 #define PEXA_CLIENTVERSION_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/pexa-config.h"
+#include <config/pexa-config.h>
 #endif //HAVE_CONFIG_H
 
 // Check that required client information is defined

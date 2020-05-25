@@ -3,25 +3,25 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "consensus/validation.h"
-#include "chainparams.h"
-#include "key.h"
-#include "validation.h"
-#include "miner.h"
-#include "pubkey.h"
-#include "txmempool.h"
-#include "random.h"
-#include "script/standard.h"
-#include "script/sign.h"
-#include "test/test_pexa.h"
-#include "utiltime.h"
-#include "core_io.h"
-#include "keystore.h"
-#include "policy/policy.h"
+#include <consensus/validation.h>
+#include <chainparams.h>
+#include <key.h>
+#include <validation.h>
+#include <miner.h>
+#include <pubkey.h>
+#include <txmempool.h>
+#include <random.h>
+#include <script/standard.h>
+#include <script/sign.h>
+#include <test/test_pexa.h>
+#include <utiltime.h>
+#include <core_io.h>
+#include <keystore.h>
+#include <policy/policy.h>
 
 #include <boost/test/unit_test.hpp>
 
-#include "util.h"
+#include <util.h>
 
 bool CheckInputs(const CTransaction &tx, CValidationState &state, const CCoinsViewCache &inputs, bool fScriptChecks, unsigned int flags, bool cacheSigStore, bool cacheFullScriptStore, PrecomputedTransactionData &txdata, std::vector<CScriptCheck> *pvChecks);
 

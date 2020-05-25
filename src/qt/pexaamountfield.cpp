@@ -3,12 +3,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "pexaamountfield.h"
+#include <qt/pexaamountfield.h>
 
-#include "pexaunits.h"
-#include "guiconstants.h"
-#include "qvaluecombobox.h"
-#include "platformstyle.h"
+#include <qt/pexaunits.h>
+#include <qt/guiconstants.h>
+#include <qt/qvaluecombobox.h>
+#include <qt/platformstyle.h>
 
 #include <QDebug>
 #include <QApplication>
@@ -217,7 +217,7 @@ Q_SIGNALS:
     void valueChanged();
 };
 
-#include "pexaamountfield.moc"
+#include <pexaamountfield.moc>
 
 PexaAmountField::PexaAmountField(QWidget *parent) :
     QWidget(parent),

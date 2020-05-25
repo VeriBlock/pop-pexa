@@ -3,22 +3,22 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "createassetdialog.h"
-#include "ui_createassetdialog.h"
-#include "platformstyle.h"
-#include "walletmodel.h"
-#include "addresstablemodel.h"
-#include "sendcoinsdialog.h"
-#include "coincontroldialog.h"
-#include "guiutil.h"
-#include "pexaunits.h"
-#include "clientmodel.h"
-#include "optionsmodel.h"
-#include "guiconstants.h"
+#include <qt/createassetdialog.h>
+#include <ui_createassetdialog.h>
+#include <qt/platformstyle.h>
+#include <qt/walletmodel.h>
+#include <qt/addresstablemodel.h>
+#include <qt/sendcoinsdialog.h>
+#include <qt/coincontroldialog.h>
+#include <qt/guiutil.h>
+#include <qt/pexaunits.h>
+#include <qt/clientmodel.h>
+#include <qt/optionsmodel.h>
+#include <qt/guiconstants.h>
 
-#include "wallet/coincontrol.h"
-#include "policy/fees.h"
-#include "wallet/fees.h"
+#include <wallet/coincontrol.h>
+#include <policy/fees.h>
+#include <wallet/fees.h>
 
 #include <script/standard.h>
 #include <base58.h>
@@ -26,8 +26,8 @@
 #include <wallet/wallet.h>
 #include <core_io.h>
 #include <policy/policy.h>
-#include "assets/assettypes.h"
-#include "assettablemodel.h"
+#include <assets/assettypes.h>
+#include <qt/assettablemodel.h>
 
 #include <QGraphicsDropShadowEffect>
 #include <QModelIndex>

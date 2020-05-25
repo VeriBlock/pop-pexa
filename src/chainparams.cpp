@@ -4,16 +4,16 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "chainparams.h"
-#include "consensus/merkle.h"
+#include <chainparams.h>
+#include <consensus/merkle.h>
 
-#include "tinyformat.h"
-#include "util.h"
-#include "utilstrencodings.h"
-#include "arith_uint256.h"
+#include <tinyformat.h>
+#include <util.h>
+#include <utilstrencodings.h>
+#include <arith_uint256.h>
 
 #include <assert.h>
-#include "chainparamsseeds.h"
+#include <chainparamsseeds.h>
 
 //TODO: Take these out
 extern double algoHashTotal[16];

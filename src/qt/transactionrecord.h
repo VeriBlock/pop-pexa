@@ -6,8 +6,8 @@
 #ifndef PEXA_QT_TRANSACTIONRECORD_H
 #define PEXA_QT_TRANSACTIONRECORD_H
 
-#include "amount.h"
-#include "uint256.h"
+#include <amount.h>
+#include <uint256.h>
 
 #include <QList>
 #include <QString>

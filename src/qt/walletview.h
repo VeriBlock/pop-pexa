@@ -6,7 +6,7 @@
 #ifndef PEXA_QT_WALLETVIEW_H
 #define PEXA_QT_WALLETVIEW_H
 
-#include "amount.h"
+#include <amount.h>
 
 #include <QStackedWidget>
 

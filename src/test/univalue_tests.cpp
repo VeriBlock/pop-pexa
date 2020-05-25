@@ -9,7 +9,7 @@
 #include <string>
 #include <map>
 #include <univalue.h>
-#include "test/test_pexa.h"
+#include <test/test_pexa.h>
 
 #include <boost/test/unit_test.hpp>
 

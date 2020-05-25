@@ -6,7 +6,7 @@
 #ifndef PEXA_CHECKPOINTS_H
 #define PEXA_CHECKPOINTS_H
 
-#include "uint256.h"
+#include <uint256.h>
 
 #include <map>
 

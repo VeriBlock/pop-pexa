@@ -6,8 +6,8 @@
 #ifndef PEXA_QT_PEERTABLEMODEL_H
 #define PEXA_QT_PEERTABLEMODEL_H
 
-#include "net_processing.h" // For CNodeStateStats
-#include "net.h"
+#include <net_processing.h> // For CNodeStateStats
+#include <net.h>
 
 #include <QAbstractTableModel>
 #include <QStringList>

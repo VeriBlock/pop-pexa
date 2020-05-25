@@ -6,7 +6,7 @@
 #ifndef PEXA_QT_TRANSACTIONVIEW_H
 #define PEXA_QT_TRANSACTIONVIEW_H
 
-#include "guiutil.h"
+#include <qt/guiutil.h>
 
 #include <QWidget>
 #include <QKeyEvent>

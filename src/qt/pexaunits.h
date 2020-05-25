@@ -6,7 +6,7 @@
 #ifndef PEXA_QT_PEXAUNITS_H
 #define PEXA_QT_PEXAUNITS_H
 
-#include "amount.h"
+#include <amount.h>
 
 #include <QAbstractListModel>
 #include <QString>

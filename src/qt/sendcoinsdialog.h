@@ -6,7 +6,7 @@
 #ifndef PEXA_QT_SENDCOINSDIALOG_H
 #define PEXA_QT_SENDCOINSDIALOG_H
 
-#include "walletmodel.h"
+#include <qt/walletmodel.h>
 
 #include <QDialog>
 #include <QMessageBox>

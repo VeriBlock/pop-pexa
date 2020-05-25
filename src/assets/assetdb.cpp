@@ -6,9 +6,9 @@
 #include <consensus/params.h>
 #include <script/ismine.h>
 #include <tinyformat.h>
-#include "assetdb.h"
-#include "assets.h"
-#include "validation.h"
+#include <assets/assetdb.h>
+#include <assets/assets.h>
+#include <validation.h>
 
 #include <boost/thread.hpp>
 

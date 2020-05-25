@@ -6,11 +6,11 @@
 #ifndef PEXA_POLICYESTIMATOR_H
 #define PEXA_POLICYESTIMATOR_H
 
-#include "amount.h"
-#include "feerate.h"
-#include "uint256.h"
-#include "random.h"
-#include "sync.h"
+#include <amount.h>
+#include <policy/feerate.h>
+#include <uint256.h>
+#include <random.h>
+#include <sync.h>
 
 #include <map>
 #include <string>

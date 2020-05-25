@@ -5,10 +5,10 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/pexa-config.h"
+#include <config/pexa-config.h>
 #endif
 
-#include "utiltime.h"
+#include <utiltime.h>
 
 #include <atomic>
 

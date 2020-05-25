@@ -7,8 +7,8 @@
 #ifndef PEXA_SCRIPT_STANDARD_H
 #define PEXA_SCRIPT_STANDARD_H
 
-#include "script/interpreter.h"
-#include "uint256.h"
+#include <script/interpreter.h>
+#include <uint256.h>
 
 #include <boost/variant.hpp>
 

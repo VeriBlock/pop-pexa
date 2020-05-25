@@ -6,7 +6,7 @@
 #ifndef PEXA_QT_WALLETMODELTRANSACTION_H
 #define PEXA_QT_WALLETMODELTRANSACTION_H
 
-#include "walletmodel.h"
+#include <qt/walletmodel.h>
 
 #include <QObject>
 

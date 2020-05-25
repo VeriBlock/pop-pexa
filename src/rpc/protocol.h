@@ -7,7 +7,7 @@
 #ifndef PEXA_RPCPROTOCOL_H
 #define PEXA_RPCPROTOCOL_H
 
-#include "fs.h"
+#include <fs.h>
 
 #include <list>
 #include <map>

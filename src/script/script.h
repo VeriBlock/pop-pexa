@@ -7,10 +7,10 @@
 #ifndef PEXA_SCRIPT_SCRIPT_H
 #define PEXA_SCRIPT_SCRIPT_H
 
-#include "crypto/common.h"
-#include "prevector.h"
-#include "serialize.h"
-#include "amount.h"
+#include <crypto/common.h>
+#include <prevector.h>
+#include <serialize.h>
+#include <amount.h>
 
 #include <assert.h>
 #include <climits>

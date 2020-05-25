@@ -1,8 +1,8 @@
 // Copyright (c) 2017-2018 The Pexa Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-#include "assetfilterproxy.h"
-#include "assettablemodel.h"
+#include <qt/assetfilterproxy.h>
+#include <qt/assettablemodel.h>
 
 
 AssetFilterProxy::AssetFilterProxy(QObject *parent) :

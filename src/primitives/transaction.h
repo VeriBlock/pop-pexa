@@ -8,10 +8,10 @@
 #define PEXA_PRIMITIVES_TRANSACTION_H
 
 #include <stdint.h>
-#include "amount.h"
-#include "script/script.h"
-#include "serialize.h"
-#include "uint256.h"
+#include <amount.h>
+#include <script/script.h>
+#include <serialize.h>
+#include <uint256.h>
 
 static const int SERIALIZE_TRANSACTION_NO_WITNESS = 0x40000000;
 

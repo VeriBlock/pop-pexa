@@ -6,7 +6,7 @@
 #ifndef PEXA_RPC_MINING_H
 #define PEXA_RPC_MINING_H
 
-#include "script/script.h"
+#include <script/script.h>
 
 #include <univalue.h>
 

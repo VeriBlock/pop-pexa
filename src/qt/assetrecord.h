@@ -6,9 +6,9 @@
 #ifndef PEXA_QT_ASSETRECORD_H
 #define PEXA_QT_ASSETRECORD_H
 
-#include "math.h"
-#include "amount.h"
-#include "tinyformat.h"
+#include <math.h>
+#include <amount.h>
+#include <tinyformat.h>
 
 
 /** UI model for unspent assets.

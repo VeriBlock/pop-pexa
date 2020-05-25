@@ -12,7 +12,7 @@
 */
 
 #include <QDebug>
-#include "darkstyle.h"
+#include <qt/darkstyle.h>
 
 DarkStyle::DarkStyle():
   DarkStyle(styleBase())

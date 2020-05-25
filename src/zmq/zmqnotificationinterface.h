@@ -6,7 +6,7 @@
 #ifndef PEXA_ZMQ_ZMQNOTIFICATIONINTERFACE_H
 #define PEXA_ZMQ_ZMQNOTIFICATIONINTERFACE_H
 
-#include "validationinterface.h"
+#include <validationinterface.h>
 #include <string>
 #include <map>
 #include <list>

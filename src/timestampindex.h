@@ -6,7 +6,7 @@
 #ifndef PEXA_TIMESTAMPINDEX_H
 #define PEXA_TIMESTAMPINDEX_H
 
-#include "uint256.h"
+#include <uint256.h>
 
 struct CTimestampIndexIteratorKey {
     unsigned int timestamp;

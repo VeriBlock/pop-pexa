@@ -6,7 +6,7 @@
 #ifndef PEXA_ZMQ_ZMQABSTRACTNOTIFIER_H
 #define PEXA_ZMQ_ZMQABSTRACTNOTIFIER_H
 
-#include "zmqconfig.h"
+#include <zmq/zmqconfig.h>
 
 class CBlockIndex;
 class CZMQAbstractNotifier;

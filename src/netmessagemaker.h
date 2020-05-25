@@ -7,8 +7,8 @@
 #ifndef PEXA_NETMESSAGEMAKER_H
 #define PEXA_NETMESSAGEMAKER_H
 
-#include "net.h"
-#include "serialize.h"
+#include <net.h>
+#include <serialize.h>
 
 class CNetMsgMaker
 {
