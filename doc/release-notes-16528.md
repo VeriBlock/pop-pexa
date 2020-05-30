@@ -5,7 +5,7 @@ Wallet
 
 Please note that Descriptor Wallets are still experimental and not all expected functionality
 is available. Additionally there may be some bugs and current functions may change in the future.
-Bugs and missing functionality can be reported to the [issue tracker](https://github.com/bitcoin/bitcoin/issues).
+Bugs and missing functionality can be reported to the [issue tracker](https://github.com/pexa/pexa/issues).
 
 0.21 introduces a new type of wallet - Descriptor Wallets. Descriptor Wallets store
 scriptPubKey information using descriptors. This is in contrast to the Legacy Wallet
@@ -16,9 +16,9 @@ of "mine" for scripts which is simpler and more intuitive than that used by Lega
 Descriptor Wallets also uses different semantics for watch-only things and imports.
 
 As Descriptor Wallets are a new type of wallet, their introduction does not affect existing wallets.
-Users who already have a Bitcoin Core wallet can continue to use it as they did before without
+Users who already have a Pexa Core wallet can continue to use it as they did before without
 any change in behavior. Newly created Legacy Wallets (which is the default type of wallet) will
-behave as they did in previous versions of Bitcoin Core.
+behave as they did in previous versions of Pexa Core.
 
 The differences between Descriptor Wallets and Legacy Wallets are largely limited to non user facing
 things. They are intended to behave similarly except for the import/export and watchonly functionality
@@ -34,7 +34,7 @@ In the GUI, a checkbox has been added to the Create Wallet Dialog to indicate th
 Descriptor Wallet should be created.
 
 Without those options being set, a Legacy Wallet will be created instead. Additionally the
-Default Wallet created upon first startup of Bitcoin Core will be a Legacy Wallet.
+Default Wallet created upon first startup of Pexa Core will be a Legacy Wallet.
 
 #### `IsMine` Semantics
 
@@ -115,6 +115,6 @@ descriptors with private keys for now as explained earlier.
 
 #### BIP 44/49/84 Support
 
-The change to using descriptors changes the default derivation paths used by Bitcoin Core
+The change to using descriptors changes the default derivation paths used by Pexa Core
 to adhere to BIP 44/49/84. Descriptors with different derivation paths can be imported without
 issue.
