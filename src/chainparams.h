@@ -100,7 +100,6 @@ public:
     bool CSVEnabled() const;
 
     unsigned int DGWActivationBlock() const { return nDGWActivationBlock; }
-    uint32_t X16RV2ActivationTime() const { return nX16RV2ActivationTime; }
     /** PEXA End **/
 
 protected:
@@ -128,7 +127,6 @@ protected:
     /** PEXA Start **/
 
     unsigned int nDGWActivationBlock;
-    uint32_t nX16RV2ActivationTime;
 
     /** PEXA End **/
 };
@@ -150,7 +148,7 @@ const CChainParams &Params();
  * Sets the params returned by Params() to those for the given chain name.
  * @throws std::runtime_error when the chain is not supported.
  */
-void SelectParams(const std::string& chain);
+void SelectParams(const std::string& chain, bool fForceBlockNetwork = false);
 
 /**
  * Allows modifying the Version Bits regtest parameters.

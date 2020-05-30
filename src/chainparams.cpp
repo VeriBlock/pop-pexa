@@ -169,7 +169,7 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x88, 0xB2, 0x1E};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x88, 0xAD, 0xE4};
 
-        bech32_hrp = "bc";
+        bech32_hrp = "x";
 
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_main, pnSeed6_main + ARRAYLEN(pnSeed6_main));
 
@@ -210,7 +210,6 @@ public:
         // DGW Activation.
 
         nDGWActivationBlock = 12000;
-        nX16RV2ActivationTime = 1568678400;
 
         /** PEXA End **/
     }
@@ -445,9 +444,12 @@ std::unique_ptr<CChainParams> CreateChainParams(const std::string& chain)
     throw std::runtime_error(strprintf("%s: Unknown chain %s.", __func__, chain));
 }
 
-void SelectParams(const std::string& network)
+void SelectParams(const std::string& network, bool fForceBlockNetwork)
 {
     SelectBaseParams(network);
+    if (fForceBlockNetwork) {
+        bNetwork.SetNetwork(network);
+    }
     globalChainParams = CreateChainParams(network);
 }
 

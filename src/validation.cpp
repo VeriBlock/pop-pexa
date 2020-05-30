@@ -1889,19 +1889,19 @@ static unsigned int GetBlockScriptFlags(const CBlockIndex* pindex, const Consens
     }
 
     // Start enforcing the DERSIG (BIP66) rule
-    // if (pindex->nHeight >= consensusparams.BIP66Height) {
-    //     flags |= SCRIPT_VERIFY_DERSIG;
-    // }
+    if (consensusparams.nBIP66Enabled) {
+        flags |= SCRIPT_VERIFY_DERSIG;
+    }
 
     // Start enforcing CHECKLOCKTIMEVERIFY (BIP65) rule
-    // if (pindex->nHeight >= consensusparams.BIP65Height) {
-    //     flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
-    // }
+    if(consensusparams.nBIP65Enabled) {
+        flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
+    }
 
     // Start enforcing BIP112 (CHECKSEQUENCEVERIFY)
-    // if (pindex->nHeight >= consensusparams.CSVHeight) {
-    //     flags |= SCRIPT_VERIFY_CHECKSEQUENCEVERIFY;
-    // }
+    if(consensusparams.nCSVEnabled) {
+        flags |= SCRIPT_VERIFY_CHECKSEQUENCEVERIFY;
+    }
 
     // Start enforcing BIP147 NULLDUMMY (activated simultaneously with segwit)
     if (IsWitnessEnabled(pindex->pprev, consensusparams)) {
@@ -3389,8 +3389,12 @@ bool CheckBlock(const CBlock& block, BlockValidationState& state, const Consensu
 
 bool IsWitnessEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    int height = pindexPrev == nullptr ? 0 : pindexPrev->nHeight + 1;
-    return (height >= params.SegwitHeight);
+    return params.nSegwitEnabled;
+}
+
+bool IsWitnessEnabled(const Consensus::Params& params)
+{
+	return params.nSegwitEnabled;
 }
 
 int GetWitnessCommitmentIndex(const CBlock& block)
@@ -3430,7 +3434,7 @@ std::vector<unsigned char> GenerateCoinbaseCommitment(CBlock& block, const CBloc
     std::vector<unsigned char> commitment;
     int commitpos = GetWitnessCommitmentIndex(block);
     std::vector<unsigned char> ret(32, 0x00);
-    if (consensusParams.SegwitHeight != std::numeric_limits<int>::max()) {
+    if (consensusParams.nSegwitEnabled) {
         if (commitpos == -1) {
             uint256 witnessroot = BlockWitnessMerkleRoot(block, nullptr);
             CHash256().Write(witnessroot.begin(), 32).Write(ret.data(), 32).Finalize(witnessroot.begin());
@@ -3595,13 +3599,13 @@ static bool ContextualCheckBlock(const CBlock& block, BlockValidationState& stat
     }
 
     // No witness data is allowed in blocks that don't commit to witness data, as this would otherwise leave room for spam
-    if (!fHaveWitness) {
-      for (const auto& tx : block.vtx) {
-            if (tx->HasWitness()) {
-                return state.Invalid(BlockValidationResult::BLOCK_MUTATED, "unexpected-witness", strprintf("%s : unexpected witness data found", __func__));
-            }
-        }
-    }
+    // if (!fHaveWitness && IsWitnessEnabled()) {
+    //   for (const auto& tx : block.vtx) {
+    //         if (tx->HasWitness()) {
+    //             return state.Invalid(BlockValidationResult::BLOCK_MUTATED, "unexpected-witness", strprintf("%s : unexpected witness data found", __func__));
+    //         }
+    //     }
+    // }
 
     // After the coinbase witness reserved value and commitment are verified,
     // we can check if the block weight passes (before we've checked the
