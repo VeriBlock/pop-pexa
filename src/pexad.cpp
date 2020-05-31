@@ -23,6 +23,9 @@
 #include <util/translation.h>
 #include <util/url.h>
 
+#include <vbk/init.hpp>
+
+#include <bootstraps.h>
 #include <functional>
 
 const std::function<std::string(const char*)> G_TRANSLATION_FUN = nullptr;
@@ -43,6 +46,7 @@ static void WaitForShutdown(NodeContext& node)
 //
 static bool AppInit(int argc, char* argv[])
 {
+    VeriBlock::InitConfig();
     NodeContext node;
     node.chain = interfaces::MakeChain(node);
 
@@ -90,6 +94,7 @@ static bool AppInit(int argc, char* argv[])
         // Check for -chain, -testnet or -regtest parameter (Params() calls are only valid after this clause)
         try {
             SelectParams(gArgs.GetChainName());
+            selectPopConfig(gArgs);
         } catch (const std::exception& e) {
             return InitError(Untranslated(strprintf("%s\n", e.what())));
         }

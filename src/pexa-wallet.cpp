@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2020 The Pexa Core developers
+// Copyright (c) 2009-2020 The Pexa Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,6 +13,7 @@
 #include <util/translation.h>
 #include <util/url.h>
 #include <wallet/wallettool.h>
+#include <bootstraps.h>
 
 #include <functional>
 
@@ -64,6 +65,7 @@ static bool WalletAppInit(int argc, char* argv[])
     }
     // Check for -testnet or -regtest parameter (Params() calls are only valid after this clause)
     SelectParams(gArgs.GetChainName());
+    selectPopConfig(gArgs);
 
     return true;
 }
