@@ -59,8 +59,8 @@
 #include <validationinterface.h>
 #include <walletinitinterface.h>
 
-#include <functional>
-#include <set>
+#include <vbk/init.hpp>
+
 #include <stdint.h>
 #include <stdio.h>
 
@@ -82,6 +82,8 @@
 #include <zmq/zmqnotificationinterface.h>
 #include <zmq/zmqrpc.h>
 #endif
+
+#include <vbk/log.hpp>
 
 static bool fFeeEstimatesInitialized = false;
 static const bool DEFAULT_PROXYRANDOMIZE = true;
@@ -310,6 +312,12 @@ void Shutdown(NodeContext& node)
     } catch (const fs::filesystem_error& e) {
         LogPrintf("%s: Unable to remove PID file: %s\n", __func__, fsbridge::get_filesystem_error_message(e));
     }
+    node.chain_clients.clear();
+    UnregisterAllValidationInterfaces();
+    GetMainSignals().UnregisterBackgroundSignalScheduler();
+    globalVerifyHandle.reset();
+    ECC_Stop();
+    if (node.mempool) node.mempool = nullptr;
 
     LogPrintf("%s: done\n", __func__);
 }
@@ -383,6 +391,16 @@ void SetupServerArgs(NodeContext& node)
         "-dbcrashratio", "-forcecompactdb",
         // GUI args. These will be overwritten by SetupUIArgs for the GUI
         "-choosedatadir", "-lang=<lang>", "-min", "-resetguisettings", "-splash", "-uiplatform"};
+	// VBK
+	gArgs.AddArg("-bfiendpoint", "Default end point for BFI setup.", ArgsManager::ALLOW_STRING, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-popautoconfig", "If false, enables pop{btc,vbk}{startheight,blocks} (default: true)", ArgsManager::ALLOW_BOOL, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-popbtcstartheight", "If autoconfig is disabled, sets the first BTC bootstrap block height", ArgsManager::ALLOW_INT, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-popbtcblocks", "If autoconfig is disabled, sets the blocks (must be comma separated list of 2014 BTC blocks)", ArgsManager::ALLOW_BOOL, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-popvbkstartheight", "If autoconfig is disabled, sets the first VBK bootstrap block height", ArgsManager::ALLOW_BOOL, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-popvbkblocks", "If autoconfig is disabled, sets the blocks (must be comma separated list of 100 VBK blocks)", ArgsManager::ALLOW_BOOL, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-popbtcnetwork", "BTC network for pop mining: main/(test)/regtest", ArgsManager::ALLOW_STRING, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-popvbknetwork", "VBK network for pop mining: main/(test)/alpha/regtest", ArgsManager::ALLOW_STRING, OptionsCategory::OPTIONS);
+	// VBK
 
     gArgs.AddArg("-version", "Print version and exit", ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
 #if HAVE_SYSTEM
@@ -588,7 +606,8 @@ void SetupServerArgs(NodeContext& node)
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/pexa/pexa>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/VeriBlock/vbk-ri-btc>";
+    const std::string URL_WEBSITE = "<https://pexaproject.com>";
 
     return CopyrightHolders(strprintf(_("Copyright (C) %i-%i").translated, 2009, COPYRIGHT_YEAR) + " ") + "\n" +
            "\n" +
@@ -879,6 +898,9 @@ void InitLogging()
 #ifdef HAVE_THREAD_LOCAL
     LogInstance().m_log_threadnames = gArgs.GetBoolArg("-logthreadnames", DEFAULT_LOGTHREADNAMES);
 #endif
+    LogInstance().EnableCategory(BCLog::POP);
+    altintegration::SetLogger<VeriBlock::VBTCLogger>();
+    altintegration::GetLogger().level = altintegration::LogLevel::info;
 
     fLogIPs = gArgs.GetBoolArg("-logips", DEFAULT_LOGIPS);
 
@@ -1242,6 +1264,8 @@ bool AppInitLockDataDirectory()
 bool AppInitMain(const util::Ref& context, NodeContext& node)
 {
     const CChainParams& chainparams = Params();
+    VeriBlock::InitPopService();
+
     // ********************************************************* Step 4a: application initialization
     if (!CreatePidFile()) {
         // Detailed error printed inside CreatePidFile().

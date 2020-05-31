@@ -13,8 +13,7 @@ NO_QR ?=
 NO_WALLET ?=
 NO_ZMQ ?=
 NO_UPNP ?=
-MULTIPROCESS ?=
-FALLBACK_DOWNLOAD_PATH ?= https://pexacore.org/depends-sources
+FALLBACK_DOWNLOAD_PATH ?= https://mirror2.veriblock.org/vbtc-sources/
 
 BUILD = $(shell ./config.guess)
 HOST ?= $(BUILD)

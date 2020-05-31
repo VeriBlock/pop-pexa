@@ -22,6 +22,20 @@ Then install [Homebrew](https://brew.sh).
 brew install automake berkeley-db4 libtool boost miniupnpc pkg-config python qt libevent qrencode
 ```
 
+## Install VeriBlock Dependencies.
+
+```shell
+cd /tmp
+wget https://github.com/VeriBlock/alt-integration-cpp/archive/67899ce3c66ecefe8cbd1a2da7af5d628e187e4b.tar.gz
+tar -xf 67899ce3c66ecefe8cbd1a2da7af5d628e187e4b.tar.gz
+cd alt-integration-cpp-67899ce3c66ecefe8cbd1a2da7af5d628e187e4b
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DTESTING=OFF
+make -j12
+sudo make install
+```
+
 If you run into issues, check [Homebrew's troubleshooting page](https://docs.brew.sh/Troubleshooting).
 See [dependencies.md](dependencies.md) for a complete overview.
 
