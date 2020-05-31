@@ -210,6 +210,7 @@ public:
         // DGW Activation.
 
         nDGWActivationBlock = 12000;
+        nAssestDeactivationBlock = 600000;
 
         /** PEXA End **/
     }
@@ -296,6 +297,7 @@ public:
 
         // DGW Activation
         nDGWActivationBlock = 345000;
+        nAssestDeactivationBlock = 1;
         /** PEXA End **/
     }
 };
@@ -422,6 +424,7 @@ void CRegTestParams::UpdateActivationParametersFromArgs(const ArgsManager& args)
 
         // DGW Activation
         nDGWActivationBlock = 200;
+        nAssestDeactivationBlock = 1;
         /** RVN End **/
     }
 }

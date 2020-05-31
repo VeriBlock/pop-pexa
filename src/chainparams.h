@@ -100,6 +100,8 @@ public:
     bool CSVEnabled() const;
 
     unsigned int DGWActivationBlock() const { return nDGWActivationBlock; }
+    int AssetsDeactivationBlock() const { return nAssestDeactivationBlock; }
+
     /** PEXA End **/
 
 protected:
@@ -127,6 +129,7 @@ protected:
     /** PEXA Start **/
 
     unsigned int nDGWActivationBlock;
+    int nAssestDeactivationBlock;
 
     /** PEXA End **/
 };
