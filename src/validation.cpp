@@ -1836,6 +1836,10 @@ int32_t ComputeBlockVersion(const CBlockIndex* pindexPrev, const Consensus::Para
     LOCK(cs_main);
     int32_t nVersion = VERSIONBITS_TOP_BITS;
 
+    if (AreAssetsDeployed()) {
+        nVersion = VERSIONBITS_TOP_BITS_ASSETS;
+    }
+
     for (int i = 0; i < (int)Consensus::MAX_VERSION_BITS_DEPLOYMENTS; i++) {
         ThresholdState state = VersionBitsState(pindexPrev, params, static_cast<Consensus::DeploymentPos>(i), versionbitscache);
         if (state == ThresholdState::LOCKED_IN || state == ThresholdState::STARTED) {
@@ -1843,7 +1847,9 @@ int32_t ComputeBlockVersion(const CBlockIndex* pindexPrev, const Consensus::Para
         }
     }
 
-    nVersion |= 1 << 25;
+    if (AreAssetsDeployed()) {
+        nVersion |= 1 << 25;
+    }
 
     return nVersion;
 }
@@ -5207,6 +5213,15 @@ double GuessVerificationProgress(const ChainTxData& data, const CBlockIndex *pin
 
 bool IsDGWActive(unsigned int nBlockNumber) {
     return nBlockNumber >= Params().DGWActivationBlock();
+}
+
+bool AreAssetsDeployed() {
+
+    if ((int)::ChainActive().Height() >= Params().AssetsDeactivationBlock()) {
+        return false;
+    }
+
+    return true;
 }
 
 /** PEXA END */
