@@ -24,10 +24,6 @@
 #include "bootstraps.h"
 #include <veriblock/blockchain/alt_chain_params.hpp>
 
-//TODO: Take these out
-extern double algoHashTotal[16];
-extern int algoHashHits[16];
-
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -268,71 +264,63 @@ public:
 
         uint32_t nGenesisTime = 1524179366;  // Thursday, September 20, 2018 12:00:00 PM GMT-06:00
 
-       // This is used inorder to mine the genesis block. Once found, we can use the nonce and block hash found to create a valid genesis block
-//        /////////////////////////////////////////////////////////////////
+        bech32_hrp = "x";
+//        // This is used inorder to mine the genesis block. Once found, we can use the nonce and block hash found to create a valid genesis block
+// //        /////////////////////////////////////////////////////////////////
 
+//        arith_uint256 test;
+//        bool fNegative;
+//        bool fOverflow;
+//        test.SetCompact(0x1e00ffff, &fNegative, &fOverflow);
+//        std::cout << "Test threshold: " << test.GetHex() << "\n\n";
 
-       arith_uint256 test;
-       bool fNegative;
-       bool fOverflow;
-       test.SetCompact(0x1e00ffff, &fNegative, &fOverflow);
-       std::cout << "Test threshold: " << test.GetHex() << "\n\n";
+//        int genesisNonce = 0;
+//        uint256 TempHashHolding = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
+//        uint256 BestBlockHash = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+//        for (int i=0;i<40000000;i++) {
+//            genesis = CreateGenesisBlock(nGenesisTime, i, 0x1e00ffff, 2, 5000 * COIN);
+//            //genesis.hashPrevBlock = TempHashHolding;
+//            // Depending on when the timestamp is on the genesis block. You will need to use GetX16RHash or GetX16RV2Hash. Replace GetHash() with these below
+//            consensus.hashGenesisBlock = genesis.GetX16RV2Hash();
 
-       int genesisNonce = 0;
-       uint256 TempHashHolding = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
-       uint256 BestBlockHash = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-       for (int i=0;i<40000000;i++) {
-           genesis = CreateGenesisBlock(nGenesisTime, i, 0x1e00ffff, 2, 5000 * COIN);
-           //genesis.hashPrevBlock = TempHashHolding;
-           // Depending on when the timestamp is on the genesis block. You will need to use GetX16RHash or GetX16RV2Hash. Replace GetHash() with these below
-           consensus.hashGenesisBlock = genesis.GetHash();
+//            arith_uint256 BestBlockHashArith = UintToArith256(BestBlockHash);
+//            if (UintToArith256(consensus.hashGenesisBlock) < BestBlockHashArith) {
+//                BestBlockHash = consensus.hashGenesisBlock;
+//                std::cout << BestBlockHash.GetHex() << " Nonce: " << i << "\n";
+//                std::cout << "   PrevBlockHash: " << genesis.hashPrevBlock.GetHex() << "\n";
+//            }
 
-           arith_uint256 BestBlockHashArith = UintToArith256(BestBlockHash);
-           if (UintToArith256(consensus.hashGenesisBlock) < BestBlockHashArith) {
-               BestBlockHash = consensus.hashGenesisBlock;
-               std::cout << BestBlockHash.GetHex() << " Nonce: " << i << "\n";
-               std::cout << "   PrevBlockHash: " << genesis.hashPrevBlock.GetHex() << "\n";
-           }
+//            TempHashHolding = consensus.hashGenesisBlock;
 
-           TempHashHolding = consensus.hashGenesisBlock;
+//            if (BestBlockHashArith < test) {
+//                genesisNonce = i - 1;
+//                break;
+//            }
+//            //std::cout << consensus.hashGenesisBlock.GetHex() << "\n";
+//        }
+//        std::cout << "\n";
+//        std::cout << "\n";
+//        std::cout << "\n";
 
-           if (BestBlockHashArith < test) {
-               genesisNonce = i - 1;
-               break;
-           }
-           //std::cout << consensus.hashGenesisBlock.GetHex() << "\n";
-       }
-       std::cout << "\n";
-       std::cout << "\n";
-       std::cout << "\n";
+//        std::cout << "hashGenesisBlock to 0x" << BestBlockHash.GetHex() << std::endl;
+//        std::cout << "Genesis Nonce to " << genesisNonce << std::endl;
+//        std::cout << "Genesis Merkle " << genesis.hashMerkleRoot.GetHex() << std::endl;
 
-       std::cout << "hashGenesisBlock to 0x" << BestBlockHash.GetHex() << std::endl;
-       std::cout << "Genesis Nonce to " << genesisNonce << std::endl;
-       std::cout << "Genesis Merkle " << genesis.hashMerkleRoot.GetHex() << std::endl;
+//        std::cout << "\n";
+//        std::cout << "\n";
+//        int totalHits = 0;
+//        double totalTime = 0.0;
 
-       std::cout << "\n";
-       std::cout << "\n";
-       int totalHits = 0;
-       double totalTime = 0.0;
+//        genesis.hashPrevBlock = TempHashHolding;
 
-       for(int x = 0; x < 16; x++) {
-           totalHits += algoHashHits[x];
-           totalTime += algoHashTotal[x];
-           std::cout << "hash algo " << x << " hits " << algoHashHits[x] << " total " << algoHashTotal[x] << " avg " << algoHashTotal[x]/algoHashHits[x] << std::endl;
-       }
-
-       std::cout << "Totals: hash algo " <<  " hits " << totalHits << " total " << totalTime << " avg " << totalTime/totalHits << std::endl;
-
-       genesis.hashPrevBlock = TempHashHolding;
-
-       return;
+//        return;
 
 //        /////////////////////////////////////////////////////////////////
 
-        genesis = CreateGenesisBlock(nGenesisTime, 8889826, 0x1e00ffff, 2, 50 * COIN );
+        genesis = CreateGenesisBlock(nGenesisTime, 19802702, 0x1e00ffff, 2, 5000 * COIN );
         consensus.hashGenesisBlock = genesis.GetX16RHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x000000e5c51eb049ef52013df58667cdcdf9fb6a34bc2fdd70a0ea576c207f2a"));
-        assert(genesis.hashMerkleRoot == uint256S("4e5951cce11bbe8d10e3f9e8b584ee2ed3c80583311e06f40d7e6146f2087f9d"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000000d5be048ba289017ff006e9b111da749c7e5ed574890292a5cf5d53ec17"));
+        assert(genesis.hashMerkleRoot == uint256S("0x9933ca70914e63d4c81a9d8f2d16263f51b22b3aa2c50f763228d160c06ae84f"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -345,6 +333,8 @@ public:
         base58Prefixes[EXT_PUBLIC_KEY] = {0x04, 0x35, 0x87, 0xCF};
         base58Prefixes[EXT_SECRET_KEY] = {0x04, 0x35, 0x83, 0x94};
 
+        bech32_hrp = "tb";
+
         vFixedSeeds = std::vector<SeedSpec6>(pnSeed6_test, pnSeed6_test + ARRAYLEN(pnSeed6_test));
 
         fDefaultConsistencyChecks = false;
@@ -354,7 +344,6 @@ public:
 
         checkpointData = (CCheckpointData) {
             {
-                { 230, uint256S("0x000004cce4dd292058ca040ecb6c2d51a970686d10631030216d6849c7a2227d")},
             }
         };
 
@@ -368,7 +357,7 @@ public:
         /** PEXA Start **/
 
         // DGW Activation
-        nDGWActivationBlock = 345000;
+        nDGWActivationBlock = 1;
         nAssestDeactivationBlock = 1;
         /** PEXA End **/
     }
