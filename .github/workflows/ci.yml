@@ -6,12 +6,14 @@ on:
       - master
       - veriblock
       - fix
+      - feature/ci
 
   pull_request:
     branches:
       - master
       - veriblock
       - fix
+      - feature/ci
 
 jobs:
   linux-native:
