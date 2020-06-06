@@ -4,16 +4,12 @@ on:
   push:
     branches:
       - master
-      - veriblock
-      - fix
-      - feature/ci
+      - tests
 
   pull_request:
     branches:
       - master
-      - veriblock
-      - fix
-      - feature/ci
+      - tests
 
 jobs:
   linux-native:
@@ -43,46 +39,44 @@ jobs:
           key: linux-ccache-${{ steps.cache_timestamp.outputs.timestamp }}
           restore-keys: |
             linux-ccache-
-      - name: get version for veriblock-pop-cpp
-        run: echo "::set-env name=VERIBLOCK_POP_CPP_VERSION::$(awk -F '=' '/\$\(package\)_version/{print $NF}' $PWD/depends/packages/veriblock-pop-cpp.mk | head -n1)"
-      - name: veriblock-pop-cpp release version
-        run: echo Using veriblock-pop-cpp version $VERIBLOCK_POP_CPP_VERSION
+#      - name: get version for veriblock-pop-cpp
+#        run: echo "::set-env name=VERIBLOCK_POP_CPP_VERSION::$(awk -F '=' '/\$\(package\)_version/{print $NF}' $PWD/depends/packages/veriblock-pop-cpp.mk | head -n1)"
+#      - name: veriblock-pop-cpp release version
+#        run: echo Using veriblock-pop-cpp version $VERIBLOCK_POP_CPP_VERSION
       - name: add bitcoin ppa
         run: sudo add-apt-repository ppa:bitcoin/bitcoin
       - name: install build requirements
         run: sudo apt-get install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 ccache
       - name: install dependencies
-        run: sudo apt-get install libevent-dev python3-dev libboost-python-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev libminiupnpc-dev libzmq3-dev libdb4.8-dev libdb4.8++-dev
-      - name: install veriblock-pop-cpp
-        env:
-          BUILD_TYPE: Release
-        run: |
-          (
-          cd /opt;
-          wget https://github.com/VeriBlock/alt-integration-cpp/archive/${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
-          tar -xf ${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
-          cd alt-integration-cpp-${VERIBLOCK_POP_CPP_VERSION};
-          mkdir build;
-          cd build;
-          cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DTESTING=OFF -DWITH_PYPOPMINER=ON;
-          make -j2;
-          sudo make install
-          )
+        run: sudo apt-get install libevent-dev python3-zmq python3-dev libboost-python-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev libminiupnpc-dev libzmq3-dev libdb4.8-dev libdb4.8++-dev
+#      - name: install veriblock-pop-cpp
+#        env:
+#          BUILD_TYPE: Release
+#        run: |
+#          (
+#          cd /opt;
+#          wget https://github.com/VeriBlock/alt-integration-cpp/archive/${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
+#          tar -xf ${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
+#          cd alt-integration-cpp-${VERIBLOCK_POP_CPP_VERSION};
+#          mkdir build;
+#          cd build;
+#          cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DTESTING=OFF -DWITH_PYPOPMINER=ON;
+#          make -j2;
+#          sudo make install
+#          )
       - name: autogen
         run: ./autogen.sh
       - name: configure
         run: ./configure
           --without-gui
-          --enable-werror
           --disable-bench
-          --disable-gmock
       - name: make
-        run: make -j2 deploy
-      - name: create artifacts
-        if: success()
-        run: |
-          mv ./release pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
-          tar czvf pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-linux-x64.tar.gz pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}/
+        run: make -j2
+#      - name: create artifacts
+#        if: success()
+#        run: |
+#          mv ./release pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
+#          tar czvf pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-linux-x64.tar.gz pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}/
 #      - name: upload artifacts
 #        if: success()
 #        uses: appleboy/scp-action@master
@@ -93,9 +87,9 @@ jobs:
 #          passphrase: ${{ secrets.ARTIFACT_KEY_PASSPHRASE }}
 #          source: pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-linux-x64.tar.gz
 #          target: ${{ secrets.ARTIFACT_PATH }}
-      - name: make check
-        timeout-minutes: 20
-        run: make check
+#      - name: make check
+#        timeout-minutes: 20
+#        run: make check
 #      - name: upload logs
 #        uses: actions/upload-artifact@v1
 #        if: failure()
@@ -159,20 +153,18 @@ jobs:
       - name: configure
         run: CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site ./configure --prefix=/
           --without-gui
-          --enable-werror
           --disable-bench
-          --disable-gmock
       - name: make
         run: make -j2
-      - name: make deploy
-        if: success()
-        run: make deploy
-      - name: create artifacts
-        if: success()
-        run: |
-          mv ./pexa-1.6.1-win64-setup-unsigned.exe release/
-          mv ./release pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
-          zip -r9 pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-win64-qt.zip pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
+#      - name: make deploy
+#        if: success()
+#        run: make deploy
+#      - name: create artifacts
+#        if: success()
+#        run: |
+#          mv ./pexa-1.6.1-win64-setup-unsigned.exe release/
+#          mv ./release pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
+#          zip -r9 pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-win64-qt.zip pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
 #      - name: upload artifacts
 #        if: success()
 #        uses: appleboy/scp-action@master
@@ -238,19 +230,17 @@ jobs:
         run: ./configure --prefix=${PWD}/depends/x86_64-apple-darwin16
           --without-gui
           --disable-shared
-          --enable-werror
           --disable-bench
-          --disable-gmock
           --without-qtdbus
       - name: make
-        run: make -j2 deploy
-      - name: create artifacts
-        if: success()
+        run: make -j2
+#      - name: create artifacts
+#        if: success()
 #          mv ./Pexa-Qt.app release/
-        run: |
-          mv ./Pexa-Core.dmg release/
-          mv ./release pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
-          zip -r9 pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-macos-qt.zip pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
+#        run: |
+#          mv ./Pexa-Core.dmg release/
+#          mv ./release pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
+#          zip -r9 pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-macos-qt.zip pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
 #      - name: upload artifacts
 #        if: success()
 #        uses: appleboy/scp-action@master
@@ -288,41 +278,39 @@ jobs:
           key: macos-ccache-${{ steps.cache_timestamp.outputs.timestamp }}
           restore-keys: |
             macos-ccache-
-      - name: get version for veriblock-pop-cpp
-        run: echo "::set-env name=VERIBLOCK_POP_CPP_VERSION::$(awk -F '=' '/\$\(package\)_version/{print $NF}' $PWD/depends/packages/veriblock-pop-cpp.mk | head -n1)"
-      - name: veriblock-pop-cpp release version
-        run: echo Using veriblock-pop-cpp version $VERIBLOCK_POP_CPP_VERSION
+#      - name: get version for veriblock-pop-cpp
+#        run: echo "::set-env name=VERIBLOCK_POP_CPP_VERSION::$(awk -F '=' '/\$\(package\)_version/{print $NF}' $PWD/depends/packages/veriblock-pop-cpp.mk | head -n1)"
+#      - name: veriblock-pop-cpp release version
+#        run: echo Using veriblock-pop-cpp version $VERIBLOCK_POP_CPP_VERSION
       - name: install homebrew
         run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
       - name: install dependencies
         run: brew install automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf python3 libevent librsvg ccache qrencode qt zeromq
-      - name: install veriblock-pop-cpp
-        env:
-          BUILD_TYPE: Release
-        run: |
-          (
-          cd /tmp;
-          wget https://github.com/VeriBlock/alt-integration-cpp/archive/${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
-          tar -xf ${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
-          cd alt-integration-cpp-${VERIBLOCK_POP_CPP_VERSION};
-          mkdir build;
-          cd build;
-          cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DTESTING=OFF;
-          make -j2;
-          sudo make install
-          )
+#      - name: install veriblock-pop-cpp
+#        env:
+#          BUILD_TYPE: Release
+#        run: |
+#          (
+#          cd /tmp;
+#          wget https://github.com/VeriBlock/alt-integration-cpp/archive/${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
+#          tar -xf ${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
+#          cd alt-integration-cpp-${VERIBLOCK_POP_CPP_VERSION};
+#          mkdir build;
+#          cd build;
+#          cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DTESTING=OFF;
+#          make -j2;
+#          sudo make install
+#          )
       - name: autogen
         run: ./autogen.sh
       - name: configure
         run: ./configure
           --without-gui
-          --enable-werror
           --disable-bench
-          --disable-gmock
       - name: make
         run: make -j2
-      - name: make check
-        run: make
+#      - name: make check
+#        run: make check
 #      - name: run functional tests
 #        if: always()
 #        timeout-minutes: 60
@@ -355,42 +343,40 @@ jobs:
           key: linux-asan-ccache-${{ steps.cache_timestamp.outputs.timestamp }}
           restore-keys: |
             linux-asan-ccache-
-      - name: get version for veriblock-pop-cpp
-        run: echo "::set-env name=VERIBLOCK_POP_CPP_VERSION::$(awk -F '=' '/\$\(package\)_version/{print $NF}' $PWD/depends/packages/veriblock-pop-cpp.mk | head -n1)"
-      - name: veriblock-pop-cpp release version
-        run: echo Using veriblock-pop-cpp version $VERIBLOCK_POP_CPP_VERSION
+#      - name: get version for veriblock-pop-cpp
+#        run: echo "::set-env name=VERIBLOCK_POP_CPP_VERSION::$(awk -F '=' '/\$\(package\)_version/{print $NF}' $PWD/depends/packages/veriblock-pop-cpp.mk | head -n1)"
+#      - name: veriblock-pop-cpp release version
+#        run: echo Using veriblock-pop-cpp version $VERIBLOCK_POP_CPP_VERSION
       - name: add bitcoin ppa
         run: sudo add-apt-repository ppa:bitcoin/bitcoin
       - name: install build requirements
         run: sudo apt-get install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 ccache libasan4
       - name: install dependencies
-        run: sudo apt-get install libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev libminiupnpc-dev libzmq3-dev libdb4.8-dev libdb4.8++-dev
-      - name: install veriblock-pop-cpp
-        env:
-          BUILD_TYPE: Debug
-        run: |
-          (
-          cd /opt;
-          wget https://github.com/VeriBlock/alt-integration-cpp/archive/${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
-          tar -xf ${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
-          cd alt-integration-cpp-${VERIBLOCK_POP_CPP_VERSION};
-          mkdir build;
-          cd build;
-          cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DTESTING=OFF -DASAN=ON;
-          make -j2;
-          sudo make install
-          )
+        run: sudo apt-get install libevent-dev python3-zmq python3-dev libboost-python-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev libminiupnpc-dev libzmq3-dev libdb4.8-dev libdb4.8++-dev
+#      - name: install veriblock-pop-cpp
+#        env:
+#          BUILD_TYPE: Debug
+#        run: |
+#          (
+#          cd /opt;
+#          wget https://github.com/VeriBlock/alt-integration-cpp/archive/${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
+#          tar -xf ${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
+#          cd alt-integration-cpp-${VERIBLOCK_POP_CPP_VERSION};
+#          mkdir build;
+#          cd build;
+#          cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DTESTING=OFF -DASAN=ON;
+#          make -j2;
+#          sudo make install
+#          )
       - name: autogen
         run: ./autogen.sh
       - name: configure
         run: ./configure
           --without-gui
-          --enable-werror
           --disable-bench
-          --disable-gmock
           --with-sanitizers=address
       - name: make
-        run: make -j2 deploy
+        run: make -j2
 #      - name: make check
 #        timeout-minutes: 20
 #        run: make check
