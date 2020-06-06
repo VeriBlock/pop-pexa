@@ -84,7 +84,7 @@ inline CBlock MineGenesisBlock(
     CBlock genesis = CreateGenesisBlock(nTime, nNonce, nBits, nVersion, genesisReward, initialPubkeyHex, pszTimestamp);
 
     printf("started genesis block mining...\n");
-    while (!CheckProofOfWork(genesis.GetHash(), genesis.nBits, Params().GetConsensus())) {
+    while (!CheckProofOfWork(genesis.GetX16RV2Hash(), genesis.nBits, Params().GetConsensus())) {
         ++genesis.nNonce;
         if (genesis.nNonce > 4294967294LL) {
             ++genesis.nTime;
@@ -93,7 +93,7 @@ inline CBlock MineGenesisBlock(
         }
     }
 
-    assert(CheckProofOfWork(genesis.GetHash(), genesis.nBits, Params().GetConsensus()));
+    assert(CheckProofOfWork(genesis.GetX16RV2Hash(), genesis.nBits, Params().GetConsensus()));
 
     return genesis;
 }

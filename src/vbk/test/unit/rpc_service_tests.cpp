@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE(submitpop_test)
 
 BOOST_FIXTURE_TEST_CASE(savepopstate_test, E2eFixture)
 {
-    std::string file_name = "vbtc_state_test";
+    std::string file_name = "pexa_state_test";
 
     auto* oldTip = ChainActive().Tip();
     InvalidateTestBlock(oldTip);
@@ -120,12 +120,12 @@ BOOST_FIXTURE_TEST_CASE(savepopstate_test, E2eFixture)
     std::vector<uint8_t> bytes(fsize);
     file.read((char*)bytes.data(), bytes.size());
 
-    altintegration::TestCase vbtc_state = altintegration::TestCase::fromRaw(bytes);
+    altintegration::TestCase pexa_state = altintegration::TestCase::fromRaw(bytes);
 
-    BOOST_CHECK_EQUAL(vbtc_state.alt_tree.size(), 104);
+    BOOST_CHECK_EQUAL(pexa_state.alt_tree.size(), 104);
 
     altintegration::AltBlock tip = VeriBlock::blockToAltBlock(*ChainActive().Tip());
-    BOOST_CHECK(tip == vbtc_state.alt_tree.back().first);
+    BOOST_CHECK(tip == pexa_state.alt_tree.back().first);
 
     file.close();
 }

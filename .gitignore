@@ -151,3 +151,6 @@ dist/
 *.background.tiff
 
 .appdata
+
+pexa_state
+pexa_state_test

@@ -20,12 +20,12 @@ extern std::vector<std::string> testnetVBKblocks;
 extern int testnetBTCstartHeight;
 extern std::vector<std::string> testnetBTCblocks;
 
-struct AltChainParamsVBTC : public altintegration::AltChainParams {
-    ~AltChainParamsVBTC() override = default;
+struct AltChainParamsPEXA : public altintegration::AltChainParams {
+    ~AltChainParamsPEXA() override = default;
 
-    AltChainParamsVBTC(const CBlock& genesis)
+    AltChainParamsPEXA(const CBlock& genesis)
     {
-        auto hash = genesis.GetHash();
+        auto hash = genesis.GetX16RV2Hash();
         bootstrap.hash = std::vector<uint8_t>{hash.begin(), hash.end()};
         bootstrap.height = 0; // pop is enabled starting at genesis
         bootstrap.timestamp = genesis.GetBlockTime();
@@ -38,7 +38,7 @@ struct AltChainParamsVBTC : public altintegration::AltChainParams {
 
     uint32_t getIdentifier() const noexcept override
     {
-        return 0x3ae6ca;
+        return 0x304fa45;
     }
 
     altintegration::AltBlock bootstrap;

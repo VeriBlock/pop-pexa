@@ -22,7 +22,7 @@ using KeystoneArray = std::array<uint256, 2>;
 
 struct Config {
     // unique index to this chain; network id across chains
-    uint32_t index = 0x3ae6ca;
+    uint32_t index = 0x304fa45;
 
     uint32_t btc_header_size = 80;
     uint32_t vbk_header_size = 64;
@@ -42,6 +42,7 @@ struct Config {
     altintegration::Config popconfig;
 
     /////// Pop Rewards section start
+    // TODO: Update for Pexa
     uint32_t POP_REWARD_PERCENTAGE = 40;
     int32_t POP_REWARD_COEFFICIENT = 20;
 };

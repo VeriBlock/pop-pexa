@@ -11,8 +11,8 @@
 
 namespace VeriBlock {
 
-struct VBTCLogger : public altintegration::Logger {
-    ~VBTCLogger() override = default;
+struct PEXALogger : public altintegration::Logger {
+    ~PEXALogger() override = default;
 
     void log(altintegration::LogLevel l, const std::string& msg) override
     {

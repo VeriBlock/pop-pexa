@@ -92,17 +92,17 @@ void SaveState(std::string file_name)
 {
     LOCK2(cs_main, mempool.cs);
 
-    altintegration::TestCase vbtc_state;
-    vbtc_state.config = VeriBlock::getService<VeriBlock::Config>().popconfig;
+    altintegration::TestCase pexa_state;
+    pexa_state.config = VeriBlock::getService<VeriBlock::Config>().popconfig;
 
-    auto& vbtc_tree = BlockIndex();
+    auto& pexa_tree = BlockIndex();
 
     auto cmp = [](CBlockIndex* a, CBlockIndex* b) -> bool {
         return a->nHeight < b->nHeight;
     };
     std::vector<CBlockIndex*> block_index;
-    block_index.reserve(vbtc_tree.size());
-    for (const auto& el : vbtc_tree) {
+    block_index.reserve(pexa_tree.size());
+    for (const auto& el : pexa_tree) {
         block_index.push_back(el.second);
     }
     std::sort(block_index.begin(), block_index.end(), cmp);
@@ -119,13 +119,13 @@ void SaveState(std::string file_name)
                 assert(res);
             }
         }
-        vbtc_state.alt_tree.push_back(std::make_pair(alt_block, payloads));
+        pexa_state.alt_tree.push_back(std::make_pair(alt_block, payloads));
     }
 
     std::ofstream file(file_name, std::ios::binary);
 
     altintegration::WriteStream stream;
-    vbtc_state.toRaw(stream);
+    pexa_state.toRaw(stream);
 
     file.write((const char*)stream.data().data(), stream.data().size());
 
@@ -271,17 +271,17 @@ UniValue savepopstate(const JSONRPCRequest& request)
             "savepopstate [file]\n"
             "\nSave pop state into the file.\n"
             "\nArguments:\n"
-            "1. file       (string, optional) the name of the file, by default 'vbtc_state'.\n");
+            "1. file       (string, optional) the name of the file, by default 'pexa_state'.\n");
     }
 
-    std::string file_name = "vbtc_state";
+    std::string file_name = "pexa_state";
 
     if (!request.params.empty()) {
         RPCTypeCheck(request.params, {UniValue::VSTR});
         file_name = request.params[0].getValStr();
     }
 
-    LogPrint(BCLog::POP, "Save vBTC state to the file %s \n", file_name);
+    LogPrint(BCLog::POP, "Save pexa state to the file %s \n", file_name);
     SaveState(file_name);
 
     return UniValue();

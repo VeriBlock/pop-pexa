@@ -1,3 +1,4 @@
+// Copyright (c) 2016-2020 The Pexa Core developers
 // Copyright (c) 2009-2018 The Bitcoin Core developers
 // Copyright (c) 2019-2020 Xenios SEZC
 // https://www.veriblock.org
