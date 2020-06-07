@@ -95,10 +95,10 @@ jobs:
 #        with:
 #          name: test-suite.log
 #          path: src/test-suite.log
-#      - name: run functional tests
-#        if: always()
-#        timeout-minutes: 60
-#        run: python3 test/functional/test_runner.py --combinedlogslen=4000
+      - name: run functional tests
+        if: always()
+        timeout-minutes: 60
+        run: python3 test/functional/test_runner.py --combinedlogslen=4000
 
   x86_64-w64-mingw32:
     runs-on: ubuntu-latest
@@ -311,10 +311,10 @@ jobs:
           --disable-gmock
       - name: make
         run: make -j2
-#      - name: run functional tests
-#        if: always()
-#        timeout-minutes: 60
-#        run: python3 test/functional/test_runner.py --combinedlogslen=4000
+      - name: run functional tests
+        if: always()
+        timeout-minutes: 60
+        run: python3 test/functional/test_runner.py --combinedlogslen=4000
 
   linux-asan:
     runs-on: ubuntu-latest
@@ -387,7 +387,7 @@ jobs:
 #        with:
 #          name: test-suite.log
 #          path: src/test-suite.log
-#      - name: run functional tests
-#        if: always()
-#        timeout-minutes: 60
-#        run: python3 test/functional/test_runner.py --combinedlogslen=4000
+      - name: run functional tests
+        if: always()
+        timeout-minutes: 60
+        run: python3 test/functional/test_runner.py --combinedlogslen=4000
