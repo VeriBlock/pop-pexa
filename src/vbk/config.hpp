@@ -43,7 +43,7 @@ struct Config {
 
     /////// Pop Rewards section start
     // TODO: Update for Pexa
-    uint32_t POP_REWARD_PERCENTAGE = 40;
+    uint32_t POP_REWARD_PERCENTAGE = 10;
     int32_t POP_REWARD_COEFFICIENT = 20;
 };
 
