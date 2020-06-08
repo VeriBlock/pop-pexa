@@ -1267,6 +1267,10 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
         nSubsidy = 5 * COIN;
     }
 
+    if(nHeight >= consensusParams.nPopEnabledHeight){
+        nSubsidy = VeriBlock::getCoinbaseSubsidy(nSubsidy);
+    }
+
     nSubsidy >>= halvings;
     return nSubsidy;
 }
