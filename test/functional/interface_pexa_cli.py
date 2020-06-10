@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 # Copyright (c) 2017-2020 The Pexa Core developers
+# Copyright (c) 2014-2019 The Bitcoin Core developers
+# Copyright (c) 2019-2020 Xenios SEZC
+# https://www.veriblock.org
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test pexa-cli"""
 from decimal import Decimal
 from test_framework.test_framework import PexaTestFramework
 from test_framework.util import assert_equal, assert_raises_process_error, get_auth_cookie
+from test_framework.payout import POW_PAYOUT
 
 # The block reward of coinbaseoutput.nValue (50) PEXA/block matures after
 # COINBASE_MATURITY (100) blocks. Therefore, after mining 101 blocks we expect
 # node 0 to have a balance of (BLOCKS - COINBASE_MATURITY) * 50 PEXA/block.
 BLOCKS = 101
-BALANCE = (BLOCKS - 100) * 50
+BALANCE = (BLOCKS - 100) * POW_PAYOUT
 
 class TestPexaCli(PexaTestFramework):
     def set_test_params(self):

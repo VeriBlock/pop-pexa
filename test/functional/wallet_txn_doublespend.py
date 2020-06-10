@@ -15,6 +15,7 @@ from test_framework.util import (
     disconnect_nodes,
     find_output,
 )
+from test_framework.payout import POW_PAYOUT
 
 class TxnMallTest(PexaTestFramework):
     def set_test_params(self):
@@ -36,7 +37,7 @@ class TxnMallTest(PexaTestFramework):
 
     def run_test(self):
         # All nodes should start with 1,250 PEXA:
-        starting_balance = 1250
+        starting_balance = (POW_PAYOUT * 25)
 
         # All nodes should be out of IBD.
         # If the nodes are not all out of IBD, that can interfere with
@@ -140,7 +141,7 @@ class TxnMallTest(PexaTestFramework):
         assert_equal(self.nodes[0].getbalance(), expected)
 
         # Node1's balance should be its initial balance (1250 for 25 block rewards) plus the doublespend:
-        assert_equal(self.nodes[1].getbalance(), 1250 + 1240)
+        assert_equal(self.nodes[1].getbalance(), (POW_PAYOUT * 25) + 1240)
 
 if __name__ == '__main__':
     TxnMallTest().main()
