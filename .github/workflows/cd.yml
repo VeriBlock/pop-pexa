@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - develop
-      - veriblock
+      - veriblock*
 
   pull_request:
     branches:
       - develop
-      - veriblock
+      - veriblock*
 
 jobs:
   alpine-base:
