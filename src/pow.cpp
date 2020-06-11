@@ -18,7 +18,7 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const CBlockH
     assert(pindexLast != nullptr);
 
     // TODO: REMOVE MODIFIED TESTNET DIFF
-    if(Params().NetworkIDString() == CBaseChainParams::TESTNET && (int)::ChainActive().Height() > 0){
+    if(Params().NetworkIDString() == CBaseChainParams::TESTNET && (int)::ChainActive().Height() > 0 && (int)::ChainActive().Height() < 500){
         return 0.000000000000000124;
     }
 
