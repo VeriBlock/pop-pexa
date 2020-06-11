@@ -17,6 +17,11 @@ unsigned int static DarkGravityWave(const CBlockIndex* pindexLast, const CBlockH
     /* current difficulty formula, dash - DarkGravity v3, written by Evan Duffield - evan@dash.org */
     assert(pindexLast != nullptr);
 
+    // TODO: REMOVE MODIFIED TESTNET DIFF
+    if(Params().NetworkIDString() == CBaseChainParams::TESTNET && (int)::ChainActive().Height() > 0){
+        return 0.000000000000000124;
+    }
+
     unsigned int nProofOfWorkLimit = UintToArith256(params.powLimit).GetCompact();
     const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     int64_t nPastBlocks = 180; // ~3hr
