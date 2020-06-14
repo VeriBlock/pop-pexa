@@ -299,7 +299,7 @@ void FastStart::DownloadSnapshotUrl()
 void FastStart::SnapshotUrlDownloaded(QNetworkReply* reply) 
 {
     if(reply->error()) {
-        ui->statusLabel->setText(ErrorText(tr(reply->errorString().toStdString()))); 
+        ui->statusLabel->setText(ErrorText(tr(reply->error()))); 
         QTimer::singleShot(ERROR_WAIT, this, SLOT(TryAgain()));
     } else {
         auto url_and_sha = QString::fromStdString(reply->readAll().toStdString()).trimmed().split(' ');
