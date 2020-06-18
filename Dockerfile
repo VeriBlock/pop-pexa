@@ -39,7 +39,8 @@ RUN apk --no-cache add autoconf \
   linux-headers \
   protobuf-dev \
   zeromq-dev \
-  cmake
+  cmake \
+  git
 
 RUN set -ex \
   && for key in \
@@ -93,7 +94,8 @@ RUN apk --no-cache add \
   libressl \
   libzmq \
   su-exec \
-  curl
+  curl \
+  git
 
 ENV DATA_DIR=/home/pexa/.pexa
 ENV PEXA_VERSION=1.7.0
