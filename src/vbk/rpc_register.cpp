@@ -186,9 +186,11 @@ std::vector<pop_t> parsePayloads(const UniValue& array)
     std::vector<pop_t> payloads;
     LogPrint(BCLog::POP, "VeriBlock-PoP: submitpop RPC called with %s, amount %d \n", pop_t::name(), array.size());
     for (uint32_t idx = 0u, size = array.size(); idx < size; ++idx) {
-        auto& vtbhex = array[idx];
-        auto vtb_bytes = ParseHexV(vtbhex, "vtb[" + std::to_string(idx) + "]");
-        altintegration::ReadStream stream(vtb_bytes);
+        auto& payloads_hex = array[idx];
+
+        auto payloads_bytes = ParseHexV(payloads_hex, strprintf("%s[%d]", pop_t::name(), idx));
+
+        altintegration::ReadStream stream(payloads_bytes);
         payloads.push_back(pop_t::fromVbkEncoding(stream));
     }
 
@@ -212,25 +214,24 @@ UniValue submitpop(const JSONRPCRequest& request)
 
     RPCTypeCheck(request.params, {UniValue::VARR, UniValue::VARR, UniValue::VARR});
 
-
     altintegration::PopData popData;
     popData.context = parsePayloads<altintegration::VbkBlock>(request.params[0].get_array());
     popData.vtbs = parsePayloads<altintegration::VTB>(request.params[1].get_array());
     popData.atvs = parsePayloads<altintegration::ATV>(request.params[2].get_array());
 
-    auto& pop_service = VeriBlock::getService<VeriBlock::PopService>();
-    auto& pop_mempool = pop_service.getMemPool();
-    auto& alt_tree = pop_service.getAltTree();
-
     {
         LOCK(cs_main);
+        auto& pop_service = VeriBlock::getService<VeriBlock::PopService>();
+        auto& pop_mempool = pop_service.getMemPool();
+        auto& alt_tree = pop_service.getAltTree();
+
         altintegration::MempoolResult result = pop_mempool.submitAll(popData, alt_tree);
 
         const CNetMsgMaker msgMaker(PROTOCOL_VERSION);
-
         NodeContext& node = EnsureNodeContext(request.context);
         VeriBlock::p2p::sendPopData<altintegration::ATV>(node.connman.get(), msgMaker, popData.atvs);
         VeriBlock::p2p::sendPopData<altintegration::VTB>(node.connman.get(), msgMaker, popData.vtbs);
+        VeriBlock::p2p::sendPopData<altintegration::VbkBlock>(node.connman.get(), msgMaker, popData.context);
 
         return altintegration::ToJSON<UniValue>(result);
     }
@@ -423,11 +424,11 @@ UniValue getblockhash(const JSONRPCRequest& request, Tree& tree, const std::stri
     }
 
     int height = request.params[0].get_int();
-    if (height < best.first()->height) {
-        throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("Chain %s starts at %d, provided %d", chain, best.first()->height, height));
+    if (height < best.first()->getHeight()) {
+        throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("Chain %s starts at %d, provided %d", chain, best.first()->getHeight(), height));
     }
-    if (height > best.tip()->height) {
-        throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("Chain %s tip is at %d, provided %d", chain, best.tip()->height, height));
+    if (height > best.tip()->getHeight()) {
+        throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("Chain %s tip is at %d, provided %d", chain, best.tip()->getHeight(), height));
     }
 
     auto* index = best[height];

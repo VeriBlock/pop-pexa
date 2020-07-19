@@ -158,3 +158,12 @@ dist/
 
 pexa_state
 pexa_state_test
+*.tmp
+compile_commands.json
+.idea
+.scannerwork
+.project
+.cproject
+.settings
+configure.lineno
+*.pb.*

@@ -30,9 +30,9 @@ If you want to build with Pexa-Qt GUI app, you need additional libraries:
 
 ```shell
 cd /tmp
-wget https://github.com/VeriBlock/alt-integration-cpp/archive/9170c2c1b62bafbff7262a4975235a01db0429ab.tar.gz
-tar -xf 9170c2c1b62bafbff7262a4975235a01db0429ab.tar.gz
-cd alt-integration-cpp-9170c2c1b62bafbff7262a4975235a01db0429ab
+wget https://github.com/VeriBlock/alt-integration-cpp/archive/066b9e715a4d2e92841bc5f3a99f683d9cf660e4.tar.gz
+tar -xf 066b9e715a4d2e92841bc5f3a99f683d9cf660e4.tar.gz
+cd alt-integration-cpp-066b9e715a4d2e92841bc5f3a99f683d9cf660e4
 mkdir build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release -DTESTING=OFF

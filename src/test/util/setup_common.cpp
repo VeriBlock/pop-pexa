@@ -90,6 +90,9 @@ BasicTestingSetup::BasicTestingSetup(const std::string& chainName, const std::ve
         assert(error.empty());
     }
     SelectParams(chainName);
+    // VeriBlock::InitConfig();
+    // selectPopConfig("regtest", "regtest", true);
+    // VeriBlock::InitPopService(m_path_root / "pop");
     SeedInsecureRand();
     if (G_TEST_LOG_FUN) LogInstance().PushBackCallback(G_TEST_LOG_FUN);
     InitLogging();
@@ -204,6 +207,13 @@ TestChain100Setup::TestChain100Setup()
         CBlock b = CreateAndProcessBlock(noTxns, scriptPubKey);
         m_coinbase_txns.push_back(b.vtx[0]);
     }
+
+    assert(ChainActive().Tip() != nullptr);
+    assert(ChainActive().Tip()->nHeight == 100);
+    assert(BlockIndex().size() == 101);
+
+    // auto& tree = VeriBlock::getService<VeriBlock::PopService>().getAltTree();
+    // assert(tree.getBestChain().tip()->getHeight() == ChainActive().Tip()->nHeight);
 }
 
 // Create a new block with just given transactions, coinbase paying to

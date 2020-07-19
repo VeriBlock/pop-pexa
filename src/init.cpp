@@ -1266,7 +1266,6 @@ bool AppInitLockDataDirectory()
 bool AppInitMain(const util::Ref& context, NodeContext& node)
 {
     const CChainParams& chainparams = Params();
-    VeriBlock::InitPopService();
 
     // ********************************************************* Step 4a: application initialization
     if (!CreatePidFile()) {
@@ -1315,6 +1314,8 @@ bool AppInitMain(const util::Ref& context, NodeContext& node)
                   "also be data loss if pexa is started while in a temporary directory.\n",
             gArgs.GetArg("-datadir", ""), fs::current_path().string());
     }
+
+    VeriBlock::InitPopService(GetDataDir(true) / "pop");
 
     InitSignatureCache();
     InitScriptExecutionCache();

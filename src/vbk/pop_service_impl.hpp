@@ -18,7 +18,7 @@
 #include <veriblock/blockchain/alt_block_tree.hpp>
 #include <veriblock/config.hpp>
 #include <veriblock/mempool.hpp>
-#include <veriblock/storage/payloads_storage.hpp>
+#include <veriblock/storage/storage_manager.hpp>
 
 namespace VeriBlock {
 
@@ -27,9 +27,19 @@ class PopServiceImpl : public PopService
 private:
     std::shared_ptr<altintegration::MemPool> mempool;
     std::shared_ptr<altintegration::AltTree> altTree;
-    std::shared_ptr<altintegration::PayloadsStorage> payloads_store;
+    std::shared_ptr<altintegration::StorageManager> storeman;
+    altintegration::PayloadsStorage* payloadsStore;
+
+    std::vector<altintegration::PopData> disconnected_popdata;
 
 public:
+    void clearPopDataStorage() override
+    {
+        VBK_ASSERT(payloadsStore);
+        // TODO: clear pop data
+        storeman->clear();
+    }
+
     std::string toPrettyString() const override
     {
         return altTree->toPrettyString();
@@ -46,7 +56,7 @@ public:
         return *mempool;
     }
 
-    PopServiceImpl(const altintegration::Config& config);
+    PopServiceImpl(const altintegration::Config& config, const fs::path& dbPath);
 
     ~PopServiceImpl() override = default;
 
@@ -61,8 +71,11 @@ public:
     bool addAllBlockPayloads(const CBlockIndex* indexPrev, const CBlock& fullBlock, BlockValidationState& state) override;
     bool setState(const uint256& block, altintegration::ValidationState& state) override;
 
-    altintegration::PopData getPopData(const CBlockIndex& currentBlockIndex) override;
+    altintegration::PopData getPopData() override;
     void removePayloadsFromMempool(const altintegration::PopData& popData) override;
+    void addDisconnectedPopdata(const altintegration::PopData& popData) override;
+    void updatePopMempoolForReorg() override;
+
 
     int compareForks(const CBlockIndex& left, const CBlockIndex& right) override;
 };
