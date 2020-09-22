@@ -13,8 +13,8 @@ from test_framework.messages import COIN, COutPoint, CTransaction, CTxIn, CTxOut
 from test_framework.script import CScript, OP_DROP
 from test_framework.test_framework import PexaTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error, satoshi_round
-from test_framework.script_util import DUMMY_P2WPKH_SCRIPT, DUMMY_2_P2WPKH_SCRIPT
-from test_framework.payout import POW_PAYOUT
+from test_framework.script_util import DUMMY_P2WPKH_SCRIPT
+from test_framework.pop_const import POW_PAYOUT
 
 MAX_REPLACEMENT_LIMIT = 100
 

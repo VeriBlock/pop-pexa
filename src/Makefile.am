@@ -104,17 +104,18 @@ endif
 ### VeriBlock section start
 VBK_H = \
   vbk/entity/context_info_container.hpp \
-  vbk/init.hpp \
-  vbk/service_locator.hpp \
   vbk/pop_service.hpp \
-  vbk/pop_service_impl.hpp \
-  vbk/config.hpp \
-  vbk/typed_wrapper.hpp \
+  vbk/vbk.hpp \
   vbk/merkle.hpp \
   vbk/genesis.hpp \
   vbk/altchainparam.hpp \
   vbk/util.hpp \
-  vbk/adaptors/univalue_json.hpp
+  vbk/adaptors/univalue_json.hpp \
+  vbk/adaptors/batch_adapter.hpp \
+  vbk/adaptors/batch.hpp \
+  vbk/adaptors/repository.hpp \
+  vbk/adaptors/cursor.hpp
+
 ### VeriBlock section end
 
 .PHONY: FORCE check-symbols check-security
@@ -342,13 +343,15 @@ libpexa_util_a-clientversion.$(OBJEXT): obj/build.h
 libpexa_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(PEXA_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
 libpexa_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libpexa_server_a_SOURCES = \
-  vbk/pop_service_impl.cpp \
-  vbk/pop_service_impl.hpp \
+  vbk/pop_service.hpp \
+  vbk/pop_service.cpp \
   addrdb.cpp \
   addrman.cpp \
   banman.cpp \
   blockencodings.cpp \
   blockfilter.cpp \
+  bootstraps.cpp \
+  chainparams.cpp \
   chain.cpp \
   consensus/tx_verify.cpp \
   flatfile.cpp \
@@ -375,6 +378,10 @@ libpexa_server_a_SOURCES = \
   policy/settings.cpp \
   pow.cpp \
   rest.cpp \
+  vbk/merkle.hpp \
+  vbk/merkle.cpp \
+  vbk/genesis.hpp \
+  vbk/genesis.cpp \
   vbk/rpc_register.hpp \
   vbk/rpc_register.cpp \
   vbk/p2p_sync.hpp \
@@ -543,8 +550,6 @@ libpexa_common_a_SOURCES = \
   base58.cpp \
   bech32.cpp \
   bloom.cpp \
-  bootstraps.cpp \
-  chainparams.cpp \
   coins.cpp \
   compressor.cpp \
   core_read.cpp \

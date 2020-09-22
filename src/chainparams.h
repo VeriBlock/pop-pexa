@@ -6,6 +6,7 @@
 #ifndef PEXA_CHAINPARAMS_H
 #define PEXA_CHAINPARAMS_H
 
+#include <bootstraps.h>
 #include <chainparamsbase.h>
 #include <consensus/params.h>
 #include <primitives/block.h>
@@ -88,6 +89,8 @@ public:
     const std::vector<SeedSpec6>& FixedSeeds() const { return vFixedSeeds; }
     const CCheckpointData& Checkpoints() const { return checkpointData; }
     const ChainTxData& TxData() const { return chainTxData; }
+    uint32_t PopRewardPercentage() const {return mPopRewardPercentage;}
+    int32_t PopRewardCoefficient() const {return mPopRewardCoefficient;}
 
     /** PEXA START **/
 
@@ -127,6 +130,11 @@ protected:
     std::string versionInfoUrl;
 
     /** PEXA End **/
+    // VeriBlock:
+    // cut this % from coinbase subsidy
+    uint32_t mPopRewardPercentage = 40; // %
+    // every pop reward will be multiplied by this coefficient
+    int32_t mPopRewardCoefficient = 20;
 };
 
 /**

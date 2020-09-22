@@ -27,8 +27,8 @@ from test_framework.util import (
     assert_equal,
     wait_until,
 )
-from test_framework.address import ADDRESS_XCRT1_UNSPENDABLE
-from test_framework.payout import POW_PAYOUT
+from test_framework.address import ADDRESS_BCRT1_UNSPENDABLE
+from test_framework.pop_const import POW_PAYOUT
 
 import time
 

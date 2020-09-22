@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <vector>
 
+#include <chainparams.h>
 #include <interfaces/chain.h>
 #include <node/context.h>
 #include <policy/policy.h>

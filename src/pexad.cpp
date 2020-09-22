@@ -46,7 +46,6 @@ static void WaitForShutdown(NodeContext& node)
 //
 static bool AppInit(int argc, char* argv[])
 {
-    VeriBlock::InitConfig();
     NodeContext node;
     node.chain = interfaces::MakeChain(node);
 

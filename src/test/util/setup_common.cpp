@@ -32,6 +32,8 @@
 #include <validation.h>
 #include <validationinterface.h>
 
+#include <bootstraps.h>
+
 #include <functional>
 
 const std::function<std::string(const char*)> G_TRANSLATION_FUN = nullptr;
@@ -90,9 +92,7 @@ BasicTestingSetup::BasicTestingSetup(const std::string& chainName, const std::ve
         assert(error.empty());
     }
     SelectParams(chainName);
-    // VeriBlock::InitConfig();
-    // selectPopConfig("regtest", "regtest", true);
-    // VeriBlock::InitPopService(m_path_root / "pop");
+    selectPopConfig("regtest", "regtest", true);
     SeedInsecureRand();
     if (G_TEST_LOG_FUN) LogInstance().PushBackCallback(G_TEST_LOG_FUN);
     InitLogging();
@@ -136,6 +136,7 @@ TestingSetup::TestingSetup(const std::string& chainName, const std::vector<const
     GetMainSignals().RegisterBackgroundSignalScheduler(*m_node.scheduler);
 
     pblocktree.reset(new CBlockTreeDB(1 << 20, true));
+    VeriBlock::SetPop(*pblocktree);
 
     m_node.chainman = &::g_chainman;
     m_node.chainman->InitializeChainstate();
@@ -212,8 +213,8 @@ TestChain100Setup::TestChain100Setup()
     assert(ChainActive().Tip()->nHeight == 100);
     assert(BlockIndex().size() == 101);
 
-    // auto& tree = VeriBlock::getService<VeriBlock::PopService>().getAltTree();
-    // assert(tree.getBestChain().tip()->getHeight() == ChainActive().Tip()->nHeight);
+    auto& tree = *VeriBlock::GetPop().altTree;
+    assert(tree.getBestChain().tip()->getHeight() == ChainActive().Tip()->nHeight);
 }
 
 // Create a new block with just given transactions, coinbase paying to

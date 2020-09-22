@@ -16,8 +16,11 @@ from collections import defaultdict
 
 from test_framework.test_framework import PexaTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error
-from test_framework.wallet_util import test_address
-from test_framework.payout import POW_PAYOUT
+from test_framework.wallet_util import (
+    labels_value,
+    test_address,
+)
+from test_framework.pop_const import POW_PAYOUT
 
 class WalletLabelsTest(PexaTestFramework):
     def set_test_params(self):

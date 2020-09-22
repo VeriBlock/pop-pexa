@@ -60,8 +60,6 @@
 #include <validationinterface.h>
 #include <walletinitinterface.h>
 
-#include <vbk/init.hpp>
-
 #include <stdint.h>
 #include <stdio.h>
 
@@ -83,6 +81,7 @@
 #endif
 
 #include <vbk/log.hpp>
+#include <vbk/pop_service.hpp>
 
 static bool fFeeEstimatesInitialized = false;
 static const bool DEFAULT_PROXYRANDOMIZE = true;
@@ -1315,8 +1314,6 @@ bool AppInitMain(const util::Ref& context, NodeContext& node)
             gArgs.GetArg("-datadir", ""), fs::current_path().string());
     }
 
-    VeriBlock::InitPopService(GetDataDir(true) / "pop");
-
     InitSignatureCache();
     InitScriptExecutionCache();
 
@@ -1595,6 +1592,7 @@ bool AppInitMain(const util::Ref& context, NodeContext& node)
                 // fails if it's still open from the previous loop. Close it first:
                 pblocktree.reset();
                 pblocktree.reset(new CBlockTreeDB(nBlockTreeDBCache, false, fReset));
+                VeriBlock::SetPop(*pblocktree);
 
                 if (fReset) {
                     pblocktree->WriteReindexing(true);
@@ -1979,6 +1977,21 @@ bool AppInitMain(const util::Ref& context, NodeContext& node)
     node.scheduler->scheduleEvery([banman]{
         banman->DumpBanlist();
     }, DUMP_BANS_INTERVAL);
+
+    {
+        auto& pop = VeriBlock::GetPop();
+        auto* tip = ChainActive().Tip();
+        altintegration::ValidationState state;
+        LOCK(cs_main);
+        bool ret = VeriBlock::setState(tip->GetBlockHash(), state);
+        auto* alttip = pop.altTree->getBestChain().tip();
+        assert(ret && "bad state");
+        assert(tip->nHeight == alttip->getHeight());
+
+        LogPrintf("ALT tree best height = %d\n", pop.altTree->getBestChain().tip()->getHeight());
+        LogPrintf("VBK tree best height = %d\n", pop.altTree->vbk().getBestChain().tip()->getHeight());
+        LogPrintf("BTC tree best height = %d\n", pop.altTree->btc().getBestChain().tip()->getHeight());
+    }
 
     return true;
 }

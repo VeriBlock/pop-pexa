@@ -11,8 +11,8 @@ from test_framework.address import check_script, script_to_p2sh
 from test_framework.test_framework import PexaTestFramework
 from test_framework.util import assert_equal, assert_raises_rpc_error, find_vout_for_address, hex_str_to_bytes
 from test_framework.messages import sha256
-from test_framework.script import CScript, OP_0, OP_CHECKSIG
-from test_framework.payout import POW_PAYOUT
+from test_framework.script import CScript, OP_0
+from test_framework.pop_const import POW_PAYOUT
 
 from decimal import Decimal
 

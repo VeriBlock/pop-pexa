@@ -15,6 +15,8 @@
 #include <txmempool.h>
 #include <util/string.h>
 
+#include <vbk/pop_service.hpp>
+
 #include <type_traits>
 
 #include <boost/thread/thread.hpp>

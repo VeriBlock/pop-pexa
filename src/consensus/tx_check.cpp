@@ -4,9 +4,8 @@
 
 #include <consensus/tx_check.h>
 
-#include <primitives/transaction.h>
 #include <consensus/validation.h>
-#include <vbk/service_locator.hpp>
+#include <primitives/transaction.h>
 #include <vbk/util.hpp>
 #include <vbk/pop_service.hpp>
 

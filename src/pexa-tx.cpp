@@ -29,7 +29,6 @@
 #include <stdio.h>
 
 #include <boost/algorithm/string.hpp>
-#include <vbk/init.hpp>
 #include <bootstraps.h>
 
 static bool fCreateBlank;

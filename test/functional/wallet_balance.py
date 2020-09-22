@@ -16,7 +16,7 @@ from test_framework.util import (
     assert_raises_rpc_error,
     connect_nodes,
 )
-from test_framework.payout import POW_PAYOUT
+from test_framework.pop_const import POW_PAYOUT
 
 
 def create_transactions(node, address, amt, fees):
