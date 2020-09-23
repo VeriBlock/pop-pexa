@@ -55,4 +55,9 @@ NodeContext& EnsureNodeContext(const util::Ref& context);
 CTxMemPool& EnsureMemPool(const util::Ref& context);
 ChainstateManager& EnsureChainman(const util::Ref& context);
 
+//! Pointer to node state that needs to be declared as a global to be accessible
+//! RPC methods. Due to limitations of the RPC framework, there's currently no
+//! direct way to pass in state to RPC methods without globals.
+extern NodeContext* g_rpc_node;
+
 #endif

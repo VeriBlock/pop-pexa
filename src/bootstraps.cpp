@@ -10,7 +10,7 @@
 #include <vbk/util.hpp>
 #include <bootstraps.h>
 
-std::vector<uint8_t> AltChainParamsVBTC::getHash(const std::vector<uint8_t>& bytes) const noexcept
+std::vector<uint8_t> AltChainParamsPEXA::getHash(const std::vector<uint8_t>& bytes) const noexcept
 {
     return VeriBlock::headerFromBytes(bytes).GetHash().asVector();
 }
@@ -111,7 +111,7 @@ void selectPopConfig(
         throw std::invalid_argument("vbknet currently only supports test/regtest");
     }
 
-    auto altparams = std::make_shared<AltChainParamsVBTC>(Params().GenesisBlock());
+    auto altparams = std::make_shared<AltChainParamsPEXA>(Params().GenesisBlock());
     popconfig.alt = altparams;
     VeriBlock::SetPopConfig(popconfig);
     printConfig(popconfig);

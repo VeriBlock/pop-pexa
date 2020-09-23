@@ -3974,7 +3974,7 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, Block
             return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-block-pop-payloads",
                                  strprintf("Can not add POP payloads to block height: %d , hash: %s: %s",
                                            pindex->nHeight, block.GetHash().ToString(),
-                                           FormatStateMessage(state)));
+                                           state.ToString()));
         }
     }
 

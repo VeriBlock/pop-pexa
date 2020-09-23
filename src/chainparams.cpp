@@ -20,7 +20,7 @@
 
 #include "bootstraps.h"
 #include <vbk/genesis.hpp>
-#include <vbk/init.hpp>
+
 #include <veriblock/blockchain/alt_chain_params.hpp>
 
 static CBlock CreateGenesisBlockMainNet(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)

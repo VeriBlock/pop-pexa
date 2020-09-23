@@ -3412,15 +3412,15 @@ void ProcessMessage(
             uint64_t nonce = 0;
             vRecv >> nonce;
 
-            if(pfrom->nVersion > PING_BESTCHAIN_VERSION) {
+            if(pfrom.nVersion > PING_BESTCHAIN_VERSION) {
                 // VeriBlock: immediately after nonce, receive best block hash
                 LOCK(cs_main);
                 uint256 bestHash;
                 vRecv >> bestHash;
-                UpdateBestChainTip(pfrom->GetId(), bestHash);
+                UpdateBestChainTip(pfrom.GetId(), bestHash);
 
-                connman->PushMessage(pfrom, msgMaker.Make(NetMsgType::PONG, nonce, ::ChainActive().Tip()->GetBlockHash()));
-                return true;
+                connman->PushMessage(&pfrom, msgMaker.Make(NetMsgType::PONG, nonce, ::ChainActive().Tip()->GetBlockHash()));
+                return;
             }
 
             // Echo the message back with the nonce. This allows for two useful features:
@@ -3473,11 +3473,11 @@ void ProcessMessage(
                     }
                 }
 
-                if(pfrom->nVersion > PING_BESTCHAIN_VERSION) {
+                if(pfrom.nVersion > PING_BESTCHAIN_VERSION) {
                     LOCK(cs_main);
                     uint256 bestHash;
                     vRecv >> bestHash;
-                    UpdateBestChainTip(pfrom->GetId(), bestHash);
+                    UpdateBestChainTip(pfrom.GetId(), bestHash);
                 }
             } else {
                 sProblem = "Unsolicited pong without ping";
