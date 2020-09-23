@@ -8,7 +8,7 @@
 
 from test_framework.pop import KEYSTONE_INTERVAL, endorse_block, sync_pop_mempools, create_endorsed_chain, \
     assert_pop_state_equal
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PexaTestFramework
 from test_framework.util import (
     connect_nodes,
     sync_mempools,
@@ -24,7 +24,7 @@ POP state must be equal.
 '''
 
 
-class PoPVerifyDB(BitcoinTestFramework):
+class PoPVerifyDB(PexaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2

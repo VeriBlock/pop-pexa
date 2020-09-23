@@ -11,7 +11,7 @@ from test_framework.mininode import (
     msg_get_atv,
 )
 from test_framework.pop import endorse_block
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PexaTestFramework
 from test_framework.util import (
     connect_nodes, assert_equal,
 )
@@ -71,7 +71,7 @@ class BaseNode(P2PInterface):
         self.log.info("receive message get VBK")
         self.executed_msg_get_vbk = self.executed_msg_get_vbk + 1
 
-class PopP2P(BitcoinTestFramework):
+class PopP2P(PexaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1

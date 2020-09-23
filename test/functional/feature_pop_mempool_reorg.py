@@ -6,14 +6,14 @@
 # file LICENSE or http://www.opensource.org/licenses/mit-license.php.
 
 from test_framework.pop import mine_vbk_blocks
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PexaTestFramework
 from test_framework.util import (
     connect_nodes,
     disconnect_nodes,
     assert_equal,
 )
 
-class PopPayouts(BitcoinTestFramework):
+class PopPayouts(PexaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2

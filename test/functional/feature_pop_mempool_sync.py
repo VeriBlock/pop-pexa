@@ -10,13 +10,13 @@ Test with multiple nodes, and multiple PoP endorsements, checking to make sure n
 """
 
 from test_framework.pop import endorse_block
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PexaTestFramework
 from test_framework.util import (
     connect_nodes,
 )
 
 
-class PoPMempoolSync(BitcoinTestFramework):
+class PoPMempoolSync(PexaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2

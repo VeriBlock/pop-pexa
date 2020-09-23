@@ -5,7 +5,7 @@
 # Distributed under the MIT software license, see the accompanying
 # file LICENSE or http://www.opensource.org/licenses/mit-license.php.
 from test_framework.pop import endorse_block
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PexaTestFramework
 from test_framework.util import (
     connect_nodes,
     sync_mempools,
@@ -26,7 +26,7 @@ class BaseNode(P2PInterface):
         super().__init__()
 
 
-class PopP2P(BitcoinTestFramework):
+class PopP2P(PexaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1

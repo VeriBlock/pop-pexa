@@ -10,7 +10,7 @@ Test with multiple nodes, and multiple PoP endorsements, checking to make sure n
 """
 
 from test_framework.pop import KEYSTONE_INTERVAL, endorse_block, sync_pop_mempools
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PexaTestFramework
 from test_framework.util import (
     connect_nodes,
     sync_mempools,
@@ -19,7 +19,7 @@ from test_framework.util import (
 import time
 
 
-class PopE2E(BitcoinTestFramework):
+class PopE2E(PexaTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
