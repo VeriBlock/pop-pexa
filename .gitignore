@@ -1,5 +1,7 @@
 *.tar.gz
 
+.vscode
+
 *.exe
 *.pdb
 src/pexa

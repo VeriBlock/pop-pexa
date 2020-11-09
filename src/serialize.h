@@ -24,6 +24,8 @@
 #include <prevector.h>
 #include <span.h>
 
+#include <veriblock/entities/popdata.hpp>
+
 static const unsigned int MAX_SIZE = 0x02000000;
 
 /** Maximum amount of memory (in bytes) to allocate at once when deserializing vectors. */
@@ -878,6 +880,19 @@ void Unserialize(Stream& is, std::pair<K, T>& item)
 }
 
 
+// VeriBlock
+template<typename Stream>
+inline void Serialize(Stream& s, const altintegration::PopData& pop_data) {
+    std::vector<uint8_t> bytes_data = pop_data.toVbkEncoding();
+    Serialize(s, bytes_data);
+}
+
+template<typename Stream>
+inline void Unserialize(Stream& s, altintegration::PopData& pop_data) {
+    std::vector<uint8_t> bytes_data;
+    Unserialize(s, bytes_data);
+    pop_data = altintegration::PopData::fromVbkEncoding(bytes_data);
+}
 
 /**
  * map
