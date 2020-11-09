@@ -186,8 +186,13 @@ FUZZ_SUITE_LD_COMMON = \
  $(EVENT_LIBS) \
  $(EVENT_PTHREADS_LIBS)
 
+# VeriBlock
+VBK_TESTS =\
+  vbk/test/block_validation_tests.cpp
+
 # test_pexa binary #
 PEXA_TESTS =\
+  $(VBK_TESTS) \
   test/arith_uint256_tests.cpp \
   test/scriptnum10.h \
   test/addrman_tests.cpp \

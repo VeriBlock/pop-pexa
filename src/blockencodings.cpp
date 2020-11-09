@@ -162,6 +162,9 @@ ReadStatus PartiallyDownloadedBlock::InitData(const CBlockHeaderAndShortTxIDs& c
             break;
     }
 
+    // VeriBlock: set pop data
+    this->popData = cmpctblock.popData;
+
     LogPrint(BCLog::CMPCTBLOCK, "Initialized PartiallyDownloadedBlock for block %s using a cmpctblock of size %lu\n", cmpctblock.header.GetHash().ToString(), GetSerializeSize(cmpctblock, PROTOCOL_VERSION));
 
     return READ_STATUS_OK;
@@ -171,6 +174,11 @@ bool PartiallyDownloadedBlock::IsTxAvailable(size_t index) const {
     assert(!header.IsNull());
     assert(index < txn_available.size());
     return txn_available[index] != nullptr;
+}
+
+ReadStatus PartiallyDownloadedBlock::FillBlock(CBlock& block, const std::vector<CTransactionRef>& vtx_missing, const altintegration::PopData& popData) {
+    block.popData = popData;
+    return FillBlock(block, vtx_missing);
 }
 
 ReadStatus PartiallyDownloadedBlock::FillBlock(CBlock& block, const std::vector<CTransactionRef>& vtx_missing) {
@@ -195,6 +203,9 @@ ReadStatus PartiallyDownloadedBlock::FillBlock(CBlock& block, const std::vector<
 
     if (vtx_missing.size() != tx_missing_offset)
         return READ_STATUS_INVALID;
+
+    // VeriBlock: set popData before CheckBlock
+    block.popData = this->popData;
 
     BlockValidationState state;
     if (!CheckBlock(block, state, Params().GetConsensus())) {
