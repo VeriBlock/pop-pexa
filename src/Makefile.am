@@ -626,9 +626,10 @@ pexa_bin_ldadd = \
   $(LIBLEVELDB) \
   $(LIBLEVELDB_SSE42) \
   $(LIBMEMENV) \
-  $(LIBSECP256K1)
+  $(LIBSECP256K1) \
+  $(VERIBLOCK_POP_CPP_LIBS)
 
-pexa_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
+pexa_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(VERIBLOCK_POP_CPP_LIBS)
 
 pexad_SOURCES = $(pexa_daemon_sources)
 pexad_CPPFLAGS = $(pexa_bin_cppflags)
@@ -656,7 +657,8 @@ pexa_cli_LDADD = \
   $(LIBPEXA_CLI) \
   $(LIBUNIVALUE) \
   $(LIBPEXA_UTIL) \
-  $(LIBPEXA_CRYPTO)
+  $(LIBPEXA_CRYPTO) \
+  $(VERIBLOCK_POP_CPP_LIBS)
 
 pexa_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS)
 #
@@ -677,9 +679,10 @@ pexa_tx_LDADD = \
   $(LIBPEXA_UTIL) \
   $(LIBPEXA_CONSENSUS) \
   $(LIBPEXA_CRYPTO) \
-  $(LIBSECP256K1)
+  $(LIBSECP256K1) \
+  $(VERIBLOCK_POP_CPP_LIBS)
 
-pexa_tx_LDADD += $(BOOST_LIBS)
+pexa_tx_LDADD += $(BOOST_LIBS) $(VERIBLOCK_POP_CPP_LIBS)
 #
 
 # pexa-wallet binary #
