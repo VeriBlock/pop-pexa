@@ -3565,6 +3565,14 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
     //         return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER, strprintf("bad-version(0x%08x)", block.nVersion),
     //                              strprintf("rejected nVersion=0x%08x block", block.nVersion));
 
+    // VeriBlock validation
+    if((block.nVersion & VeriBlock::POP_BLOCK_VERSION_BIT) && 
+        !params.isPopEnabled(nHeight)) {
+            return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER,
+                strprintf("bad-pop-version(0x%08x)", block.nVersion),
+                strprintf("block contains PopData before PopSecurity has been enabled"));
+        }
+
     return true;
 }
 
