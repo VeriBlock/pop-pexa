@@ -89,6 +89,12 @@ public:
     const CCheckpointData& Checkpoints() const { return checkpointData; }
     const ChainTxData& TxData() const { return chainTxData; }
 
+    // VeriBlock start
+    bool isPopEnabled(int height) const {
+            return height >= consensus.VeriBlockPopSecurityHeight;
+    }
+    // VeriBlock end
+
     /** PEXA START **/
 
     unsigned int DGWActivationBlock() const { return nDGWActivationBlock; }
