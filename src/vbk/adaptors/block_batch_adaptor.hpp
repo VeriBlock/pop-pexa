@@ -35,9 +35,9 @@ struct BlockBatchAdaptor : public altintegration::BlockBatchAdaptor {
         return std::make_pair(DB_ALT_TIP, "alttip");
     }
 
-    explicit BlockBatchAdaptor(CDBatch& batch) : batch_(batch) {}
+    explicit BlockBatchAdaptor(CDBBatch& batch) : batch_(batch) {}
 
-    bool writeBlock(const altintegration::BlockIndex<altintgration::BtcBlock>& value) override
+    bool writeBlock(const altintegration::BlockIndex<altintegration::BtcBlock>& value) override
     {
         batch_.Write(std::make_pair(DB_BTC_BLOCK, getHash(value)), value);
         return true;

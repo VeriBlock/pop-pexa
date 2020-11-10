@@ -2,6 +2,8 @@
 #define PEXA_SRC_VBK_ADAPTORS_PAYLOADS_PROVIDER_HPP
 
 #include <dbwrapper.h>
+#include <vbk/pop_common.hpp>
+
 #include <veriblock/storage/payloads_index.hpp>
 
 namespace VeriBlock {
@@ -17,7 +19,7 @@ struct PayloadsProvider : public altintegration::PayloadsProvider {
 
     ~PayloadsProvider() = default;
 
-    PayloadsProvider(CDWrapper& db) : db_(db) {}
+    PayloadsProvider(CDBWrapper& db) : db_(db) {}
 
     void write(const altintegration::PopData& pop)
     {
@@ -72,7 +74,7 @@ private:
             if (memval != nullptr) {
                 value = *memval;
             } else {
-                if (!db_.Read(std::make_pair(dbPrefix, ids[i], value))) {
+                if (!db_.Read(std::make_pair(dbPrefix, ids[i]), value)) {
                     return state.Invalid(pop_t::name() + "-read-error", i);
                 }
             }
