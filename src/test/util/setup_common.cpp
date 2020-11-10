@@ -32,6 +32,9 @@
 #include <validation.h>
 #include <validationinterface.h>
 
+#include <vbk/bootstraps.hpp>
+#include <vbk/pop_service.hpp>
+
 #include <functional>
 
 const std::function<std::string(const char*)> G_TRANSLATION_FUN = nullptr;
@@ -90,6 +93,8 @@ BasicTestingSetup::BasicTestingSetup(const std::string& chainName, const std::ve
         assert(error.empty());
     }
     SelectParams(chainName);
+    // VeriBlock
+    VeriBlock::selectPopConfig("regtest", "regtest", true);
     SeedInsecureRand();
     if (G_TEST_LOG_FUN) LogInstance().PushBackCallback(G_TEST_LOG_FUN);
     InitLogging();
@@ -133,6 +138,8 @@ TestingSetup::TestingSetup(const std::string& chainName, const std::vector<const
     GetMainSignals().RegisterBackgroundSignalScheduler(*m_node.scheduler);
 
     pblocktree.reset(new CBlockTreeDB(1 << 20, true));
+    // VeriBlock
+    VeriBlock::SetPop(*pblocktree);
 
     m_node.chainman = &::g_chainman;
     m_node.chainman->InitializeChainstate();

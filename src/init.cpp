@@ -65,6 +65,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <vbk/pop_service.hpp>
+
 #ifndef WIN32
 #include <attributes.h>
 #include <cerrno>
@@ -1567,6 +1569,8 @@ bool AppInitMain(const util::Ref& context, NodeContext& node)
                 // fails if it's still open from the previous loop. Close it first:
                 pblocktree.reset();
                 pblocktree.reset(new CBlockTreeDB(nBlockTreeDBCache, false, fReset));
+                // VeriBlock
+                VeriBlock::SetPop(*pblocktree);
 
                 if (fReset) {
                     pblocktree->WriteReindexing(true);

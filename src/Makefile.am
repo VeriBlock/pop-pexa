@@ -324,6 +324,7 @@ libpexa_util_a-clientversion.$(OBJEXT): obj/build.h
 libpexa_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(PEXA_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
 libpexa_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libpexa_server_a_SOURCES = \
+  vbk/pop_service.cpp \
   addrdb.cpp \
   addrman.cpp \
   banman.cpp \
