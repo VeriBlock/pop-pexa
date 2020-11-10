@@ -14,6 +14,8 @@
 #include <util/url.h>
 #include <wallet/wallettool.h>
 
+#include <vbk/bootstraps.hpp>
+
 #include <functional>
 
 const std::function<std::string(const char*)> G_TRANSLATION_FUN = nullptr;
@@ -64,6 +66,8 @@ static bool WalletAppInit(int argc, char* argv[])
     }
     // Check for -testnet or -regtest parameter (Params() calls are only valid after this clause)
     SelectParams(gArgs.GetChainName());
+    // VeriBlock
+    VeriBlock::selectPopConfig(gArgs);
 
     return true;
 }
