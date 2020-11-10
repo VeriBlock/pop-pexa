@@ -516,6 +516,8 @@ libpexa_consensus_a_SOURCES = \
 libpexa_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(PEXA_INCLUDES)
 libpexa_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libpexa_common_a_SOURCES = \
+  vbk/pop_common.cpp \
+  vbk/bootstraps.cpp \
   base58.cpp \
   bech32.cpp \
   bloom.cpp \
