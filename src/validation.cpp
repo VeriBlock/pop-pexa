@@ -380,6 +380,9 @@ static void UpdateMempoolForReorg(DisconnectedBlockTransactions& disconnectpool,
 {
     AssertLockHeld(cs_main);
     std::vector<uint256> vHashUpdate;
+    // VeriBlock
+    VeriBlock::updatePopMempoolForReorg();
+
     // disconnectpool's insertion_order index sorts the entries from
     // oldest to newest, but the oldest entry will be the last tx from the
     // latest mined block that was disconnected.
@@ -2555,6 +2558,9 @@ bool CChainState::DisconnectTip(BlockValidationState& state, const CChainParams&
         }
     }
 
+    // VeriBlock
+    VeriBlock::addDisconnectedPopData(block.popData);
+
     m_chain.SetTip(pindexDelete->pprev);
 
     UpdateTip(pindexDelete->pprev, chainparams);
@@ -2660,6 +2666,8 @@ bool CChainState::ConnectTip(BlockValidationState& state, const CChainParams& ch
     // Remove conflicting transactions from the mempool.;
     mempool.removeForBlock(blockConnecting.vtx, pindexNew->nHeight);
     disconnectpool.removeForBlock(blockConnecting.vtx);
+    // VeriBlock: remove from pop_mempool
+    VeriBlock::removePayloadsFromMempool(blockConnecting.popData);
     // Update m_chain & related variables.
     m_chain.SetTip(pindexNew);
     UpdateTip(pindexNew, chainparams);

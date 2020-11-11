@@ -21,6 +21,8 @@
 #include <util/moneystr.h>
 #include <util/system.h>
 
+#include <vbk/pop_service.hpp>
+
 #include <algorithm>
 #include <utility>
 
@@ -150,6 +152,9 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     addPackageTxs(nPackagesSelected, nDescendantsUpdated);
 
     // VeriBlock: add PopData into the block
+    if(chainparams.isPopEnabled(nHeight)) {
+        pblock->popData = VeriBlock::getPopData();
+    }
     if(!pblock->popData.empty()) {
         pblock->nVersion |= VeriBlock::POP_BLOCK_VERSION_BIT;
     }

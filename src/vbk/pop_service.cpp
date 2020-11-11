@@ -141,4 +141,29 @@ bool loadTrees(CDBIterator& iter)
     return true;
 }
 
+altintegration::PopData getPopData() EXCLUSIVE_LOCKS_REQUIRED(cs_main)
+{
+    AssertLockHeld(cs_main);
+    return GetPop().mempool->getPop();
+}
+
+void removePayloadsFromMempool(const altintegration::PopData& popData) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
+{
+    AssertLockHeld(cs_main);
+    GetPop().mempool->removeAll(popData);
+}
+
+void updatePopMempoolForReorg() EXCLUSIVE_LOCKS_REQUIRED(cs_main)
+{
+    auto& pop = GetPop();
+    for (const auto& popData : disconnected_popdata) {
+        pop.mempool->submitAll(popData);
+    }
+    disconnected_popdata.clear();
+}
+
+void addDisconnectedPopData(const altintegration::PopData& popData) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
+{
+    disconnected_popdata.push_back(popData);
+}
 } // namespace VeriBlock
