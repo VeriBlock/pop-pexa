@@ -1,15 +1,26 @@
 #ifndef PEXA_SRC_VBK_POP_SERVICE_HPP
 #define PEXA_SRC_VBK_POP_SERVICE_HPP
 
+#include <consensus/validation.h>
+
 #include <vbk/adaptors/block_batch_adaptor.hpp>
 #include <vbk/adaptors/payloads_provider.hpp>
 #include <vbk/pop_common.hpp>
+#include <vbk/util.hpp>
 
+typedef int64_t CAmount;
+
+class CBlockIndex;
+class CBlock;
+class CScript;
 class CBlockTreeDB;
 class CDBIterator;
 class CDBWrapper;
 
 namespace VeriBlock {
+
+using BlockBytes = std::vector<uint8_t>;
+using PopRewards = std::map<CScript, CAmount>;
 
 void SetPop(CDBWrapper& db);
 
@@ -21,11 +32,19 @@ altintegration::PopData getPopData();
 void saveTrees(altintegration::BlockBatchAdaptor& batch);
 bool loadTrees(CDBIterator& iter);
 
+//! alttree methods
+bool acceptBlock(const CBlockIndex& indexNew, BlockValidationState& state);
+bool addAllBlockPayloads(const CBlock& block, BlockValidationState& state);
+bool setState(const uint256& hash, altintegration::ValidationState& state);
+
 //! mempool methods
 altintegration::PopData getPopData();
 void removePayloadsFromMempool(const altintegration::PopData& popData);
 void updatePopMempoolForReorg();
 void addDisconnectedPopData(const altintegration::PopData& popData);
+
+std::vector<BlockBytes> getLastKnownVBKBlocks(size_t blocks);
+std::vector<BlockBytes> getLastKnownBTCBlocks(size_t blocks);
 
 } // namespace VeriBlock
 
