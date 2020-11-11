@@ -1778,6 +1778,10 @@ DisconnectResult CChainState::DisconnectBlock(const CBlock& block, const CBlockI
         }
     }
 
+    // VeriBlock
+    altintegration::ValidationState state;
+    VeriBlock::setState(block.hashPrevBlock, state);
+
     // move best block pointer to prevout block
     view.SetBestBlock(pindex->pprev->GetBlockHash());
 
@@ -2224,6 +2228,16 @@ bool CChainState::ConnectBlock(const CBlock& block, BlockValidationState& state,
         }
         UpdateCoins(tx, view, i == 0 ? undoDummy : blockundo.vtxundo.back(), pindex->nHeight);
     }
+
+    altintegration::ValidationState _state;
+    if(!VeriBlock::setState(pindex->GetBlockHash(), _state)) {
+        return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS,
+         "bad-block-pop",
+         strprintf("Block %s is POP invalid: %s",
+          pindex->GetBlockHash().ToString(),
+          _state.toString()));
+    }
+
     int64_t nTime3 = GetTimeMicros(); nTimeConnect += nTime3 - nTime2;
     LogPrint(BCLog::BENCH, "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs (%.2fms/blk)]\n", (unsigned)block.vtx.size(), MILLI * (nTime3 - nTime2), MILLI * (nTime3 - nTime2) / block.vtx.size(), nInputs <= 1 ? 0 : MILLI * (nTime3 - nTime2) / (nInputs-1), nTimeConnect * MICRO, nTimeConnect * MILLI / nBlocksTotal);
 
@@ -2473,6 +2487,11 @@ void static UpdateTip(const CBlockIndex* pindexNew, const CChainParams& chainPar
         g_best_block = pindexNew->GetBlockHash();
         g_best_block_cv.notify_all();
     }
+
+    // VeriBlock
+    altintegration::ValidationState state;
+    bool ret = VeriBlock::setState(pindexNew->GetBlockHash(), state);
+    assert(ret && "block has been checked previously and should be valid");
 
     bilingual_str warning_messages;
     if (!::ChainstateActive().IsInitialBlockDownload())
@@ -3757,6 +3776,14 @@ bool BlockManager::AcceptBlockHeader(const CBlockHeader& block, BlockValidationS
     if (ppindex)
         *ppindex = pindex;
 
+    // VeriBlock
+    if(!VeriBlock::acceptBlock(*pindex, state)) {
+        return error("%s: ALT tree could not accept block ALT:%d:%s, reason: %s",
+          __func__,
+          pindex->nHeight,
+          pindex->GetBlockHash().ToString());
+    }
+
     return true;
 }
 
@@ -3865,6 +3892,17 @@ bool CChainState::AcceptBlock(const std::shared_ptr<const CBlock>& pblock, Block
         return error("%s: %s", __func__, state.ToString());
     }
 
+    // VeriBlock
+    {
+        if(!VeriBlock::addAllBlockPayloads(block, state)) {
+            return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS,
+              strprintf("Can not add POP payloads to block height: %d, hash: %s, message: %s",
+              pindex->nHeight,
+              block.GetHash().ToString(),
+              state.ToString()));
+        }
+    }
+
     // Header is valid/has work, merkle tree and segwit merkle tree are good...RELAY NOW
     // (but if it does not build on our best tip, let the SendMessages loop relay it)
     if (!IsInitialBlockDownload() && m_chain.Tip() == pindex->pprev)
@@ -3935,6 +3973,28 @@ bool TestBlockValidity(BlockValidationState& state, const CChainParams& chainpar
     indexDummy.pprev = pindexPrev;
     indexDummy.nHeight = pindexPrev->nHeight + 1;
     indexDummy.phashBlock = &block_hash;
+
+    // VeriBlock: Block that have been passed to TestBlockValidity may not exist
+    // in alt tree, because technically it was not created ("mined"). in this
+    // case, add it and then remove
+    auto& tree = *VeriBlock::GetPop().altTree;
+    std::vector<uint8_t> _hash{block_hash.begin(), block_hash.end()};
+    bool shouldRemove = false;
+    if(!tree.getBlockIndex(_hash)) {
+        shouldRemove = true;
+        auto containing = VeriBlock::blockToAltBlock(indexDummy);
+        altintegration::ValidationState _state;
+        bool ret = tree.acceptBlockHeader(containing, _state);
+        assert(ret && "alt tree can not accept alt block");
+
+        tree.acceptBlock(_hash, block.popData);
+    }
+
+    auto _f = altintegration::Finalizer([shouldRemove, _hash, &tree]() {
+        if(shouldRemove) {
+            tree.removeSubtree(_hash);
+        }
+    });
 
     // NOTE: CheckBlockHeader is called by CheckBlock
     if (!ContextualCheckBlockHeader(block, state, chainparams, pindexPrev, GetAdjustedTime()))
