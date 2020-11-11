@@ -11,15 +11,21 @@ class CDBWrapper;
 
 namespace VeriBlock {
 
-void SetPop(CDBWrapper &db);
+void SetPop(CDBWrapper& db);
 
-PayloadsProvider &GetPayloadsProvider();
+PayloadsProvider& GetPayloadsProvider();
 
 //! returns true if all tips are stored in database, false otherwise
-bool hasPopData(CBlockTreeDB &db);
+bool hasPopData(CBlockTreeDB& db);
 altintegration::PopData getPopData();
-void saveTrees(altintegration::BlockBatchAdaptor &batch);
-bool loadTrees(CDBIterator &iter);
+void saveTrees(altintegration::BlockBatchAdaptor& batch);
+bool loadTrees(CDBIterator& iter);
+
+//! mempool methods
+altintegration::PopData getPopData();
+void removePayloadsFromMempool(const altintegration::PopData& popData);
+void updatePopMempoolForReorg();
+void addDisconnectedPopData(const altintegration::PopData& popData);
 
 } // namespace VeriBlock
 
