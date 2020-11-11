@@ -171,5 +171,5 @@ def parse_output(a, fmt):
     else:
         raise NotImplementedError("Don't know how to compare %s" % fmt)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     # main()
