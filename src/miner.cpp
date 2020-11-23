@@ -154,6 +154,10 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     // VeriBlock: add PopData into the block
     if(chainparams.isPopEnabled(nHeight)) {
         pblock->popData = VeriBlock::getPopData();
+        LogPrintf("pblock->popData atvs: %ld, vtbs: %ld, context: %ld \n",
+               pblock->popData.atvs.size(),
+               pblock->popData.vtbs.size(),
+               pblock->popData.context.size());
     }
     if(!pblock->popData.empty()) {
         pblock->nVersion |= VeriBlock::POP_BLOCK_VERSION_BIT;

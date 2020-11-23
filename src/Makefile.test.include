@@ -188,7 +188,8 @@ FUZZ_SUITE_LD_COMMON = \
 
 # VeriBlock
 VBK_TESTS =\
-  vbk/test/block_validation_tests.cpp
+  vbk/test/block_validation_tests.cpp \
+  vbk/test/e2e_pop_tests.cpp
 
 # test_pexa binary #
 PEXA_TESTS =\

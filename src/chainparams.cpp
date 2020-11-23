@@ -86,7 +86,7 @@ public:
 
         // VeriBlock
         // TODO: set an VeriBlock pop security fork height
-        // consensus.VeriBlockPopSecurityHeight = -1;
+        consensus.VeriBlockPopSecurityHeight = -1;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
@@ -210,7 +210,7 @@ public:
 
         // VeriBlock
         // TODO: set an VeriBlock pop security fork height
-        // consensus.VeriBlockPopSecurityHeight = -1;
+        consensus.VeriBlockPopSecurityHeight = -1;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
@@ -310,7 +310,7 @@ public:
 
         // VeriBlock
         // TODO: set an VeriBlock pop security fork height
-        // consensus.VeriBlockPopSecurityHeight = 1;
+        consensus.VeriBlockPopSecurityHeight = 200;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
