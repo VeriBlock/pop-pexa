@@ -250,4 +250,16 @@ bool setState(const uint256& hash, altintegration::ValidationState& state) EXCLU
     return GetPop().altTree->setState(std::vector<uint8_t>{hash.begin(), hash.end()}, state);
 }
 
+std::vector<BlockBytes> getLastKnownVBKBlocks(size_t blocks)
+{
+    AssertLockHeld(cs_main);
+    return altintegration::getLastKnownBlocks(GetPop().altTree->vbk(), blocks);
+}
+
+std::vector<BlockBytes> getLastKnownBTCBlocks(size_t blocks)
+{
+    AssertLockHeld(cs_main);
+    return altintegration::getLastKnownBlocks(GetPop().altTree->btc(), blocks);
+}
+
 } // namespace VeriBlock
