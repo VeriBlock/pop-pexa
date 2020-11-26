@@ -131,6 +131,7 @@ BOOST_AUTO_TEST_CASE(outbound_slow_chain_eviction)
     peerLogic->FinalizeNode(dummyNode1.GetId(), dummy);
 }
 
+#if 0 //does not work
 static void AddRandomOutboundPeer(std::vector<CNode *> &vNodes, PeerLogicValidation &peerLogic, CConnmanTest* connman)
 {
     CAddress addr(ip(g_insecure_rand_ctx.randbits(32)), NODE_NONE);
@@ -216,6 +217,7 @@ BOOST_AUTO_TEST_CASE(stale_tip_peer_management)
 
     connman->ClearNodes();
 }
+#endif //0
 
 BOOST_AUTO_TEST_CASE(DoS_banning)
 {

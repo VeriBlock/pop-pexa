@@ -1142,10 +1142,6 @@ pexa_test_clean : FORCE
 	rm -f $(CLEAN_PEXA_TEST) $(test_test_pexa_OBJECTS) $(TEST_BINARY)
 
 check-local: $(PEXA_TESTS:.cpp=.cpp.test)
-if BUILD_PEXA_TX
-	@echo "Running test/util/pexa-util-test.py..."
-	$(PYTHON) $(top_builddir)/test/util/pexa-util-test.py
-endif
 	@echo "Running test/util/rpcauth-test.py..."
 	$(PYTHON) $(top_builddir)/test/util/rpcauth-test.py
 if TARGET_WINDOWS

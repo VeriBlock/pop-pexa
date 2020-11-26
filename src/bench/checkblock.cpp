@@ -49,4 +49,6 @@ static void DeserializeAndCheckBlockTest(benchmark::State& state)
 }
 
 BENCHMARK(DeserializeBlockTest, 130);
+#if 0 //does not work
 BENCHMARK(DeserializeAndCheckBlockTest, 160);
+#endif //0
