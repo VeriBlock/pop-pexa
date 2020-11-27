@@ -7,6 +7,7 @@ on:
       - develop
       - tests
       - feature/*
+      - veriblock*
 
   pull_request:
     branches:
@@ -14,6 +15,7 @@ on:
       - develop
       - tests
       - feature/*
+      - veriblock*
 
 jobs:
   linux-native:
@@ -49,6 +51,15 @@ jobs:
         run: sudo apt-get install build-essential libtool autotools-dev automake pkg-config bsdmainutils python3 ccache
       - name: install dependencies
         run: sudo apt-get install libevent-dev python3-zmq python3-dev libboost-python-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libboost-thread-dev libminiupnpc-dev libzmq3-dev libdb4.8-dev libdb4.8++-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libqrencode-dev libarchive-dev
+      - name: install veriblock lib
+        run: |
+          git clone https://github.com/VeriBlock/alt-integration-cpp.git
+          cd alt-integration-cpp
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DTESTING=OFF
+          make -j
+          sudo make install
       - name: autogen
         run: ./autogen.sh
       - name: configure
@@ -109,6 +120,15 @@ jobs:
             mingw32-ccache-
       - name: install build requirements
         run: sudo apt-get install build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git g++-mingw-w64-x86-64 ccache nsis
+      - name: install veriblock lib
+        run: |
+          git clone https://github.com/VeriBlock/alt-integration-cpp.git
+          cd alt-integration-cpp
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DTESTING=OFF
+          make -j
+          sudo make install
       - name: set the default mingw32 g++ compiler option to posix
         run: sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
       - name: strip out problematic Windows %PATH% imported var
@@ -181,6 +201,15 @@ jobs:
             darwin-ccache-
       - name: install build requirements
         run: sudo apt-get install curl librsvg2-bin libtiff-tools bsdmainutils cmake imagemagick libcap-dev libz-dev libbz2-dev python3-setuptools ccache
+      - name: install veriblock lib
+        run: |
+          git clone https://github.com/VeriBlock/alt-integration-cpp.git
+          cd alt-integration-cpp
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DTESTING=OFF
+          make -j
+          sudo make install
       - name: download and extract macos sdk
         run: |
           wget -P depends/sdk-sources https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.14.sdk.tar.xz
@@ -237,9 +266,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v1
-        with:
-          path: main
+        uses: actions/checkout@v2
       - name: Extract branch name & commit
         id: extract_branch
         run: |
@@ -259,10 +286,28 @@ jobs:
           key: macos-ccache-${{ steps.cache_timestamp.outputs.timestamp }}
           restore-keys: |
             macos-ccache-
-      - name: install homebrew
-        run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+      - name: get version for veriblock-pop-cpp
+        run: echo "VERIBLOCK_POP_CPP_VERSION=$(awk -F '=' '/\$\(package\)_version/{print $NF}' $PWD/depends/packages/veriblock-pop-cpp.mk | head -n1)" >> $GITHUB_ENV
+      - name: veriblock-pop-cpp release version
+        run: echo Using veriblock-pop-cpp version ${VERIBLOCK_POP_CPP_VERSION}
       - name: install dependencies
-        run: brew install automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf python3 libevent librsvg ccache qrencode qt zeromq libarchive
+        run: |
+          brew install automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf python3 libevent librsvg ccache qrencode qt zeromq libarchive
+      - name: install veriblock-pop-cpp
+        env:
+          BUILD_TYPE: Release
+        run: |
+          (
+          cd /tmp;
+          wget https://github.com/VeriBlock/alt-integration-cpp/archive/${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
+          tar -xf ${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
+          cd alt-integration-cpp-${VERIBLOCK_POP_CPP_VERSION};
+          mkdir build;
+          cd build;
+          cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DTESTING=OFF;
+          make -j2;
+          sudo make install
+          )
       - name: autogen
         run: ./autogen.sh
       - name: configure
