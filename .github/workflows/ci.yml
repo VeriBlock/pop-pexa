@@ -286,28 +286,18 @@ jobs:
           key: macos-ccache-${{ steps.cache_timestamp.outputs.timestamp }}
           restore-keys: |
             macos-ccache-
-      - name: get version for veriblock-pop-cpp
-        run: echo "VERIBLOCK_POP_CPP_VERSION=$(awk -F '=' '/\$\(package\)_version/{print $NF}' $PWD/depends/packages/veriblock-pop-cpp.mk | head -n1)" >> $GITHUB_ENV
-      - name: veriblock-pop-cpp release version
-        run: echo Using veriblock-pop-cpp version ${VERIBLOCK_POP_CPP_VERSION}
       - name: install dependencies
         run: |
           brew install automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf python3 libevent librsvg ccache qrencode qt zeromq libarchive
-      - name: install veriblock-pop-cpp
-        env:
-          BUILD_TYPE: Release
+      - name: install veriblock lib
         run: |
-          (
-          cd /tmp;
-          wget https://github.com/VeriBlock/alt-integration-cpp/archive/${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
-          tar -xf ${VERIBLOCK_POP_CPP_VERSION}.tar.gz;
-          cd alt-integration-cpp-${VERIBLOCK_POP_CPP_VERSION};
-          mkdir build;
-          cd build;
-          cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DTESTING=OFF;
-          make -j2;
+          git clone https://github.com/VeriBlock/alt-integration-cpp.git
+          cd alt-integration-cpp
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DTESTING=OFF
+          make -j
           sudo make install
-          )
       - name: autogen
         run: ./autogen.sh
       - name: configure
