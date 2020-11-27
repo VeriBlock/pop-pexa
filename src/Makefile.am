@@ -616,6 +616,7 @@ pexa_daemon_sources += pexad-res.rc
 endif
 
 pexa_bin_ldadd = \
+  $(VERIBLOCK_POP_CPP_LIBS) \
   $(LIBPEXA_WALLET) \
   $(LIBPEXA_COMMON) \
   $(LIBPEXA_UTIL) \
@@ -626,8 +627,7 @@ pexa_bin_ldadd = \
   $(LIBLEVELDB) \
   $(LIBLEVELDB_SSE42) \
   $(LIBMEMENV) \
-  $(LIBSECP256K1) \
-  $(VERIBLOCK_POP_CPP_LIBS)
+  $(LIBSECP256K1)
 
 pexa_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(VERIBLOCK_POP_CPP_LIBS)
 
@@ -674,13 +674,13 @@ pexa_tx_SOURCES += pexa-tx-res.rc
 endif
 
 pexa_tx_LDADD = \
+  $(VERIBLOCK_POP_CPP_LIBS) \
   $(LIBUNIVALUE) \
   $(LIBPEXA_COMMON) \
   $(LIBPEXA_UTIL) \
   $(LIBPEXA_CONSENSUS) \
   $(LIBPEXA_CRYPTO) \
-  $(LIBSECP256K1) \
-  $(VERIBLOCK_POP_CPP_LIBS)
+  $(LIBSECP256K1)
 
 pexa_tx_LDADD += $(BOOST_LIBS) $(VERIBLOCK_POP_CPP_LIBS)
 #

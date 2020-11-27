@@ -891,7 +891,10 @@ template<typename Stream>
 inline void Unserialize(Stream& s, altintegration::PopData& pop_data) {
     std::vector<uint8_t> bytes_data;
     Unserialize(s, bytes_data);
-    pop_data = altintegration::PopData::fromVbkEncoding(bytes_data);
+    altintegration::ReadStream stream(bytes_data);
+    altintegration::ValidationState state;
+    altintegration::DeserializeFromVbkEncoding(stream, pop_data, state);
+    assert(state.IsValid());
 }
 
 /**
