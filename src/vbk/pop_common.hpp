@@ -6,6 +6,8 @@
 namespace VeriBlock {
 altintegration::PopContext& GetPop();
 
+void StopPop();
+
 void SetPopConfig(const altintegration::Config& config);
 
 void SetPop(std::shared_ptr<altintegration::PayloadsProvider>& db);

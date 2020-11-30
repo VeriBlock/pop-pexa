@@ -181,6 +181,7 @@ TestingSetup::~TestingSetup()
     if (m_node.scheduler) m_node.scheduler->stop();
     threadGroup.interrupt_all();
     threadGroup.join_all();
+    VeriBlock::StopPop();
     GetMainSignals().FlushBackgroundCallbacks();
     GetMainSignals().UnregisterBackgroundSignalScheduler();
     m_node.connman.reset();
