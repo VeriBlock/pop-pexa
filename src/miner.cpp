@@ -21,6 +21,7 @@
 #include <util/moneystr.h>
 #include <util/system.h>
 
+#include <vbk/merkle.hpp>
 #include <vbk/pop_service.hpp>
 
 #include <algorithm>
@@ -465,5 +466,5 @@ void IncrementExtraNonce(CBlock* pblock, const CBlockIndex* pindexPrev, unsigned
     assert(txCoinbase.vin[0].scriptSig.size() <= 100);
 
     pblock->vtx[0] = MakeTransactionRef(std::move(txCoinbase));
-    pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
+    pblock->hashMerkleRoot = VeriBlock::TopLevelMerkleRoot(pindexPrev, *pblock);
 }

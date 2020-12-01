@@ -153,6 +153,8 @@ PEXA_CORE_H = \
   algo/sponge.cpp \
   algo/sph_sha2.c \
   algo/gost_streebog.c \
+  vbk/pop_common.hpp \
+  vbk/pop_common.cpp \
   base58.h \
   bech32.h \
   bloom.h \
@@ -285,6 +287,8 @@ PEXA_CORE_H = \
   validationinterface.h \
   versionbits.h \
   versionbitsinfo.h \
+  vbk/merkle.hpp \
+  vbk/merkle.cpp \
   walletinitinterface.h \
   wallet/bdb.h \
   wallet/coincontrol.h \
