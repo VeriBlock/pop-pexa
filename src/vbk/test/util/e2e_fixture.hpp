@@ -8,14 +8,16 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <bootstraps.h>
-#include <chain.h>
 #include <chainparams.h>
 #include <consensus/validation.h>
 #include <test/util/setup_common.h>
+#include <txmempool.h>
 #include <validation.h>
-#include <vbk/log.hpp>
+
+#include <vbk/bootstraps.hpp>
+#include <vbk/pop_service.hpp>
 #include <vbk/util.hpp>
+
 #include <veriblock/alt-util.hpp>
 #include <veriblock/mempool.hpp>
 #include <veriblock/mock_miner.hpp>
@@ -49,7 +51,7 @@ struct E2eFixture : public TestChain100Setup {
         altintegration::GetLogger().level = altintegration::LogLevel::warn;
 
         // create N blocks necessary to start POP fork resolution
-        CScript scriptPubKey = CScript() << ToByteVector(coinbaseKey.GetPubKey()) << OP_CHECKSIG;   
+        CScript scriptPubKey = CScript() << ToByteVector(coinbaseKey.GetPubKey()) << OP_CHECKSIG;
         while (!Params().isPopActive(ChainActive().Tip()->nHeight))
         {
             CBlock b = CreateAndProcessBlock({}, scriptPubKey);
@@ -149,10 +151,7 @@ struct E2eFixture : public TestChain100Setup {
             // do not check the submit result - expect statefully invalid data for testing purposes
         }
 
-        bool isValid = false;
-        const auto& block = CreateAndProcessBlock({}, prevBlock, cbKey, &isValid);
-        BOOST_CHECK(isValid);
-        return block;
+        return CreateAndProcessBlock({}, cbKey);
     }
 
     CBlock endorseAltBlockAndMine(uint256 hash, uint256 prevBlock, const std::vector<uint8_t>& payoutInfo, size_t generateVtbs = 0)

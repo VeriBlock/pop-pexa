@@ -3513,6 +3513,15 @@ std::vector<unsigned char> GenerateCoinbaseCommitment(CBlock& block, const CBloc
             commitment = std::vector<unsigned char>(out.scriptPubKey.begin(), out.scriptPubKey.end());
             CMutableTransaction tx(*block.vtx[0]);
             tx.vout.push_back(out);
+            // VeriBlock: add payloads commitment
+            int currentHeight = 0;
+            if (pindexPrev != nullptr) {
+                currentHeight = pindexPrev->nHeight + 1;
+            }
+            if (consensusParams.VeriBlockPopSecurityHeight <= currentHeight) {
+                CTxOut popOut = VeriBlock::addPopDataRootIntoCoinbaseCommitment(block);
+                tx.vout.push_back(popOut);
+            }
             block.vtx[0] = MakeTransactionRef(std::move(tx));
         }
     }
@@ -3593,7 +3602,7 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, BlockValidatio
 
     // VeriBlock validation
     if((block.nVersion & VeriBlock::POP_BLOCK_VERSION_BIT) && 
-        !params.isPopEnabled(nHeight)) {
+        !params.isPopActive(nHeight)) {
             return state.Invalid(BlockValidationResult::BLOCK_INVALID_HEADER,
                 strprintf("bad-pop-version(0x%08x)", block.nVersion),
                 strprintf("block contains PopData before PopSecurity has been enabled"));
@@ -3649,7 +3658,7 @@ bool ContextualCheckBlock(const CBlock& block, BlockValidationState& state, cons
     //   {0xaa, 0x21, 0xa9, 0xed}, and the following 32 bytes are SHA256^2(witness root, witness reserved value). In case there are
     //   multiple, the last one is used.
     // bool fHaveWitness = false;
-    if (nHeight >= consensusParams.SegwitHeight) {
+    if (nHeight >= params.SegwitHeight) {
         int commitpos = GetWitnessCommitmentIndex(block);
         if (commitpos != -1) {
             bool malleated = false;
@@ -3996,9 +4005,9 @@ bool TestBlockValidity(BlockValidationState& state, const CChainParams& chainpar
     // NOTE: CheckBlockHeader is called by CheckBlock
     if (!ContextualCheckBlockHeader(block, state, chainparams, pindexPrev, GetAdjustedTime()))
         return error("%s: Consensus::ContextualCheckBlockHeader: %s", __func__, state.ToString());
-    if (!CheckBlock(block, state, chainparams.GetConsensus(), fCheckPOW, fCheckMerkleRoot))
+    if (!CheckBlock(block, state, chainparams.GetConsensus(), fCheckPOW))
         return error("%s: Consensus::CheckBlock: %s", __func__, state.ToString());
-    if (!ContextualCheckBlock(block, state, chainparams.GetConsensus(), pindexPrev))
+    if (!ContextualCheckBlock(block, state, chainparams.GetConsensus(), pindexPrev, fCheckMerkleRoot))
         return error("%s: Consensus::ContextualCheckBlock: %s", __func__, state.ToString());
     if (!::ChainstateActive().ConnectBlock(block, state, &indexDummy, viewNew, chainparams, true))
         return false;

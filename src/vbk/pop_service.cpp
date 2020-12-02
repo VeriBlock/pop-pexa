@@ -252,13 +252,13 @@ bool setState(const uint256& hash, altintegration::ValidationState& state) EXCLU
 
 std::vector<BlockBytes> getLastKnownVBKBlocks(size_t blocks)
 {
-    AssertLockHeld(cs_main);
+    LOCK(cs_main);
     return altintegration::getLastKnownBlocks(GetPop().altTree->vbk(), blocks);
 }
 
 std::vector<BlockBytes> getLastKnownBTCBlocks(size_t blocks)
 {
-    AssertLockHeld(cs_main);
+    LOCK(cs_main);
     return altintegration::getLastKnownBlocks(GetPop().altTree->btc(), blocks);
 }
 

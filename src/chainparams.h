@@ -90,7 +90,7 @@ public:
     const ChainTxData& TxData() const { return chainTxData; }
 
     // VeriBlock start
-    bool isPopEnabled(int height) const {
+    bool isPopActive(int height) const {
             return height >= consensus.VeriBlockPopSecurityHeight;
     }
     // VeriBlock end
