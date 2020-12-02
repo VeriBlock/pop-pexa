@@ -60,9 +60,8 @@ static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits
 /**
  * Main network
  */
-class CMainParams : public CChainParams {
-public:
-    CMainParams() {
+CMainParams::CMainParams()
+{
         strNetworkID = CBaseChainParams::MAIN;
         consensus.nSubsidyHalvingInterval = 1712290;
         consensus.BIP16Exception = uint256S("0x000000b3f4b347d4a1fb2f2a8f42d5fc33094a49858608e511c0d45f51628b85");
@@ -178,15 +177,13 @@ public:
         #endif // WIN 32
 
         /** PEXA End **/
-    }
-};
+}
 
 /**
  * Testnet (v3)
  */
-class CTestNetParams : public CChainParams {
-public:
-    CTestNetParams() {
+CTestNetParams::CTestNetParams()
+{
         strNetworkID = CBaseChainParams::TESTNET;
         consensus.nSubsidyHalvingInterval = 210000;
         consensus.BIP16Exception = uint256S("0x000000e5c51eb049ef52013df58667cdcdf9fb6a34bc2fdd70a0ea576c207f2a");
@@ -278,15 +275,13 @@ public:
         #endif // WIN 32
 
         /** PEXA End **/
-    }
-};
+}
 
 /**
  * Regression test
  */
-class CRegTestParams : public CChainParams {
-public:
-    explicit CRegTestParams(const ArgsManager& args) {
+CRegTestParams::CRegTestParams(const ArgsManager& args)
+{
         strNetworkID =  CBaseChainParams::REGTEST;
         consensus.nSubsidyHalvingInterval = 150;
         consensus.BIP16Exception = uint256();
@@ -363,18 +358,16 @@ public:
 
         // DGW Activation
         nDGWActivationBlock = 200;
-    }
+}
 
-    /**
-     * Allows modifying the Version Bits regtest parameters.
-     */
-    void UpdateVersionBitsParameters(Consensus::DeploymentPos d, int64_t nStartTime, int64_t nTimeout)
-    {
-        consensus.vDeployments[d].nStartTime = nStartTime;
-        consensus.vDeployments[d].nTimeout = nTimeout;
-    }
-    void UpdateActivationParametersFromArgs(const ArgsManager& args);
-};
+/**
+ * Allows modifying the Version Bits regtest parameters.
+ */
+void CRegTestParams::UpdateVersionBitsParameters(Consensus::DeploymentPos d, int64_t nStartTime, int64_t nTimeout)
+{
+    consensus.vDeployments[d].nStartTime = nStartTime;
+    consensus.vDeployments[d].nTimeout = nTimeout;
+}
 
 void CRegTestParams::UpdateActivationParametersFromArgs(const ArgsManager& args)
 {

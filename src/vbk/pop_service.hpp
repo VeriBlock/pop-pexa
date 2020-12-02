@@ -16,6 +16,7 @@ class CScript;
 class CBlockTreeDB;
 class CDBIterator;
 class CDBWrapper;
+class CChainParams;
 
 namespace VeriBlock {
 
@@ -44,6 +45,11 @@ void addDisconnectedPopData(const altintegration::PopData& popData);
 
 std::vector<BlockBytes> getLastKnownVBKBlocks(size_t blocks);
 std::vector<BlockBytes> getLastKnownBTCBlocks(size_t blocks);
+
+PopRewards getPopRewards(const CBlockIndex& pindexPrev, const CChainParams& params);
+void addPopPayoutsIntoCoinbaseTx(CMutableTransaction& coinbaseTx, const CBlockIndex& pindexPrev, const CChainParams& params);
+bool checkCoinbaseTxWithPopRewards(const CTransaction& tx, const CAmount& nFees, const CBlockIndex& pindexPrev, const CChainParams& params, BlockValidationState& state);
+CAmount getCoinbaseSubsidy(const CAmount& subsidy, int32_t height, const CChainParams& params);
 
 } // namespace VeriBlock
 

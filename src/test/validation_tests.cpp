@@ -13,7 +13,17 @@
 
 BOOST_FIXTURE_TEST_SUITE(validation_tests, TestingSetup)
 
-static void TestBlockSubsidyHalvings(const Consensus::Params& consensusParams)
+class CMainWithHalvingsParams : public CMainParams
+{
+public:
+    CMainWithHalvingsParams(int nSubsidyHalvingInterval)
+    {
+        consensus.nSubsidyHalvingInterval = nSubsidyHalvingInterval;
+    }
+};
+
+#if 0 //does not work
+static void TestBlockSubsidyHalvings(const CChainParams& params)
 {
     int maxHalvings = 64;
     CAmount nInitialSubsidy = 50 * COIN;
@@ -21,23 +31,21 @@ static void TestBlockSubsidyHalvings(const Consensus::Params& consensusParams)
     CAmount nPreviousSubsidy = nInitialSubsidy * 2; // for height == 0
     BOOST_CHECK_EQUAL(nPreviousSubsidy, nInitialSubsidy * 2);
     for (int nHalvings = 0; nHalvings < maxHalvings; nHalvings++) {
-        int nHeight = nHalvings * consensusParams.nSubsidyHalvingInterval;
-        CAmount nSubsidy = GetBlockSubsidy(nHeight, consensusParams);
+        int nHeight = nHalvings * params.GetConsensus().nSubsidyHalvingInterval;
+        CAmount nSubsidy = GetBlockSubsidy(nHeight, params);
         BOOST_CHECK(nSubsidy <= nInitialSubsidy);
         BOOST_CHECK_EQUAL(nSubsidy, nPreviousSubsidy / 2);
         nPreviousSubsidy = nSubsidy;
     }
-    BOOST_CHECK_EQUAL(GetBlockSubsidy(maxHalvings * consensusParams.nSubsidyHalvingInterval, consensusParams), 0);
+    BOOST_CHECK_EQUAL(GetBlockSubsidy(maxHalvings * params.GetConsensus().nSubsidyHalvingInterval, params), 0);
 }
 
 static void TestBlockSubsidyHalvings(int nSubsidyHalvingInterval)
 {
-    Consensus::Params consensusParams;
-    consensusParams.nSubsidyHalvingInterval = nSubsidyHalvingInterval;
-    TestBlockSubsidyHalvings(consensusParams);
+    auto chainParams = CMainWithHalvingsParams(nSubsidyHalvingInterval);
+    TestBlockSubsidyHalvings(chainParams);
 }
 
-#if 0 //does not work
 BOOST_AUTO_TEST_CASE(block_subsidy_test)
 {
     const auto chainParams = CreateChainParams(CBaseChainParams::MAIN);

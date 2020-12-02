@@ -95,6 +95,8 @@ BOOST_FIXTURE_TEST_CASE(tx_mempool_block_doublespend, TestChain100Setup)
     BOOST_CHECK_EQUAL(m_node.mempool->size(), 0U);
 }
 
+#if 0 //does not work
+
 // Run CheckInputScripts (using CoinsTip()) on the given transaction, for all script
 // flags.  Test that CheckInputScripts passes for all flags that don't overlap with
 // the failing_flags argument, but otherwise fails.
@@ -145,7 +147,6 @@ static void ValidateCheckInputsForAllFlags(const CTransaction &tx, uint32_t fail
     }
 }
 
-#if 0 //does not work
 BOOST_FIXTURE_TEST_CASE(checkinputs_test, TestChain100Setup)
 {
     // Test that passing CheckInputScripts with one set of script flags doesn't imply

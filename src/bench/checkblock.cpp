@@ -28,6 +28,7 @@ static void DeserializeBlockTest(benchmark::State& state)
     }
 }
 
+#if 0 //unused
 static void DeserializeAndCheckBlockTest(benchmark::State& state)
 {
     CDataStream stream(benchmark::data::block413567, SER_NETWORK, PROTOCOL_VERSION);
@@ -47,6 +48,7 @@ static void DeserializeAndCheckBlockTest(benchmark::State& state)
         assert(checked);
     }
 }
+#endif //0
 
 BENCHMARK(DeserializeBlockTest, 130);
 #if 0 //does not work
