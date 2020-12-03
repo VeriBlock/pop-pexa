@@ -102,8 +102,21 @@ endif
 endif
 
 .PHONY: FORCE check-symbols check-security
+
+### VeriBlock section start
+VBK_H = \
+  vbk/entity/context_info_container.hpp \
+  vbk/pop_common.hpp \
+  vbk/pop_service.hpp \
+  vbk/vbk.hpp \
+  vbk/merkle.hpp \
+  vbk/util.hpp \
+  vbk/adaptors/block_batch_adaptor.hpp \
+  vbk/adaptors/payloads_provider.hpp
+
 # pexa core #
 PEXA_CORE_H = \
+  $(VBK_H) \
   addrdb.h \
   addrman.h \
   attributes.h \
@@ -153,8 +166,6 @@ PEXA_CORE_H = \
   algo/sponge.cpp \
   algo/sph_sha2.c \
   algo/gost_streebog.c \
-  vbk/pop_common.hpp \
-  vbk/pop_common.cpp \
   base58.h \
   bech32.h \
   bloom.h \
@@ -287,8 +298,6 @@ PEXA_CORE_H = \
   validationinterface.h \
   versionbits.h \
   versionbitsinfo.h \
-  vbk/merkle.hpp \
-  vbk/merkle.cpp \
   walletinitinterface.h \
   wallet/bdb.h \
   wallet/coincontrol.h \
@@ -328,6 +337,7 @@ libpexa_util_a-clientversion.$(OBJEXT): obj/build.h
 libpexa_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(PEXA_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
 libpexa_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libpexa_server_a_SOURCES = \
+  vbk/pop_service.hpp \
   vbk/pop_service.cpp \
   addrdb.cpp \
   addrman.cpp \
@@ -549,6 +559,8 @@ libpexa_common_a_SOURCES = \
   script/sign.cpp \
   script/signingprovider.cpp \
   script/standard.cpp \
+  vbk/merkle.hpp \
+  vbk/merkle.cpp \
   versionbitsinfo.cpp \
   warnings.cpp \
   $(PEXA_CORE_H)
@@ -707,7 +719,7 @@ endif
 # pexaconsensus library #
 if BUILD_PEXA_LIBS
 include_HEADERS = script/pexaconsensus.h
-libpexaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libpexa_crypto_base_a_SOURCES) $(libpexa_consensus_a_SOURCES)
+libpexaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libpexa_crypto_base_a_SOURCES) $(libpexa_consensus_a_SOURCES) $(VBK_H)
 
 if GLIBC_BACK_COMPAT
   libpexaconsensus_la_SOURCES += compat/glibc_compat.cpp
