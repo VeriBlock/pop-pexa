@@ -391,4 +391,66 @@ CAmount getCoinbaseSubsidy(const CAmount& subsidy, int32_t height, const CChainP
     return newSubsidy / 100;
 }
 
+CBlockIndex* compareTipToBlock(CBlockIndex* candidate)
+{
+    AssertLockHeld(cs_main);
+    assert(candidate != nullptr && "block has no according header in block tree");
+
+    auto blockHash = candidate->GetBlockHash();
+    auto* tip = ChainActive().Tip();
+    if (!tip) {
+        // if tip is not set, candidate wins
+        return nullptr;
+    }
+
+    auto tipHash = tip->GetBlockHash();
+    if (tipHash == blockHash) {
+        // we compare tip with itself
+        return tip;
+    }
+
+   int result = 0;
+    if (Params().isPopActive(tip->nHeight)) {
+        result = compareForks(*tip, *candidate);
+    } else {
+        result = CBlockIndexWorkComparator()(tip, candidate) ? -1 : 1;
+    }
+
+    if (result < 0) {
+        // candidate has higher POP score
+        return candidate;
+    }
+
+    if (result == 0 && tip->nChainWork < candidate->nChainWork) {
+        // candidate is POP equal to current tip;
+        // candidate has higher chainwork
+        return candidate;
+    }
+
+    // otherwise, current chain wins
+    return tip;
+}
+
+int compareForks(const CBlockIndex& leftForkTip, const CBlockIndex& rightForkTip) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
+{
+    auto& pop = GetPop();
+    AssertLockHeld(cs_main);
+    if (&leftForkTip == &rightForkTip) {
+        return 0;
+    }
+
+    auto left = blockToAltBlock(leftForkTip);
+    auto right = blockToAltBlock(rightForkTip);
+    auto state = altintegration::ValidationState();
+
+    if (!pop.altTree->setState(left.hash, state)) {
+        if (!pop.altTree->setState(right.hash, state)) {
+            throw std::logic_error("both chains are invalid");
+        }
+        return -1;
+    }
+
+    return pop.altTree->comparePopScore(left.hash, right.hash);
+}
+
 } // namespace VeriBlock

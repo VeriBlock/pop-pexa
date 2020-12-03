@@ -680,6 +680,9 @@ private:
     //! Mark a block as not having block data
     void EraseBlockData(CBlockIndex* index) EXCLUSIVE_LOCKS_REQUIRED(cs_main);
 
+    CBlockIndex* FindBestChain() EXCLUSIVE_LOCKS_REQUIRED(cs_main);
+    bool TestBlockIndex(CBlockIndex *pindexTest) EXCLUSIVE_LOCKS_REQUIRED(cs_main);
+
     friend ChainstateManager;
 };
 
