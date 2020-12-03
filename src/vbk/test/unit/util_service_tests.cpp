@@ -17,8 +17,6 @@
 #include <vbk/pop_service.hpp>
 #include <vbk/util.hpp>
 
-using ::testing::Return;
-
 BOOST_AUTO_TEST_SUITE(util_service_tests)
 
 BOOST_FIXTURE_TEST_CASE(is_keystone, TestingSetup) {
