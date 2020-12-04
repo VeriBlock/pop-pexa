@@ -45,4 +45,7 @@ static const int INVALID_CB_NO_BAN_VERSION = 70015;
 //! getassetdata reutrn asstnotfound, and assetdata doesn't have blockhash in the data
 static const int X16RV2_VERSION = 70025;
 
+//! VeriBlock: ping p2p msg contains 'best chain'
+static const int PING_BESTCHAIN_VERSION = 80000;
+
 #endif // PEXA_VERSION_H

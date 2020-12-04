@@ -111,6 +111,7 @@ VBK_H = \
   vbk/vbk.hpp \
   vbk/merkle.hpp \
   vbk/util.hpp \
+  vbk/adaptors/univalue_json.hpp \
   vbk/adaptors/block_batch_adaptor.hpp \
   vbk/adaptors/payloads_provider.hpp
 
@@ -370,6 +371,8 @@ libpexa_server_a_SOURCES = \
   policy/settings.cpp \
   pow.cpp \
   rest.cpp \
+  vbk/rpc_register.hpp \
+  vbk/rpc_register.cpp \
   rpc/blockchain.cpp \
   rpc/mining.cpp \
   rpc/misc.cpp \
@@ -726,8 +729,8 @@ if GLIBC_BACK_COMPAT
 endif
 
 libpexaconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libpexaconsensus_la_LIBADD = $(LIBSECP256K1)
-libpexaconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_PEXA_INTERNAL
+libpexaconsensus_la_LIBADD = $(LIBSECP256K1) $(LIBUNIVALUE)
+libpexaconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -I$(srcdir)/univalue/include -DBUILD_PEXA_INTERNAL
 libpexaconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
 endif

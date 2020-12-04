@@ -178,6 +178,7 @@ BOOST_AUTO_TEST_CASE(rpc_format_monetary_values)
     BOOST_CHECK_EQUAL(ValueFromAmount(COIN/100000000).write(), "0.00000001");
 }
 
+#if 0 //does not work
 static UniValue ValueFromString(const std::string &str)
 {
     UniValue value;
@@ -185,7 +186,6 @@ static UniValue ValueFromString(const std::string &str)
     return value;
 }
 
-#if 0 //does not work
 BOOST_AUTO_TEST_CASE(rpc_parse_monetary_values)
 {
     BOOST_CHECK_THROW(AmountFromValue(ValueFromString("-0.00000001")), UniValue);

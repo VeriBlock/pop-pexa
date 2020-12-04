@@ -24,6 +24,7 @@
 #include <prevector.h>
 #include <span.h>
 
+#include <vbk/adaptors/univalue_json.hpp>
 #include <veriblock/entities/vtb.hpp>
 #include <veriblock/entities/atv.hpp>
 #include <veriblock/entities/btcblock.hpp>
