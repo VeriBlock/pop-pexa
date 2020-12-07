@@ -28,6 +28,7 @@
 #include <txmempool.h>
 #include <util/system.h>
 #include <util/strencodings.h>
+#include <vbk/p2p_sync.hpp>
 
 #include <memory>
 #include <typeinfo>
@@ -892,6 +893,8 @@ void PeerLogicValidation::FinalizeNode(NodeId nodeid, bool& fUpdateConnectionTim
     assert(g_outbound_peers_with_protect_from_disconnect >= 0);
 
     mapNodeState.erase(nodeid);
+    // VeriBlock
+    VeriBlock::p2p::erasePopDataNodeState(nodeid);
 
     if (mapNodeState.empty()) {
         // Do a consistency check after the last peer is removed.
@@ -1877,7 +1880,9 @@ static void ProcessHeadersMessage(CNode& pfrom, CConnman* connman, ChainstateMan
         bool fCanDirectFetch = CanDirectFetch(chainparams.GetConsensus());
         // If this set of headers is valid and ends in a block with at least as
         // much work as our tip, download as much as possible.
-        if (fCanDirectFetch && pindexLast->IsValid(BLOCK_VALID_TREE) && ::ChainActive().Tip()->nChainWork <= pindexLast->nChainWork) {
+        if (fCanDirectFetch && pindexLast->IsValid(BLOCK_VALID_TREE)
+            // VeriBlock: download the chain suggested by the peer
+            /* && ::ChainActive().Tip()->nChainWork <= pindexLast->nChainWork */) {
             std::vector<const CBlockIndex*> vToFetch;
             const CBlockIndex *pindexWalk = pindexLast;
             // Calculate all the blocks we'd need to switch to pindexLast, up to a limit.
@@ -2255,6 +2260,12 @@ void ProcessMessage(
     if (gArgs.IsArgSet("-dropmessagestest") && GetRand(gArgs.GetArg("-dropmessagestest", 0)) == 0)
     {
         LogPrintf("dropmessagestest DROPPING RECV MESSAGE\n");
+        return;
+    }
+
+    int pop_res = VeriBlock::p2p::processPopData(&pfrom, msg_type, vRecv, connman);
+    if(pop_res >= 0)
+    {
         return;
     }
 
@@ -4292,6 +4303,13 @@ bool PeerLogicValidation::SendMessages(CNode* pto)
         }
         if (!vInv.empty())
             connman->PushMessage(pto, msgMaker.Make(NetMsgType::INV, vInv));
+
+        // VeriBlock offer Pop Data
+        {
+            VeriBlock::p2p::offerPopData<altintegration::ATV>(pto, connman, msgMaker);
+            VeriBlock::p2p::offerPopData<altintegration::VTB>(pto, connman, msgMaker);
+            VeriBlock::p2p::offerPopData<altintegration::VbkBlock>(pto, connman, msgMaker);
+        }
 
         // Detect whether we're stalling
         current_time = GetTime<std::chrono::microseconds>();

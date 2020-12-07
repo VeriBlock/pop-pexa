@@ -108,6 +108,7 @@ VBK_H = \
   vbk/entity/context_info_container.hpp \
   vbk/pop_common.hpp \
   vbk/pop_service.hpp \
+  vbk/p2p_sync.hpp \
   vbk/vbk.hpp \
   vbk/merkle.hpp \
   vbk/util.hpp \
@@ -373,6 +374,8 @@ libpexa_server_a_SOURCES = \
   rest.cpp \
   vbk/rpc_register.hpp \
   vbk/rpc_register.cpp \
+  vbk/p2p_sync.hpp \
+  vbk/p2p_sync.cpp \
   rpc/blockchain.cpp \
   rpc/mining.cpp \
   rpc/misc.cpp \

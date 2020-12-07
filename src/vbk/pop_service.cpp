@@ -11,6 +11,7 @@
 #include <vbk/adaptors/payloads_provider.hpp>
 #include <vbk/pop_common.hpp>
 #include <vbk/pop_service.hpp>
+#include <vbk/p2p_sync.hpp>
 
 #include <veriblock/storage/util.hpp>
 
@@ -23,11 +24,22 @@ namespace VeriBlock {
 static std::shared_ptr<PayloadsProvider> payloads = nullptr;
 static std::vector<altintegration::PopData> disconnected_popdata;
 
-void SetPop(CDBWrapper& db)
+void SetPop(const util::Ref& context, CDBWrapper& db)
 {
     payloads = std::make_shared<PayloadsProvider>(db);
     std::shared_ptr<altintegration::PayloadsProvider> dbrepo = payloads;
     SetPop(dbrepo);
+
+    auto& app = GetPop();
+    app.mempool->onAccepted<altintegration::ATV>([context](const altintegration::ATV& p) {
+        VeriBlock::p2p::offerPopDataToAllNodes<altintegration::ATV>(context, p);
+    });
+    app.mempool->onAccepted<altintegration::VTB>([context](const altintegration::VTB& p) {
+        VeriBlock::p2p::offerPopDataToAllNodes<altintegration::VTB>(context, p);
+    });
+    app.mempool->onAccepted<altintegration::VbkBlock>([context](const altintegration::VbkBlock& p) {
+        VeriBlock::p2p::offerPopDataToAllNodes<altintegration::VbkBlock>(context, p);
+    });
 }
 
 PayloadsProvider& GetPayloadsProvider()

@@ -1571,7 +1571,7 @@ bool AppInitMain(const util::Ref& context, NodeContext& node)
                 pblocktree.reset();
                 pblocktree.reset(new CBlockTreeDB(nBlockTreeDBCache, false, fReset));
                 // VeriBlock
-                VeriBlock::SetPop(*pblocktree);
+                VeriBlock::SetPop(context, *pblocktree);
 
                 if (fReset) {
                     pblocktree->WriteReindexing(true);

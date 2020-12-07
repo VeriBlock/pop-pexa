@@ -14,6 +14,7 @@
 #include <scheduler.h>
 #include <txmempool.h>
 #include <util/string.h>
+#include <util/ref.h>
 
 #include <type_traits>
 
@@ -77,6 +78,9 @@ struct BasicTestingSetup {
 
     explicit BasicTestingSetup(const std::string& chainName = CBaseChainParams::MAIN, const std::vector<const char*>& extra_args = {});
     ~BasicTestingSetup();
+
+protected:
+    util::Ref context{m_node};
 
 private:
     const fs::path m_path_root;

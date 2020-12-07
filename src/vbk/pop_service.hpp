@@ -2,7 +2,7 @@
 #define PEXA_SRC_VBK_POP_SERVICE_HPP
 
 #include <consensus/validation.h>
-
+#include <util/ref.h>
 #include <vbk/adaptors/block_batch_adaptor.hpp>
 #include <vbk/adaptors/payloads_provider.hpp>
 #include <vbk/pop_common.hpp>
@@ -23,7 +23,7 @@ namespace VeriBlock {
 using BlockBytes = std::vector<uint8_t>;
 using PopRewards = std::map<CScript, CAmount>;
 
-void SetPop(CDBWrapper& db);
+void SetPop(const util::Ref& context, CDBWrapper& db);
 
 PayloadsProvider& GetPayloadsProvider();
 

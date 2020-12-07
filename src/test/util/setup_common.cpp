@@ -139,7 +139,7 @@ TestingSetup::TestingSetup(const std::string& chainName, const std::vector<const
 
     pblocktree.reset(new CBlockTreeDB(1 << 20, true));
     // VeriBlock
-    VeriBlock::SetPop(*pblocktree);
+    VeriBlock::SetPop(context, *pblocktree);
 
     m_node.chainman = &::g_chainman;
     m_node.chainman->InitializeChainstate();
