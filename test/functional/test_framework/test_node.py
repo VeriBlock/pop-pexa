@@ -36,7 +36,7 @@ from .util import (
     EncodeDecimal,
 )
 
-PEXAD_PROC_WAIT_TIMEOUT = 60
+PEXAD_PROC_WAIT_TIMEOUT = 60 * 5
 
 
 class FailedToStartError(Exception):

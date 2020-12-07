@@ -437,7 +437,7 @@ UniValue getrawpopmempool(const JSONRPCRequest& request)
         cmdname,
         "\nReturns the list of VBK blocks, ATVs and VTBs stored in POP mempool.\n",
         {},
-        RPCResult{RPCResult::Type::ARR, "", "TODO"},
+        RPCResult{RPCResult::Type::STR_HEX, "", "TODO"},
         RPCExamples{
             HelpExampleCli(cmdname, "") +
             HelpExampleRpc(cmdname, "")},
@@ -656,7 +656,7 @@ UniValue getpopparams(const JSONRPCRequest& req)
         cmdname,
         "\nReturns POP-related parameters set for this altchain.\n",
         {},
-        RPCResult{RPCResult::Type::OBJ, "", "TODO"},
+        RPCResult{RPCResult::Type::STR_HEX, "", "TODO"},
         RPCExamples{
             HelpExampleCli(cmdname, "") +
             HelpExampleRpc(cmdname, "")},
