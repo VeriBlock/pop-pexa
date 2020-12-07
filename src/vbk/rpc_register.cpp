@@ -596,7 +596,7 @@ UniValue getrawpayload(const JSONRPCRequest& request, const std::string& name)
     }
 
     if (!fVerbose) {
-        return altintegration::ToJSON<UniValue>(out.toHex());
+        return altintegration::ToJSON<UniValue>(altintegration::SerializeToHex(out));
     }
 
     uint256 activeHashBlock{};
