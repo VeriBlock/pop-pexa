@@ -129,10 +129,8 @@ bool parsePayloads(const UniValue& array, std::vector<pop_t>& out, altintegratio
         auto& payloads_hex = array[idx];
 
         auto payloads_bytes = ParseHexV(payloads_hex, strprintf("%s[%d]", pop_t::name(), idx));
-
-        altintegration::ReadStream stream(payloads_bytes);
         pop_t data;
-        if (!altintegration::DeserializeFromVbkEncoding(stream, data, state)) {
+        if (!altintegration::DeserializeFromVbkEncoding(payloads_bytes, data, state)) {
             return state.Invalid("bad-payloads");
         }
         payloads.push_back(data);
@@ -244,11 +242,9 @@ UniValue submitpopIt(const JSONRPCRequest& request)
     check_submitpop(request, Pop::name());
 
     auto payloads_bytes = ParseHexV(request.params[0].get_str(), Pop::name());
-
-    altintegration::ReadStream stream(payloads_bytes);
     Pop data;
     altintegration::ValidationState state;
-    if (!altintegration::DeserializeFromVbkEncoding(stream, data, state)) {
+    if (!altintegration::DeserializeFromVbkEncoding(payloads_bytes, data, state)) {
         return state.Invalid("bad-data");
     }
 

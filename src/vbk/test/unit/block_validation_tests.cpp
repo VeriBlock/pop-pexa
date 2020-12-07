@@ -23,20 +23,9 @@ BOOST_AUTO_TEST_SUITE(block_validation_tests)
 
 static altintegration::PopData generateRandPopData()
 {
-    altintegration::ValidationState state;
-
     // add PopData
-    auto atvBytes = altintegration::ParseHex(VeriBlockTest::defaultAtvEncoded);
-    auto streamATV = altintegration::ReadStream(atvBytes);
-    altintegration::ATV atv;
-    altintegration::DeserializeFromVbkEncoding(streamATV, atv, state);
-    assert(state.IsValid());
-
-    auto vtbBytes = altintegration::ParseHex(VeriBlockTest::defaultVtbEncoded);
-    auto streamVTB = altintegration::ReadStream(vtbBytes);
-    altintegration::VTB vtb;
-    altintegration::DeserializeFromVbkEncoding(streamVTB, vtb, state);
-    assert(state.IsValid());
+    altintegration::ATV atv = altintegration::AssertDeserializeFromHex<altintegration::ATV>(VeriBlockTest::defaultAtvEncoded);
+    altintegration::VTB vtb = altintegration::AssertDeserializeFromHex<altintegration::VTB>(VeriBlockTest::defaultVtbEncoded);
 
     altintegration::PopData popData;
     popData.atvs = {atv};
