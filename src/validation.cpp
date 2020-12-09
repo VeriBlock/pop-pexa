@@ -1458,6 +1458,10 @@ void static InvalidChainFound(CBlockIndex* pindexNew) EXCLUSIVE_LOCKS_REQUIRED(c
 void CChainState::InvalidBlockFound(CBlockIndex *pindex, const BlockValidationState &state) {
     if (state.GetResult() != BlockValidationResult::BLOCK_MUTATED) {
         pindex->nStatus |= BLOCK_FAILED_VALID;
+        const auto& hash = std::vector<uint8_t>{pindex->GetBlockHash().begin(), pindex->GetBlockHash().end()};
+        VeriBlock::GetPop()
+            .altTree
+            ->invalidateSubtree(hash, altintegration::BLOCK_FAILED_BLOCK);
         m_blockman.m_failed_blocks.insert(pindex);
         setDirtyBlockIndex.insert(pindex);
         setBlockIndexCandidates.erase(pindex);
@@ -3294,6 +3298,8 @@ void CChainState::ResetBlockFailureFlags(CBlockIndex *pindex) {
     AssertLockHeld(cs_main);
 
     int nHeight = pindex->nHeight;
+    const auto& blockHash = std::vector<uint8_t>{pindex->GetBlockHash().begin(), pindex->GetBlockHash().end()};
+    VeriBlock::GetPop().altTree->revalidateSubtree(blockHash, altintegration::BLOCK_FAILED_BLOCK, true);
 
     // Remove the invalidity flag from this block and all its descendants.
     BlockMap::iterator it = m_blockman.m_block_index.begin();
@@ -3301,7 +3307,10 @@ void CChainState::ResetBlockFailureFlags(CBlockIndex *pindex) {
         if (!it->second->IsValid() && it->second->GetAncestor(nHeight) == pindex) {
             it->second->nStatus &= ~BLOCK_FAILED_MASK;
             setDirtyBlockIndex.insert(it->second);
-            if (it->second->IsValid(BLOCK_VALID_TRANSACTIONS) && it->second->HaveTxsDownloaded() && setBlockIndexCandidates.value_comp()(m_chain.Tip(), it->second)) {
+            if (it->second->IsValid(BLOCK_VALID_TRANSACTIONS) && it->second->HaveTxsDownloaded()
+                // VeriBlock: setBlockIndexCandidates now stores all tips
+                /*&& setBlockIndexCandidates.value_comp()(m_chain.Tip(), it->second)*/
+            ) {
                 setBlockIndexCandidates.insert(it->second);
             }
             if (it->second == pindexBestInvalid) {
@@ -3312,6 +3321,8 @@ void CChainState::ResetBlockFailureFlags(CBlockIndex *pindex) {
         }
         it++;
     }
+
+    PruneBlockIndexCandidates();
 
     // Remove the invalidity flag from all ancestors too.
     while (pindex != nullptr) {
@@ -3356,7 +3367,9 @@ CBlockIndex* BlockManager::AddToBlockIndex(const CBlockHeader& block)
     pindexNew->nTimeMax = (pindexNew->pprev ? std::max(pindexNew->pprev->nTimeMax, pindexNew->nTime) : pindexNew->nTime);
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);
     pindexNew->RaiseValidity(BLOCK_VALID_TREE);
-    if (pindexBestHeader == nullptr || pindexBestHeader->nChainWork < pindexNew->nChainWork)
+    // VeriBlock: if pindexNew is a successor of pindexBestHeader, and pindexNew has higher chainwork, then update pindexBestHeader
+    if (pindexBestHeader == nullptr || ((pindexBestHeader->nChainWork < pindexNew->nChainWork) &&
+                                           (pindexNew->GetAncestor(pindexBestHeader->nHeight) == pindexBestHeader)))
         pindexBestHeader = pindexNew;
 
     setDirtyBlockIndex.insert(pindexNew);
@@ -3409,6 +3422,8 @@ void CChainState::ReceivedBlockTransactions(const CBlock& block, CBlockIndex* pi
             m_blockman.m_blocks_unlinked.insert(std::make_pair(pindexNew->pprev, pindexNew));
         }
     }
+
+    PruneBlockIndexCandidates();
 }
 
 static bool FindBlockPos(FlatFilePos &pos, unsigned int nAddSize, unsigned int nHeight, uint64_t nTime, bool fKnown = false)
@@ -3520,16 +3535,7 @@ bool CheckBlock(const CBlock& block, BlockValidationState& state, const Consensu
     // because we receive the wrong transactions for it.
     // Note that witness malleability is checked in ContextualCheckBlock, so no
     // checks that use witness data may be performed here.
-
-    auto currentBlockSize = ::GetSerializeSize(block, PROTOCOL_VERSION | SERIALIZE_TRANSACTION_NO_WITNESS);
-    // VeriBlock
-    if (block.nVersion & VeriBlock::POP_BLOCK_VERSION_BIT)
-    {
-        currentBlockSize -= ::GetSerializeSize(block.popData, PROTOCOL_VERSION | SERIALIZE_TRANSACTION_NO_WITNESS);
-    }
-
-    // Size limits
-    if (block.vtx.empty() || block.vtx.size() * WITNESS_SCALE_FACTOR > MAX_BLOCK_WEIGHT || currentBlockSize * WITNESS_SCALE_FACTOR > MAX_BLOCK_WEIGHT)
+    if (block.vtx.empty() || block.vtx.size() * WITNESS_SCALE_FACTOR > MAX_BLOCK_WEIGHT || GetBlockWeight(block) > MAX_BLOCK_WEIGHT)
         return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-blk-length", "size limits failed");
 
     // First transaction must be coinbase, the rest must not be
@@ -4917,6 +4923,10 @@ bool CChainState::LoadGenesisBlock(const CChainParams& chainparams)
         if (blockPos.IsNull())
             return error("%s: writing genesis block to disk failed", __func__);
         CBlockIndex *pindex = m_blockman.AddToBlockIndex(block);
+        BlockValidationState state;
+        if (!VeriBlock::acceptBlock(*pindex, state)) {
+            return false;
+        }
         ReceivedBlockTransactions(block, pindex, blockPos, chainparams.GetConsensus());
     } catch (const std::runtime_error& e) {
         return error("%s: failed to write genesis block: %s", __func__, e.what());

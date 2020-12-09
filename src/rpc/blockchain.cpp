@@ -914,26 +914,18 @@ static UniValue getblock(const JSONRPCRequest& request)
 
     UniValue json = blockToJSON(block, tip, pblockindex, verbosity >= 2);
 
-    std::cerr << "1\r\n";
     //VeriBlock
     {
         auto& pop = VeriBlock::GetPop();
         LOCK(cs_main);
-        std::cerr << "2\r\n";
-        auto hash = std::vector<uint8_t>{block.GetHash().begin(), block.GetHash().end()};
-        std::cerr << "3\r\n";
-        auto index = pop.altTree->getBlockIndex(hash);
-        std::cerr << "4\r\n";
+        std::vector<uint8_t> hashVector{hash.begin(), hash.end()};
+        auto index = pop.altTree->getBlockIndex(hashVector);
         VBK_ASSERT(index);
-        std::cerr << "5\r\n";
         UniValue obj(UniValue::VOBJ);
 
         obj.pushKV("state", altintegration::ToJSON<UniValue>(*index));
-        std::cerr << "6\r\n";
         obj.pushKV("data", altintegration::ToJSON<UniValue>(block.popData, verbosity >= 2));
-        std::cerr << "7\r\n";
         json.pushKV("pop", obj);
-        std::cerr << "8\r\n";
     }
 
     return json;

@@ -3117,6 +3117,7 @@ void ProcessMessage(
                     // Dirty hack to jump to BLOCKTXN code (TODO: move message handling into their own functions)
                     BlockTransactions txn;
                     txn.blockhash = cmpctblock.header.GetHash();
+                    txn.popData = cmpctblock.popData;
                     blockTxnMsg << txn;
                     fProcessBLOCKTXN = true;
                 } else {
@@ -3310,6 +3311,10 @@ void ProcessMessage(
         for (unsigned int n = 0; n < nCount; n++) {
             vRecv >> headers[n];
             ReadCompactSize(vRecv); // ignore tx count; assume it is 0.
+            if (headers[n].nVersion & VeriBlock::POP_BLOCK_VERSION_BIT) {
+                altintegration::PopData tmp;
+                vRecv >> tmp;
+            }
         }
 
         return ProcessHeadersMessage(pfrom, connman, chainman, mempool, headers, chainparams, /*via_compact_block=*/false);

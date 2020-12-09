@@ -966,6 +966,17 @@ inline void Unserialize(Stream& s, altintegration::BlockIndex<altintegration::Vb
     b = altintegration::AssertDeserializeFromVbkEncoding<altintegration::BlockIndex<altintegration::VbkBlock>>(bytes_data);
 }
 
+template <typename Stream>
+inline void UnserializeWithHash(Stream& s, altintegration::BlockIndex<altintegration::VbkBlock>& block, const altintegration::VbkBlock::hash_t& precalculatedHash = altintegration::VbkBlock::hash_t())
+{
+    std::vector<uint8_t> bytes_data;
+    Unserialize(s, bytes_data);
+    altintegration::ValidationState state;
+    altintegration::ReadStream stream(bytes_data);
+    altintegration::DeserializeFromVbkEncoding(stream, block, state, precalculatedHash);
+    assert(state.IsValid());
+}
+
 template<typename Stream>
 inline void Serialize(Stream& s, const altintegration::BlockIndex<altintegration::AltBlock>& b) {
     std::vector<uint8_t> bytes_data = altintegration::SerializeToVbkEncoding(b);

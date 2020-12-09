@@ -65,6 +65,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <vbk/log.hpp>
 #include <vbk/pop_service.hpp>
 
 #ifndef WIN32
@@ -388,6 +389,7 @@ void SetupServerArgs(NodeContext& node)
         // GUI args. These will be overwritten by SetupUIArgs for the GUI
         "-choosedatadir", "-lang=<lang>", "-min", "-resetguisettings", "-splash", "-uiplatform"};
 
+    gArgs.AddArg("-poplogverbosity", "Verbosity for alt-cpp lib: debug/info/(warn)/error/off", ArgsManager::ALLOW_STRING, OptionsCategory::OPTIONS);
     gArgs.AddArg("-version", "Print version and exit", ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
 #if HAVE_SYSTEM
     gArgs.AddArg("-alertnotify=<cmd>", "Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)", ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);

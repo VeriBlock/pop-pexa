@@ -13,7 +13,7 @@ altintegration::PopContext& GetPop()
 void StopPop()
 {
     if (app == nullptr) return;
-    app->stop();
+    app->shutdown();
 }
 
 void SetPopConfig(const altintegration::Config& newConfig)

@@ -61,6 +61,12 @@ inline altintegration::AltBlock blockToAltBlock(const CBlockIndex &index) {
     return blockToAltBlock(index.nHeight, index.GetBlockHeader());
 }
 
+//PopData weight
+inline int64_t GetPopDataWeight(const altintegration::PopData& pop_data)
+{
+    return ::GetSerializeSize(pop_data, PROTOCOL_VERSION | SERIALIZE_TRANSACTION_NO_WITNESS) * (WITNESS_SCALE_FACTOR - 1) + ::GetSerializeSize(pop_data, PROTOCOL_VERSION);
+}
+
 template <typename T>
 bool FindPayloadInBlock(const CBlock &block, const typename T::id_t &id,
                         T &out) {
