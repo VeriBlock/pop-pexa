@@ -3232,7 +3232,7 @@ void ProcessMessage(
             }
 
             PartiallyDownloadedBlock& partialBlock = *it->second.second->partialBlock;
-            ReadStatus status = partialBlock.FillBlock(*pblock, resp.txn);
+            ReadStatus status = partialBlock.FillBlock(*pblock, resp.txn, resp.popData);
             if (status == READ_STATUS_INVALID) {
                 MarkBlockAsReceived(resp.blockhash); // Reset in-flight state in case of whitelist
                 Misbehaving(pfrom.GetId(), 100, strprintf("Peer %d sent us invalid compact block/non-matching block transactions\n", pfrom.GetId()));
