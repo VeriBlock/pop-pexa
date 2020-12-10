@@ -48,7 +48,10 @@ class PoPMerkleRootTest(PexaTestFramework):
         self.nodes[0].p2p.send_message(block_message)
         self.nodes[0].waitforblockheight(lastblock + 2)
         newbest = self.nodes[0].getbestblockhash()
-        assert newbest == block.hash, "bad tip. \n\tExpected : {}\n\tGot      : {}".format(block, newbest)
+        block2 = self.nodes[0].getblock(newbest)
+        self.log.info(newbest)
+        self.log.info(block.hash)
+        assert newbest == block.hash, "bad tip. \n\tExpected : {}\n\tGot      : {}".format(block, block2)
 
 
 if __name__ == '__main__':
