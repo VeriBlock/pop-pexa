@@ -515,7 +515,7 @@ class P2PInterface(P2PConnection):
         def test_function():
             return self.message_count["verack"]
 
-        self.wait_until(test_function, timeout=timeout)
+        wait_until(test_function, timeout=timeout, lock=mininode_lock)
 
     # Message sending helper functions
 

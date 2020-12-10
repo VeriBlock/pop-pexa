@@ -1687,6 +1687,7 @@ class msg_cfcheckpt:
 class msg_offer_atv:
     __slots__ = ("atv_ids",)
     command = b"ofATV"
+    msgtype = b"ofATV"
 
     def __init__(self, atv_ids = None):
         self.atv_ids = atv_ids
@@ -1703,6 +1704,7 @@ class msg_offer_atv:
 class msg_offer_vtb:
     __slots__ = ("vtb_ids",)
     command = b"ofVTB"
+    msgtype = b"ofVTB"
 
     def __init__(self, vtb_ids = None):
         self.vtb_ids = vtb_ids
@@ -1719,6 +1721,7 @@ class msg_offer_vtb:
 class msg_offer_vbk:
     __slots__ = ("vbk_ids",)
     command = b"ofVBK"
+    msgtype = b"ofVBK"
 
     def __init__(self, vbk_ids = None):
         self.vbk_ids = vbk_ids
@@ -1735,6 +1738,7 @@ class msg_offer_vbk:
 class msg_atv:
     __slots__ = ("atv",)
     command = b'ATV'
+    msgtype = b'ATV'
 
     def __init__(self, atv = None):
         self.atv = atv
@@ -1754,6 +1758,7 @@ class msg_atv:
 class msg_vtb:
     __slots__ = ("vtb",)
     command = b'VTB'
+    msgtype = b'VTB'
 
     def __init__(self, vtb = None):
         self.vtb = vtb
@@ -1773,6 +1778,7 @@ class msg_vtb:
 class msg_vbk:
     __slots__ = ("vbk",)
     command = b'VBK'
+    msgtype = b'VBK'
 
     def __init__(self, vbk = None):
         self.vbk = vbk
@@ -1792,6 +1798,7 @@ class msg_vbk:
 class msg_get_atv:
     __slots__ = ("atv_ids",)
     command = b'gATV'
+    msgtype = b'gATV'
 
     def __init__(self, atv_ids = None):
         self.atv_ids = atv_ids
@@ -1808,6 +1815,7 @@ class msg_get_atv:
 class msg_get_vtb:
     __slots__ = ("vtb_ids",)
     command = b'gVTB'
+    msgtype = b'gVTB'
 
     def __init__(self, vtb_ids = None):
         self.vtb_ids = vtb_ids
@@ -1824,6 +1832,7 @@ class msg_get_vtb:
 class msg_get_vbk:
     __slots__ = ("vbk_ids",)
     command = b'gVBK'
+    msgtype = b'gVBK'
 
     def __init__(self, vbk_ids = None):
         self.vbk_ids = vbk_ids
