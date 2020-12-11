@@ -537,7 +537,7 @@ class TestNode():
             #
             # So syncing here is redundant when we only want to send a message, but the cost is low (a few milliseconds)
             # in comparison to the upside of making tests less fragile and unexpected intermittent errors less likely.
-            #p2p_conn.sync_with_ping()
+            p2p_conn.sync_with_ping()
 
         return p2p_conn
 

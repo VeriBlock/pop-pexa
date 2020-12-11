@@ -441,7 +441,7 @@ def connect_nodes(from_connection, node_num):
     # * Must have a version message before anything else
     # * Must have a verack message before anything else
     wait_until(lambda: all(peer['version'] != 0 for peer in from_connection.getpeerinfo()))
-    #wait_until(lambda: all(peer['bytesrecv_per_msg'].pop('verack', 0) == 24 for peer in from_connection.getpeerinfo()))
+    wait_until(lambda: all(peer['bytesrecv_per_msg'].pop('verack', 0) == 24 for peer in from_connection.getpeerinfo()))
 
 
 # Transaction/Block functions

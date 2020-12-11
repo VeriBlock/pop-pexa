@@ -14,6 +14,22 @@ from test_framework.mininode import (
     msg_block,
 )
 from test_framework.test_framework import PexaTestFramework
+from test_framework.messages import (
+    CBlock,
+    COIN,
+    COutPoint,
+    CTransaction,
+    CTxIn,
+    CTxInWitness,
+    CTxOut,
+    FromHex,
+    ToHex,
+    hash256,
+    hex_str_to_bytes,
+    ser_uint256,
+    sha256,
+    uint256_from_str,
+)
 
 
 class PoPMerkleRootTest(PexaTestFramework):
@@ -48,10 +64,7 @@ class PoPMerkleRootTest(PexaTestFramework):
         self.nodes[0].p2p.send_message(block_message)
         self.nodes[0].waitforblockheight(lastblock + 2)
         newbest = self.nodes[0].getbestblockhash()
-        block2 = self.nodes[0].getblock(newbest)
-        self.log.info(newbest)
-        self.log.info(block.hash)
-        assert newbest == block.hash, "bad tip. \n\tExpected : {}\n\tGot      : {}".format(block, block2)
+        assert newbest == block.hash, "bad tip. \n\tExpected : {}\n\tGot      : {}".format(block.hash, newbest)
 
 
 if __name__ == '__main__':
