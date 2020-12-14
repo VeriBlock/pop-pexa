@@ -12,7 +12,7 @@ std::vector<uint8_t>
 AltChainParamsPEXA::getHash(const std::vector<uint8_t>& bytes) const noexcept
 {
     uint256 hash = VeriBlock::headerFromBytes(bytes).GetHash();
-    return std::vector<uint8_t>(hash.begin(), hash.end());
+    return hash.asVector();
 }
 
 static std::vector<std::string> parseBlocks(const std::string& s)

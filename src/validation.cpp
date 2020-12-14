@@ -1458,10 +1458,9 @@ void static InvalidChainFound(CBlockIndex* pindexNew) EXCLUSIVE_LOCKS_REQUIRED(c
 void CChainState::InvalidBlockFound(CBlockIndex *pindex, const BlockValidationState &state) {
     if (state.GetResult() != BlockValidationResult::BLOCK_MUTATED) {
         pindex->nStatus |= BLOCK_FAILED_VALID;
-        const auto& hash = std::vector<uint8_t>{pindex->GetBlockHash().begin(), pindex->GetBlockHash().end()};
         VeriBlock::GetPop()
             .altTree
-            ->invalidateSubtree(hash, altintegration::BLOCK_FAILED_BLOCK);
+            ->invalidateSubtree(pindex->GetBlockHash().asVector(), altintegration::BLOCK_FAILED_BLOCK);
         m_blockman.m_failed_blocks.insert(pindex);
         setDirtyBlockIndex.insert(pindex);
         setBlockIndexCandidates.erase(pindex);
@@ -3300,8 +3299,7 @@ void CChainState::ResetBlockFailureFlags(CBlockIndex *pindex) {
     AssertLockHeld(cs_main);
 
     int nHeight = pindex->nHeight;
-    const auto& blockHash = std::vector<uint8_t>{pindex->GetBlockHash().begin(), pindex->GetBlockHash().end()};
-    VeriBlock::GetPop().altTree->revalidateSubtree(blockHash, altintegration::BLOCK_FAILED_BLOCK, true);
+    VeriBlock::GetPop().altTree->revalidateSubtree(pindex->GetBlockHash().asVector(), altintegration::BLOCK_FAILED_BLOCK, true);
 
     // Remove the invalidity flag from this block and all its descendants.
     BlockMap::iterator it = m_blockman.m_block_index.begin();
@@ -4104,9 +4102,9 @@ bool TestBlockValidity(BlockValidationState& state, const CChainParams& chainpar
     // in alt tree, because technically it was not created ("mined"). in this
     // case, add it and then remove
     auto& tree = *VeriBlock::GetPop().altTree;
-    std::vector<uint8_t> _hash{block_hash.begin(), block_hash.end()};
+    const auto& _hash = block_hash.asVector();
     bool shouldRemove = false;
-    if(!tree.getBlockIndex(_hash)) {
+    if (!tree.getBlockIndex(_hash)) {
         shouldRemove = true;
         auto containing = VeriBlock::blockToAltBlock(indexDummy);
         altintegration::ValidationState _state;

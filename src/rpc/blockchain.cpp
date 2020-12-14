@@ -918,8 +918,7 @@ static UniValue getblock(const JSONRPCRequest& request)
     {
         auto& pop = VeriBlock::GetPop();
         LOCK(cs_main);
-        std::vector<uint8_t> hashVector{hash.begin(), hash.end()};
-        auto index = pop.altTree->getBlockIndex(hashVector);
+        auto index = pop.altTree->getBlockIndex(hash.asVector());
         VBK_ASSERT(index);
         UniValue obj(UniValue::VOBJ);
 

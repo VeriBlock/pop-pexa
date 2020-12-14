@@ -252,7 +252,7 @@ bool addAllBlockPayloads(const CBlock& block, BlockValidationState& state) EXCLU
     auto& provider = GetPayloadsProvider();
     provider.write(block.popData);
 
-    GetPop().altTree->acceptBlock(std::vector<uint8_t>{hash.begin(), hash.end()}, block.popData);
+    GetPop().altTree->acceptBlock(hash.asVector(), block.popData);
 
     return true;
 }
@@ -260,7 +260,7 @@ bool addAllBlockPayloads(const CBlock& block, BlockValidationState& state) EXCLU
 bool setState(const uint256& hash, altintegration::ValidationState& state) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     AssertLockHeld(cs_main);
-    return GetPop().altTree->setState(std::vector<uint8_t>{hash.begin(), hash.end()}, state);
+    return GetPop().altTree->setState(hash.asVector(), state);
 }
 
 std::vector<BlockBytes> getLastKnownVBKBlocks(size_t blocks)
@@ -295,12 +295,11 @@ PopRewards getPopRewards(const CBlockIndex& pindexPrev, const CChainParams& para
 
     altintegration::ValidationState state;
     auto blockHash = pindexPrev.GetBlockHash();
-    auto hashVector = std::vector<uint8_t>{blockHash.begin(), blockHash.end()};
-    bool ret = pop.altTree->setState(hashVector, state);
+    bool ret = pop.altTree->setState(blockHash.asVector(), state);
     (void)ret;
     assert(ret);
 
-    auto rewards = pop.altTree->getPopPayout(hashVector);
+    auto rewards = pop.altTree->getPopPayout(blockHash.asVector());
     int halvings = (pindexPrev.nHeight + 1) / params.GetConsensus().nSubsidyHalvingInterval;
     PopRewards btcRewards{};
     //erase rewards, that pay 0 satoshis and halve rewards

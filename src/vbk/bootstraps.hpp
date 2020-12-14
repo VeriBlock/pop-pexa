@@ -22,8 +22,8 @@ struct AltChainParamsPEXA : public altintegration::AltChainParams {
     AltChainParamsPEXA(const CBlock& genesis)
     {
         auto hash = genesis.GetHash();
-        bootstrap.hash = std::vector<uint8_t>{hash.begin(), hash.end()};
-        bootstrap.previousBlock = std::vector<uint8_t>{genesis.hashPrevBlock.begin(), genesis.hashPrevBlock.end()};
+        bootstrap.hash = hash.asVector();
+        bootstrap.previousBlock = genesis.hashPrevBlock.asVector();
         bootstrap.height = 0; // pop is enabled starting at genesis
         bootstrap.timestamp = genesis.GetBlockTime();
     }
