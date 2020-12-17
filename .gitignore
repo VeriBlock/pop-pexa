@@ -149,3 +149,5 @@ dist/
 *.background.tiff
 
 .appdata
+compile_commands.json
+.idea

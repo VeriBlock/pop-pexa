@@ -974,7 +974,9 @@ inline void UnserializeWithHash(Stream& s, altintegration::BlockIndex<altintegra
     altintegration::ValidationState state;
     altintegration::ReadStream stream(bytes_data);
     altintegration::DeserializeFromVbkEncoding(stream, block, state, precalculatedHash);
-    assert(state.IsValid());
+    if(state.IsInvalid()) {
+        throw std::runtime_error("Can not deserialize VBK block index: " + state.toString());
+    }
 }
 
 template<typename Stream>
