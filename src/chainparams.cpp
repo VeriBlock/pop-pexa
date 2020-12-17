@@ -210,8 +210,7 @@ CTestNetParams::CTestNetParams()
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
 
         // VeriBlock
-        // TODO: set an VeriBlock pop security fork height
-        consensus.VeriBlockPopSecurityHeight = -1;
+        consensus.VeriBlockPopSecurityHeight = 10;
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
@@ -237,7 +236,7 @@ CTestNetParams::CTestNetParams()
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("seed-testnet.pexa.dev", false);
+        // vSeeds.emplace_back("seed-testnet.pexa.dev", false);
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
