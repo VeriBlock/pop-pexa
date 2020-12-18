@@ -36,7 +36,7 @@ from .util import (
     EncodeDecimal,
 )
 
-PEXAD_PROC_WAIT_TIMEOUT = 60
+PEXAD_PROC_WAIT_TIMEOUT = 60 * 5
 
 
 class FailedToStartError(Exception):
@@ -94,6 +94,8 @@ class TestNode():
         # spam debug.log.
         self.args = [
             self.binary,
+            "-popvbknetwork=regtest",
+            "-popbtcnetwork=regtest",
             "-datadir=" + self.datadir,
             "-logtimemicros",
             "-debug",

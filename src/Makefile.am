@@ -102,8 +102,23 @@ endif
 endif
 
 .PHONY: FORCE check-symbols check-security
+
+### VeriBlock section start
+VBK_H = \
+  vbk/entity/context_info_container.hpp \
+  vbk/pop_common.hpp \
+  vbk/pop_service.hpp \
+  vbk/p2p_sync.hpp \
+  vbk/vbk.hpp \
+  vbk/merkle.hpp \
+  vbk/util.hpp \
+  vbk/adaptors/univalue_json.hpp \
+  vbk/adaptors/block_batch_adaptor.hpp \
+  vbk/adaptors/payloads_provider.hpp
+
 # pexa core #
 PEXA_CORE_H = \
+  $(VBK_H) \
   addrdb.h \
   addrman.h \
   attributes.h \
@@ -324,6 +339,8 @@ libpexa_util_a-clientversion.$(OBJEXT): obj/build.h
 libpexa_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(PEXA_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
 libpexa_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libpexa_server_a_SOURCES = \
+  vbk/pop_service.hpp \
+  vbk/pop_service.cpp \
   addrdb.cpp \
   addrman.cpp \
   banman.cpp \
@@ -355,6 +372,10 @@ libpexa_server_a_SOURCES = \
   policy/settings.cpp \
   pow.cpp \
   rest.cpp \
+  vbk/rpc_register.hpp \
+  vbk/rpc_register.cpp \
+  vbk/p2p_sync.hpp \
+  vbk/p2p_sync.cpp \
   rpc/blockchain.cpp \
   rpc/mining.cpp \
   rpc/misc.cpp \
@@ -516,6 +537,8 @@ libpexa_consensus_a_SOURCES = \
 libpexa_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(PEXA_INCLUDES)
 libpexa_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libpexa_common_a_SOURCES = \
+  vbk/pop_common.cpp \
+  vbk/bootstraps.cpp \
   base58.cpp \
   bech32.cpp \
   bloom.cpp \
@@ -542,6 +565,8 @@ libpexa_common_a_SOURCES = \
   script/sign.cpp \
   script/signingprovider.cpp \
   script/standard.cpp \
+  vbk/merkle.hpp \
+  vbk/merkle.cpp \
   versionbitsinfo.cpp \
   warnings.cpp \
   $(PEXA_CORE_H)
@@ -616,6 +641,7 @@ pexa_daemon_sources += pexad-res.rc
 endif
 
 pexa_bin_ldadd = \
+  $(VERIBLOCK_POP_CPP_LIBS) \
   $(LIBPEXA_WALLET) \
   $(LIBPEXA_COMMON) \
   $(LIBPEXA_UTIL) \
@@ -628,7 +654,7 @@ pexa_bin_ldadd = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-pexa_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS)
+pexa_bin_ldadd += $(BOOST_LIBS) $(BDB_LIBS) $(MINIUPNPC_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(VERIBLOCK_POP_CPP_LIBS)
 
 pexad_SOURCES = $(pexa_daemon_sources)
 pexad_CPPFLAGS = $(pexa_bin_cppflags)
@@ -656,7 +682,8 @@ pexa_cli_LDADD = \
   $(LIBPEXA_CLI) \
   $(LIBUNIVALUE) \
   $(LIBPEXA_UTIL) \
-  $(LIBPEXA_CRYPTO)
+  $(LIBPEXA_CRYPTO) \
+  $(VERIBLOCK_POP_CPP_LIBS)
 
 pexa_cli_LDADD += $(BOOST_LIBS) $(EVENT_LIBS)
 #
@@ -672,6 +699,7 @@ pexa_tx_SOURCES += pexa-tx-res.rc
 endif
 
 pexa_tx_LDADD = \
+  $(VERIBLOCK_POP_CPP_LIBS) \
   $(LIBUNIVALUE) \
   $(LIBPEXA_COMMON) \
   $(LIBPEXA_UTIL) \
@@ -679,7 +707,7 @@ pexa_tx_LDADD = \
   $(LIBPEXA_CRYPTO) \
   $(LIBSECP256K1)
 
-pexa_tx_LDADD += $(BOOST_LIBS)
+pexa_tx_LDADD += $(BOOST_LIBS) $(VERIBLOCK_POP_CPP_LIBS)
 #
 
 # pexa-wallet binary #
@@ -697,15 +725,15 @@ endif
 # pexaconsensus library #
 if BUILD_PEXA_LIBS
 include_HEADERS = script/pexaconsensus.h
-libpexaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libpexa_crypto_base_a_SOURCES) $(libpexa_consensus_a_SOURCES)
+libpexaconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libpexa_crypto_base_a_SOURCES) $(libpexa_consensus_a_SOURCES) $(VBK_H)
 
 if GLIBC_BACK_COMPAT
   libpexaconsensus_la_SOURCES += compat/glibc_compat.cpp
 endif
 
 libpexaconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libpexaconsensus_la_LIBADD = $(LIBSECP256K1)
-libpexaconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_PEXA_INTERNAL
+libpexaconsensus_la_LIBADD = $(LIBSECP256K1) $(LIBUNIVALUE)
+libpexaconsensus_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/obj -I$(srcdir)/secp256k1/include -I$(srcdir)/univalue/include -DBUILD_PEXA_INTERNAL
 libpexaconsensus_la_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
 endif

@@ -65,6 +65,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <vbk/log.hpp>
+#include <vbk/pop_service.hpp>
+
 #ifndef WIN32
 #include <attributes.h>
 #include <cerrno>
@@ -221,6 +224,7 @@ void Shutdown(NodeContext& node)
     if (g_load_block.joinable()) g_load_block.join();
     threadGroup.interrupt_all();
     threadGroup.join_all();
+    VeriBlock::StopPop();
 
     // After the threads that potentially access these pointers have been stopped,
     // destruct and reset all to nullptr.
@@ -385,6 +389,9 @@ void SetupServerArgs(NodeContext& node)
         // GUI args. These will be overwritten by SetupUIArgs for the GUI
         "-choosedatadir", "-lang=<lang>", "-min", "-resetguisettings", "-splash", "-uiplatform"};
 
+    gArgs.AddArg("-popbtcnetwork", "BTC network for pop mining: main/(test)/regtest", ArgsManager::ALLOW_STRING, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-popvbknetwork", "VBK network for pop mining: main/(test)/alpha/regtest", ArgsManager::ALLOW_STRING, OptionsCategory::OPTIONS);
+    gArgs.AddArg("-poplogverbosity", "Verbosity for alt-cpp lib: debug/info/(warn)/error/off", ArgsManager::ALLOW_STRING, OptionsCategory::OPTIONS);
     gArgs.AddArg("-version", "Print version and exit", ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
 #if HAVE_SYSTEM
     gArgs.AddArg("-alertnotify=<cmd>", "Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)", ArgsManager::ALLOW_ANY, OptionsCategory::OPTIONS);
@@ -1567,6 +1574,8 @@ bool AppInitMain(const util::Ref& context, NodeContext& node)
                 // fails if it's still open from the previous loop. Close it first:
                 pblocktree.reset();
                 pblocktree.reset(new CBlockTreeDB(nBlockTreeDBCache, false, fReset));
+                // VeriBlock
+                VeriBlock::SetPop(context, *pblocktree);
 
                 if (fReset) {
                     pblocktree->WriteReindexing(true);
@@ -1951,6 +1960,21 @@ bool AppInitMain(const util::Ref& context, NodeContext& node)
     node.scheduler->scheduleEvery([banman]{
         banman->DumpBanlist();
     }, DUMP_BANS_INTERVAL);
+
+    {
+        auto& pop = VeriBlock::GetPop();
+        auto* tip = ChainActive().Tip();
+        altintegration::ValidationState state;
+        LOCK(cs_main);
+        bool ret = VeriBlock::setState(tip->GetBlockHash(), state);
+        auto* alttip = pop.altTree->getBestChain().tip();
+        assert(ret && "bad state");
+        assert(tip->nHeight == alttip->getHeight());
+
+        LogPrintf("ALT tree best height = %d\n", pop.altTree->getBestChain().tip()->getHeight());
+        LogPrintf("VBK tree best height = %d\n", pop.altTree->vbk().getBestChain().tip()->getHeight());
+        LogPrintf("BTC tree best height = %d\n", pop.altTree->btc().getBestChain().tip()->getHeight());
+    }
 
     return true;
 }

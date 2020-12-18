@@ -12,6 +12,7 @@
 #include <validationinterface.h>
 #include <wallet/wallet.h>
 
+#if 0 //does not work
 static void WalletBalance(benchmark::State& state, const bool set_dirty, const bool add_watchonly, const bool add_mine)
 {
     TestingSetup test_setup{
@@ -62,3 +63,4 @@ BENCHMARK(WalletBalanceDirty, 2500);
 BENCHMARK(WalletBalanceClean, 8000);
 BENCHMARK(WalletBalanceMine, 16000);
 BENCHMARK(WalletBalanceWatch, 8000);
+#endif //0

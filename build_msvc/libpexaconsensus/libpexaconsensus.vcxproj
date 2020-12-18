@@ -7,7 +7,38 @@
   <PropertyGroup Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>F:\programming\berkeleydb\db-4.8.30.NC\build_windows;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\algo\aes_helper.c" />
+    <ClCompile Include="..\..\src\algo\blake.c" />
+    <ClCompile Include="..\..\src\algo\bmw.c" />
+    <ClCompile Include="..\..\src\algo\cubehash.c" />
+    <ClCompile Include="..\..\src\algo\echo.c" />
+    <ClCompile Include="..\..\src\algo\extra.c" />
+    <ClCompile Include="..\..\src\algo\fugue.c" />
+    <ClCompile Include="..\..\src\algo\gost_streebog.c" />
+    <ClCompile Include="..\..\src\algo\groestl.c" />
+    <ClCompile Include="..\..\src\algo\hamsi.c" />
+    <ClCompile Include="..\..\src\algo\haval.c" />
+    <ClCompile Include="..\..\src\algo\jh.c" />
+    <ClCompile Include="..\..\src\algo\keccak.c" />
+    <ClCompile Include="..\..\src\algo\luffa.c" />
+    <ClCompile Include="..\..\src\algo\lyra2.cpp" />
+    <ClCompile Include="..\..\src\algo\Lyra2RE.c" />
+    <ClCompile Include="..\..\src\algo\sha2.c" />
+    <ClCompile Include="..\..\src\algo\shabal.c" />
+    <ClCompile Include="..\..\src\algo\shavite.c" />
+    <ClCompile Include="..\..\src\algo\simd.c" />
+    <ClCompile Include="..\..\src\algo\skein.c" />
+    <ClCompile Include="..\..\src\algo\sph_sha2.c" />
+    <ClCompile Include="..\..\src\algo\sph_sha2big.c" />
+    <ClCompile Include="..\..\src\algo\sponge.cpp" />
+    <ClCompile Include="..\..\src\algo\tiger.cpp" />
+    <ClCompile Include="..\..\src\algo\whirlpool.c" />
     <ClCompile Include="..\..\src\arith_uint256.cpp" />
     <ClCompile Include="..\..\src\consensus\merkle.cpp" />
     <ClCompile Include="..\..\src\consensus\tx_check.cpp" />
@@ -30,6 +61,33 @@
     <ClCompile Include="..\..\src\script\script_error.cpp" />
     <ClCompile Include="..\..\src\uint256.cpp" />
     <ClCompile Include="..\..\src\util\strencodings.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\algo\extra.h" />
+    <ClInclude Include="..\..\src\algo\gost_streebog.h" />
+    <ClInclude Include="..\..\src\algo\hash_algos.h" />
+    <ClInclude Include="..\..\src\algo\lyra2.h" />
+    <ClInclude Include="..\..\src\algo\Lyra2RE.h" />
+    <ClInclude Include="..\..\src\algo\sph_blake.h" />
+    <ClInclude Include="..\..\src\algo\sph_bmw.h" />
+    <ClInclude Include="..\..\src\algo\sph_cubehash.h" />
+    <ClInclude Include="..\..\src\algo\sph_echo.h" />
+    <ClInclude Include="..\..\src\algo\sph_fugue.h" />
+    <ClInclude Include="..\..\src\algo\sph_groestl.h" />
+    <ClInclude Include="..\..\src\algo\sph_hamsi.h" />
+    <ClInclude Include="..\..\src\algo\sph_haval.h" />
+    <ClInclude Include="..\..\src\algo\sph_jh.h" />
+    <ClInclude Include="..\..\src\algo\sph_keccak.h" />
+    <ClInclude Include="..\..\src\algo\sph_luffa.h" />
+    <ClInclude Include="..\..\src\algo\sph_sha2.h" />
+    <ClInclude Include="..\..\src\algo\sph_shabal.h" />
+    <ClInclude Include="..\..\src\algo\sph_shavite.h" />
+    <ClInclude Include="..\..\src\algo\sph_simd.h" />
+    <ClInclude Include="..\..\src\algo\sph_skein.h" />
+    <ClInclude Include="..\..\src\algo\sph_tiger.h" />
+    <ClInclude Include="..\..\src\algo\sph_types.h" />
+    <ClInclude Include="..\..\src\algo\sph_whirlpool.h" />
+    <ClInclude Include="..\..\src\algo\sponge.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

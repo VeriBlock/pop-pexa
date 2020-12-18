@@ -20,6 +20,7 @@ import time
 
 from .authproxy import JSONRPCException
 from . import coverage
+from .pop import sync_pop_mempools, sync_pop_tips, assert_pop_state_equal
 from .test_node import TestNode
 from .mininode import NetworkThread
 from .util import (
@@ -98,7 +99,7 @@ class PexaTestFramework(metaclass=PexaTestMetaClass):
         self.setup_clean_chain = False
         self.nodes = []
         self.network_thread = None
-        self.rpc_timeout = 60  # Wait for up to 60 seconds for the RPC server to respond
+        self.rpc_timeout = 300  # Wait for up to 300 seconds for the RPC server to respond
         self.supports_cli = True
         self.bind_to_localhost_only = True
         self.set_test_params()
@@ -592,9 +593,17 @@ class PexaTestFramework(metaclass=PexaTestMetaClass):
             "".join("\n  {!r}".format(m) for m in pool),
         ))
 
-    def sync_all(self, nodes=None):
-        self.sync_blocks(nodes)
-        self.sync_mempools(nodes)
+    def sync_pop_mempools(self, nodes=None, **kwargs):
+        sync_pop_mempools(nodes or self.nodes)
+
+    def sync_pop_tips(self, nodes=None, **kwargs):
+        sync_pop_tips(nodes or self.nodes)
+
+    def sync_all(self, nodes=None, **kwargs):
+        self.sync_blocks(nodes, **kwargs)
+        self.sync_mempools(nodes, **kwargs)
+        self.sync_pop_mempools(nodes, **kwargs)
+        self.sync_pop_tips(nodes, **kwargs)
 
     # Private helper methods. These should not be accessed by the subclass test scripts.
 
@@ -711,6 +720,13 @@ class PexaTestFramework(metaclass=PexaTestMetaClass):
             import zmq  # noqa
         except ImportError:
             raise SkipTest("python3-zmq module not available.")
+
+    def skip_if_no_pypopminer(self):
+        """Attempt to import the pypopminer package and skip the test if the import fails."""
+        try:
+            import pypopminer  # noqa
+        except ImportError:
+            raise SkipTest("pypopminer module not available.")
 
     def skip_if_no_pexad_zmq(self):
         """Skip the running test if pexad has not been compiled with zmq support."""

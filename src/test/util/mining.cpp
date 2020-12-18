@@ -12,6 +12,7 @@
 #include <pow.h>
 #include <script/standard.h>
 #include <validation.h>
+#include <vbk/merkle.hpp>
 
 CTxIn generatetoaddress(const NodeContext& node, const std::string& address)
 {
@@ -31,7 +32,7 @@ CTxIn MineBlock(const NodeContext& node, const CScript& coinbase_scriptPubKey)
         assert(block->nNonce);
     }
 
-    bool processed{EnsureChainman(node).ProcessNewBlock(Params(), block, true, nullptr)};
+    bool processed = EnsureChainman(node).ProcessNewBlock(Params(), block, true, nullptr);
     assert(processed);
 
     return CTxIn{block->vtx[0]->GetHash(), 0};
@@ -40,14 +41,17 @@ CTxIn MineBlock(const NodeContext& node, const CScript& coinbase_scriptPubKey)
 std::shared_ptr<CBlock> PrepareBlock(const NodeContext& node, const CScript& coinbase_scriptPubKey)
 {
     assert(node.mempool);
+    const auto& params = Params();
     auto block = std::make_shared<CBlock>(
-        BlockAssembler{*node.mempool, Params()}
+        BlockAssembler{*node.mempool, params}
             .CreateNewBlock(coinbase_scriptPubKey)
             ->block);
 
     LOCK(cs_main);
     block->nTime = ::ChainActive().Tip()->GetMedianTimePast() + 1;
-    block->hashMerkleRoot = BlockMerkleRoot(*block);
+    CBlockIndex* tip = ::ChainActive().Tip();
+    assert(tip != nullptr);
+    block->hashMerkleRoot = VeriBlock::TopLevelMerkleRoot(tip, *block);
 
     return block;
 }

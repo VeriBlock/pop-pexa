@@ -174,6 +174,15 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "createwallet", 5, "descriptors"},
     { "getnodeaddresses", 0, "count"},
     { "stop", 0, "wait" },
+    // VBK
+    { "getbtcblockhash", 0, "height"},
+    { "getvbkblockhash", 0, "height"},
+    { "getrawatv", 1, "verbose"},
+    { "getrawvtb", 1, "verbose"},
+    { "getrawvbkblock", 1, "verbose"},
+    { "getpopdata", 0, "block_height"},
+    { "submitpop", 1, "vtbs"},
+    // VBK
 };
 // clang-format on
 

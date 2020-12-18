@@ -32,6 +32,11 @@ struct MinerTestingSetup : public RegTestingSetup {
 
 BOOST_FIXTURE_TEST_SUITE(validation_block_tests, MinerTestingSetup)
 
+// -t option causes empty cpps to fail, add dummy to prevent this
+BOOST_AUTO_TEST_CASE(dummy){}
+
+#if 0 // disable test
+
 struct TestSubscriber final : public CValidationInterface {
     uint256 m_expected_tip;
 
@@ -372,4 +377,5 @@ BOOST_AUTO_TEST_CASE(witness_commitment_index)
 
     BOOST_CHECK_EQUAL(GetWitnessCommitmentIndex(pblock), 2);
 }
+#endif //0
 BOOST_AUTO_TEST_SUITE_END()

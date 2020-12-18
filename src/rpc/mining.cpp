@@ -39,6 +39,9 @@
 #include <memory>
 #include <stdint.h>
 
+#include <vbk/merkle.hpp>
+#include <vbk/pop_service.hpp>
+
 /**
  * Return average network hashes per second based on the last 'lookup' blocks,
  * or from the last difficulty change if 'lookup' is nonpositive.
@@ -641,8 +644,9 @@ static UniValue getblocktemplate(const JSONRPCRequest& request)
     if(!node.connman)
         throw JSONRPCError(RPC_CLIENT_P2P_DISABLED, "Error: Peer-to-peer functionality missing or disabled");
 
-    if (node.connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0)
-        throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, PACKAGE_NAME " is not connected!");
+    // VERIBLOCK: when node does not have other peers, this disables certain RPCs. Disable this condition for now.
+    //if (node.connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0)
+    //    throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, PACKAGE_NAME " is not connected!");
 
     if (::ChainstateActive().IsInitialBlockDownload())
         throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, PACKAGE_NAME " is in initial sync and waiting for blocks...");
@@ -875,6 +879,49 @@ static UniValue getblocktemplate(const JSONRPCRequest& request)
     if (!pblocktemplate->vchCoinbaseCommitment.empty()) {
         result.pushKV("default_witness_commitment", HexStr(pblocktemplate->vchCoinbaseCommitment.begin(), pblocktemplate->vchCoinbaseCommitment.end()));
     }
+
+    //VeriBlock Data
+    UniValue keystoneArray(UniValue::VARR);
+    VeriBlock::KeystoneArray keystones = VeriBlock::getKeystoneHashesForTheNextBlock(pindexPrev);
+    for (const auto& keystone : keystones) {
+        keystoneArray.push_back(keystone.GetHex());
+    }
+    result.pushKV("pop_keystone_hashes", keystoneArray);
+
+    auto& popctx = VeriBlock::GetPop();
+    pblock->popData = popctx.mempool->getPop();
+    CTxOut popOutput = VeriBlock::addPopDataRootIntoCoinbaseCommitment(*pblock);
+    result.pushKV("pop_output", HexStr(popOutput.scriptPubKey.begin(), popOutput.scriptPubKey.end()));
+
+    // add pop data
+    UniValue popData(UniValue::VOBJ);
+    UniValue popDataAtvs(UniValue::VARR);
+    for(auto& atv : pblock->popData.atvs) {
+        popDataAtvs.push_back(atv.getId().toHex());
+    }
+    UniValue popDataVtbs(UniValue::VARR);
+    for(auto& vtb : pblock->popData.vtbs) {
+        popDataVtbs.push_back(vtb.getId().toHex());
+    }
+    UniValue popDataVbks(UniValue::VARR);
+    for(auto& vbk : pblock->popData.context) {
+        popDataVbks.push_back(vbk.getId().toHex());
+    }
+    popData.pushKV("atvs", popDataAtvs);
+    popData.pushKV("vtbs", popDataVtbs);
+    popData.pushKV("vbkblocks", popDataVbks);
+    result.pushKV("pop_data", popData);
+
+    // pop rewards
+    UniValue popRewardsArray(UniValue::VARR);
+    VeriBlock::PopRewards popRewards = VeriBlock::getPopRewards(*pindexPrev, Params());
+    for (const auto& itr : popRewards) {
+        UniValue popRewardValue(UniValue::VOBJ);
+        popRewardValue.pushKV("payout_info", HexStr(itr.first.begin(), itr.first.end()));
+        popRewardValue.pushKV("amount", itr.second);
+        popRewardsArray.push_back(popRewardValue);
+    }
+    result.pushKV("pop_rewards", popRewardsArray);
 
     return result;
 }

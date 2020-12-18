@@ -32,6 +32,9 @@
 #include <validation.h>
 #include <validationinterface.h>
 
+#include <vbk/bootstraps.hpp>
+#include <vbk/pop_service.hpp>
+
 #include <functional>
 
 const std::function<std::string(const char*)> G_TRANSLATION_FUN = nullptr;
@@ -90,6 +93,8 @@ BasicTestingSetup::BasicTestingSetup(const std::string& chainName, const std::ve
         assert(error.empty());
     }
     SelectParams(chainName);
+    // VeriBlock
+    VeriBlock::selectPopConfig("regtest", "regtest", true);
     SeedInsecureRand();
     if (G_TEST_LOG_FUN) LogInstance().PushBackCallback(G_TEST_LOG_FUN);
     InitLogging();
@@ -133,6 +138,8 @@ TestingSetup::TestingSetup(const std::string& chainName, const std::vector<const
     GetMainSignals().RegisterBackgroundSignalScheduler(*m_node.scheduler);
 
     pblocktree.reset(new CBlockTreeDB(1 << 20, true));
+    // VeriBlock
+    VeriBlock::SetPop(context, *pblocktree);
 
     m_node.chainman = &::g_chainman;
     m_node.chainman->InitializeChainstate();
@@ -174,6 +181,7 @@ TestingSetup::~TestingSetup()
     if (m_node.scheduler) m_node.scheduler->stop();
     threadGroup.interrupt_all();
     threadGroup.join_all();
+    VeriBlock::StopPop();
     GetMainSignals().FlushBackgroundCallbacks();
     GetMainSignals().UnregisterBackgroundSignalScheduler();
     m_node.connman.reset();
@@ -191,7 +199,7 @@ TestChain100Setup::TestChain100Setup()
 {
     // CreateAndProcessBlock() does not support building SegWit blocks, so don't activate in these tests.
     // TODO: fix the code to support SegWit blocks.
-    gArgs.ForceSetArg("-segwitheight", "432");
+    gArgs.ForceSetArg("-segwitheight", "1000");
     // Need to recreate chainparams
     SelectParams(CBaseChainParams::REGTEST);
 
@@ -204,12 +212,26 @@ TestChain100Setup::TestChain100Setup()
         CBlock b = CreateAndProcessBlock(noTxns, scriptPubKey);
         m_coinbase_txns.push_back(b.vtx[0]);
     }
+
+    assert(ChainActive().Tip() != nullptr);
+    assert(ChainActive().Tip()->nHeight == 100);
+    assert(BlockIndex().size() == 101);
+
+    auto& tree = *VeriBlock::GetPop().altTree;
+    assert(tree.getBestChain().tip()->getHeight() == ChainActive().Tip()->nHeight);
 }
 
 // Create a new block with just given transactions, coinbase paying to
 // scriptPubKey, and try to add it to the current chain.
-CBlock TestChain100Setup::CreateAndProcessBlock(const std::vector<CMutableTransaction>& txns, const CScript& scriptPubKey)
+CBlock TestChain100Setup::CreateAndProcessBlock(const std::vector<CMutableTransaction>& txns, uint256 prevBlock, const CScript& scriptPubKey, bool* isBlockValid)
 {
+    CBlockIndex* pPrev = nullptr;
+    {
+        LOCK(cs_main);
+        pPrev = LookupBlockIndex(prevBlock);
+        assert(pPrev && "CreateAndProcessBlock called with unknown prev block");
+    }
+
     const CChainParams& chainparams = Params();
     std::unique_ptr<CBlockTemplate> pblocktemplate = BlockAssembler(*m_node.mempool, chainparams).CreateNewBlock(scriptPubKey);
     CBlock& block = pblocktemplate->block;
@@ -222,16 +244,27 @@ CBlock TestChain100Setup::CreateAndProcessBlock(const std::vector<CMutableTransa
     {
         LOCK(cs_main);
         unsigned int extraNonce = 0;
-        IncrementExtraNonce(&block, ::ChainActive().Tip(), extraNonce);
+        IncrementExtraNonce(&block, pPrev, extraNonce);
     }
+    block.nTime = pPrev->nTime + (rand() % 100 + 1);
 
     while (!CheckProofOfWork(block.GetHash(), block.nBits, chainparams.GetConsensus())) ++block.nNonce;
 
     std::shared_ptr<const CBlock> shared_pblock = std::make_shared<const CBlock>(block);
-    EnsureChainman(m_node).ProcessNewBlock(chainparams, shared_pblock, true, nullptr);
+    bool isValid = EnsureChainman(m_node).ProcessNewBlock(chainparams, shared_pblock, true, nullptr);
+    if(isBlockValid != nullptr) {
+        *isBlockValid = isValid;
+    }
 
     CBlock result = block;
     return result;
+}
+
+// Create a new block with just given transactions, coinbase paying to
+// scriptPubKey, and try to add it to the current chain.
+CBlock TestChain100Setup::CreateAndProcessBlock(const std::vector<CMutableTransaction>& txns, const CScript& scriptPubKey, bool* isBlockValid)
+{
+    return CreateAndProcessBlock(txns, ChainActive().Tip()->GetBlockHash(), scriptPubKey, isBlockValid);
 }
 
 TestChain100Setup::~TestChain100Setup()

@@ -10,6 +10,7 @@
 #include <consensus/params.h>
 #include <primitives/block.h>
 #include <protocol.h>
+#include <util/system.h>
 
 #include <memory>
 #include <vector>
@@ -89,6 +90,15 @@ public:
     const CCheckpointData& Checkpoints() const { return checkpointData; }
     const ChainTxData& TxData() const { return chainTxData; }
 
+    // VeriBlock start
+    bool isPopActive(int height) const {
+            return height >= consensus.VeriBlockPopSecurityHeight;
+    }
+
+    uint32_t PopRewardPercentage() const {return mPopRewardPercentage;}
+    int32_t PopRewardCoefficient() const {return mPopRewardCoefficient;}
+    // VeriBlock end
+
     /** PEXA START **/
 
     unsigned int DGWActivationBlock() const { return nDGWActivationBlock; }
@@ -127,6 +137,41 @@ protected:
     std::string versionInfoUrl;
 
     /** PEXA End **/
+
+    // VeriBlock:
+    // cut this % from coinbase subsidy
+    uint32_t mPopRewardPercentage = 40; // %
+    // every pop reward will be multiplied by this coefficient
+    int32_t mPopRewardCoefficient = 20;
+};
+
+class CMainParams : public CChainParams
+{
+public:
+    CMainParams();
+};
+
+/**
+ * Testnet (v3)
+ */
+class CTestNetParams : public CChainParams
+{
+public:
+    CTestNetParams();
+};
+
+/**
+ * Regression test
+ */
+class CRegTestParams : public CChainParams
+{
+public:
+    explicit CRegTestParams(const ArgsManager& args);
+    /**
+     * Allows modifying the Version Bits regtest parameters.
+     */
+    void UpdateVersionBitsParameters(Consensus::DeploymentPos d, int64_t nStartTime, int64_t nTimeout);
+    void UpdateActivationParametersFromArgs(const ArgsManager& args);
 };
 
 /**

@@ -30,7 +30,7 @@
  * @author   Thomas Pornin <thomas.pornin@cryptolog.com>
  */
  
-#ifndef MAC_OSX
+#if !(defined(MAC_OSX) || defined(WIN32))
 #pragma GCC diagnostic ignored "-fpermissive"
 #endif
 

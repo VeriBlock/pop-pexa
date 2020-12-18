@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\src\base58.cpp" />
+    <ClCompile Include="..\..\src\bech32.cpp" />
+    <ClCompile Include="..\..\src\bloom.cpp" />
+    <ClCompile Include="..\..\src\chainparams.cpp" />
+    <ClCompile Include="..\..\src\coins.cpp" />
+    <ClCompile Include="..\..\src\compressor.cpp" />
+    <ClCompile Include="..\..\src\core_read.cpp" />
+    <ClCompile Include="..\..\src\core_write.cpp" />
+    <ClCompile Include="..\..\src\key.cpp" />
+    <ClCompile Include="..\..\src\key_io.cpp" />
+    <ClCompile Include="..\..\src\merkleblock.cpp" />
+    <ClCompile Include="..\..\src\netaddress.cpp" />
+    <ClCompile Include="..\..\src\netbase.cpp" />
+    <ClCompile Include="..\..\src\net_permissions.cpp" />
+    <ClCompile Include="..\..\src\outputtype.cpp" />
+    <ClCompile Include="..\..\src\policy\feerate.cpp" />
+    <ClCompile Include="..\..\src\policy\policy.cpp" />
+    <ClCompile Include="..\..\src\protocol.cpp" />
+    <ClCompile Include="..\..\src\psbt.cpp" />
+    <ClCompile Include="..\..\src\rpc\rawtransaction_util.cpp" />
+    <ClCompile Include="..\..\src\rpc\util.cpp" />
+    <ClCompile Include="..\..\src\scheduler.cpp" />
+    <ClCompile Include="..\..\src\script\descriptor.cpp" />
+    <ClCompile Include="..\..\src\script\sign.cpp" />
+    <ClCompile Include="..\..\src\script\signingprovider.cpp" />
+    <ClCompile Include="..\..\src\script\standard.cpp" />
+    <ClCompile Include="..\..\src\versionbitsinfo.cpp" />
+    <ClCompile Include="..\..\src\warnings.cpp" />
+    <ClCompile Include="..\..\src\algo\aes_helper.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\blake.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\bmw.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\cubehash.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\echo.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\extra.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\fugue.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\gost_streebog.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\groestl.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\hamsi.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\hamsi_helper.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\haval.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\jh.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\keccak.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\luffa.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\lyra2.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\Lyra2RE.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\sha2.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\shabal.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\shavite.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\simd.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\skein.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\sph_sha2.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\sph_sha2big.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\sponge.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\tiger.cpp">
+      <Filter>algo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\algo\whirlpool.c">
+      <Filter>algo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="algo">
+      <UniqueIdentifier>{83d7a032-ed2d-45a4-9828-5f1ff7be268d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\algo\extra.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\gost_streebog.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\hash_algos.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\lyra2.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\Lyra2RE.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_blake.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_bmw.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_cubehash.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_echo.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_fugue.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_groestl.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_hamsi.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_haval.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_jh.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_keccak.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_luffa.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_sha2.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_shabal.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_shavite.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_simd.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_skein.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_tiger.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_types.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sph_whirlpool.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\algo\sponge.h">
+      <Filter>algo</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

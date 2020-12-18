@@ -10,6 +10,10 @@
 #include <serialize.h>
 #include <uint256.h>
 
+#include <vbk/vbk.hpp>
+
+#include <veriblock/entities/popdata.hpp>
+
 class BlockNetwork
 {
 public:
@@ -82,6 +86,8 @@ class CBlock : public CBlockHeader
 public:
     // network and disk
     std::vector<CTransactionRef> vtx;
+    // VeriBlock
+    altintegration::PopData popData;
 
     // memory only
     mutable bool fChecked;
@@ -101,12 +107,18 @@ public:
     {
         READWRITEAS(CBlockHeader, obj);
         READWRITE(obj.vtx);
+        if(obj.nVersion & VeriBlock::POP_BLOCK_VERSION_BIT) {
+            READWRITE(obj.popData);
+        }
     }
 
     void SetNull()
     {
         CBlockHeader::SetNull();
         vtx.clear();
+        popData.context.clear();
+        popData.vtbs.clear();
+        popData.atvs.clear();
         fChecked = false;
     }
 

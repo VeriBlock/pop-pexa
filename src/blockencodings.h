@@ -53,6 +53,8 @@ public:
     // A BlockTransactions message
     uint256 blockhash;
     std::vector<CTransactionRef> txn;
+    // VeriBlock
+    altintegration::PopData popData;
 
     BlockTransactions() {}
     explicit BlockTransactions(const BlockTransactionsRequest& req) :
@@ -61,6 +63,7 @@ public:
     SERIALIZE_METHODS(BlockTransactions, obj)
     {
         READWRITE(obj.blockhash, Using<VectorFormatter<TransactionCompression>>(obj.txn));
+        READWRITE(obj.popData);
     }
 };
 
@@ -100,6 +103,8 @@ public:
     static constexpr int SHORTTXIDS_LENGTH = 6;
 
     CBlockHeader header;
+    // VeriBlock
+    altintegration::PopData popData;
 
     // Dummy for deserialization
     CBlockHeaderAndShortTxIDs() {}
@@ -119,6 +124,9 @@ public:
             }
             obj.FillShortTxIDSelector();
         }
+        if(obj.header.nVersion & VeriBlock::POP_BLOCK_VERSION_BIT) {
+            READWRITE(obj.popData);
+        }
     }
 };
 
@@ -129,12 +137,14 @@ protected:
     const CTxMemPool* pool;
 public:
     CBlockHeader header;
+    altintegration::PopData popData;
     explicit PartiallyDownloadedBlock(CTxMemPool* poolIn) : pool(poolIn) {}
 
     // extra_txn is a list of extra transactions to look at, in <witness hash, reference> form
     ReadStatus InitData(const CBlockHeaderAndShortTxIDs& cmpctblock, const std::vector<std::pair<uint256, CTransactionRef>>& extra_txn);
     bool IsTxAvailable(size_t index) const;
     ReadStatus FillBlock(CBlock& block, const std::vector<CTransactionRef>& vtx_missing);
+    ReadStatus FillBlock(CBlock& block, const std::vector<CTransactionRef>& vtx_missing, const altintegration::PopData& popData);
 };
 
 #endif // PEXA_BLOCKENCODINGS_H

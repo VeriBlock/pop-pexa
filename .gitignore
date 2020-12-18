@@ -1,5 +1,7 @@
 *.tar.gz
 
+.vscode
+
 *.exe
 *.pdb
 src/pexa
@@ -147,3 +149,7 @@ dist/
 *.background.tiff
 
 .appdata
+compile_commands.json
+.idea
+*.o.tmp
+.cache

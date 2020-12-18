@@ -9,7 +9,7 @@
  * network protocol versioning
  */
 
-static const int PROTOCOL_VERSION = 70030;
+static const int PROTOCOL_VERSION = 80000;
 
 //! initial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
@@ -44,5 +44,8 @@ static const int INVALID_CB_NO_BAN_VERSION = 70015;
 
 //! getassetdata reutrn asstnotfound, and assetdata doesn't have blockhash in the data
 static const int X16RV2_VERSION = 70025;
+
+//! VeriBlock: ping p2p msg contains 'best chain'
+static const int PING_BESTCHAIN_VERSION = 80000;
 
 #endif // PEXA_VERSION_H

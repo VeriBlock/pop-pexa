@@ -18,6 +18,10 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 
+#define VBK_GAMMA  0xb1
+#define VBK_1  0xc0
+#define VBK_VERSION (VBK_1 + 0x1)
+
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -60,9 +64,8 @@ static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits
 /**
  * Main network
  */
-class CMainParams : public CChainParams {
-public:
-    CMainParams() {
+CMainParams::CMainParams()
+{
         strNetworkID = CBaseChainParams::MAIN;
         consensus.nSubsidyHalvingInterval = 1712290;
         consensus.BIP16Exception = uint256S("0x000000b3f4b347d4a1fb2f2a8f42d5fc33094a49858608e511c0d45f51628b85");
@@ -84,6 +87,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
 
+        // VeriBlock
+        // TODO: set an VeriBlock pop security fork height
+        consensus.VeriBlockPopSecurityHeight = -1;
+
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
 
@@ -95,10 +102,10 @@ public:
          * The characters are rarely used upper ASCII, not valid as UTF-8, and produce
          * a large 32-bit integer with any alignment.
          */
-        pchMessageStart[0] = 0x50; // P
-        pchMessageStart[1] = 0x45; // E
-        pchMessageStart[2] = 0x58; // X
-        pchMessageStart[3] = 0x41; // A
+        pchMessageStart[0] = 1;
+        pchMessageStart[1] = 1;
+        pchMessageStart[2] = 1;
+        pchMessageStart[3] = 1 + VBK_VERSION;
         nDefaultPort = 8235;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 320;
@@ -174,15 +181,13 @@ public:
         #endif // WIN 32
 
         /** PEXA End **/
-    }
-};
+}
 
 /**
  * Testnet (v3)
  */
-class CTestNetParams : public CChainParams {
-public:
-    CTestNetParams() {
+CTestNetParams::CTestNetParams()
+{
         strNetworkID = CBaseChainParams::TESTNET;
         consensus.nSubsidyHalvingInterval = 210000;
         consensus.BIP16Exception = uint256S("0x000000e5c51eb049ef52013df58667cdcdf9fb6a34bc2fdd70a0ea576c207f2a");
@@ -204,16 +209,19 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 1199145601; // January 1, 2008
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = 1230767999; // December 31, 2008
 
+        // VeriBlock
+        consensus.VeriBlockPopSecurityHeight = 10;
+
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x00");
 
-        pchMessageStart[0] = 0x50; // P
-        pchMessageStart[1] = 0x43; // C
-        pchMessageStart[2] = 0x54; // T
-        pchMessageStart[3] = 0x4e; // N
+        pchMessageStart[0] = 2;
+        pchMessageStart[1] = 2;
+        pchMessageStart[2] = 2;
+        pchMessageStart[3] = 2 + VBK_VERSION;
         nDefaultPort = 18770;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 40;
@@ -228,7 +236,7 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.emplace_back("seed-testnet.pexa.dev", false);
+        // vSeeds.emplace_back("seed-testnet.pexa.dev", false);
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -270,15 +278,13 @@ public:
         #endif // WIN 32
 
         /** PEXA End **/
-    }
-};
+}
 
 /**
  * Regression test
  */
-class CRegTestParams : public CChainParams {
-public:
-    explicit CRegTestParams(const ArgsManager& args) {
+CRegTestParams::CRegTestParams(const ArgsManager& args)
+{
         strNetworkID =  CBaseChainParams::REGTEST;
         consensus.nSubsidyHalvingInterval = 150;
         consensus.BIP16Exception = uint256();
@@ -300,16 +306,20 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nStartTime = 0;
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
+        // VeriBlock
+        // TODO: set an VeriBlock pop security fork height
+        consensus.VeriBlockPopSecurityHeight = 200;
+
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x00");
 
         // By default assume that the signatures in ancestors of this block are valid.
         consensus.defaultAssumeValid = uint256S("0x00");
 
-        pchMessageStart[0] = 0x50; // P
-        pchMessageStart[1] = 0x43; // C
-        pchMessageStart[2] = 0x52; // R
-        pchMessageStart[3] = 0x44; // T
+        pchMessageStart[0] = 3;
+        pchMessageStart[1] = 3;
+        pchMessageStart[2] = 3;
+        pchMessageStart[3] = 3 + VBK_VERSION;
         nDefaultPort = 18444;
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 0;
@@ -317,7 +327,7 @@ public:
 
         UpdateActivationParametersFromArgs(args);
 
-            genesis = CreateGenesisBlock(1582483185, 2, 0x207fffff, 2, 5000 * COIN);
+        genesis = CreateGenesisBlock(1582483185, 2, 0x207fffff, 2, 5000 * COIN);
         consensus.hashGenesisBlock = genesis.GetX16RHash();
         assert(consensus.hashGenesisBlock == uint256S("0x500d7bfd140e3cb24681d334a000d898057250513dc975894009146c61293b3b"));
         assert(genesis.hashMerkleRoot == uint256S("0x9933ca70914e63d4c81a9d8f2d16263f51b22b3aa2c50f763228d160c06ae84f"));
@@ -351,18 +361,16 @@ public:
 
         // DGW Activation
         nDGWActivationBlock = 200;
-    }
+}
 
-    /**
-     * Allows modifying the Version Bits regtest parameters.
-     */
-    void UpdateVersionBitsParameters(Consensus::DeploymentPos d, int64_t nStartTime, int64_t nTimeout)
-    {
-        consensus.vDeployments[d].nStartTime = nStartTime;
-        consensus.vDeployments[d].nTimeout = nTimeout;
-    }
-    void UpdateActivationParametersFromArgs(const ArgsManager& args);
-};
+/**
+ * Allows modifying the Version Bits regtest parameters.
+ */
+void CRegTestParams::UpdateVersionBitsParameters(Consensus::DeploymentPos d, int64_t nStartTime, int64_t nTimeout)
+{
+    consensus.vDeployments[d].nStartTime = nStartTime;
+    consensus.vDeployments[d].nTimeout = nTimeout;
+}
 
 void CRegTestParams::UpdateActivationParametersFromArgs(const ArgsManager& args)
 {
