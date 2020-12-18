@@ -9,9 +9,9 @@
 
 #include <vbk/adaptors/block_batch_adaptor.hpp>
 #include <vbk/adaptors/payloads_provider.hpp>
+#include <vbk/p2p_sync.hpp>
 #include <vbk/pop_common.hpp>
 #include <vbk/pop_service.hpp>
-#include <vbk/p2p_sync.hpp>
 
 #include <veriblock/storage/util.hpp>
 
@@ -74,19 +74,19 @@ bool LoadTree(CDBIterator& iter, char blocktype, std::pair<char, std::string> ti
     iter.Seek(tiptype);
     if (!iter.Valid()) {
         // no valid tip is stored = no need to load anything
-        return error("%s: failed to load %s tip", block_t::name());
+        return state.Invalid("bad-iter", strprintf("%s: failed to load %s tip", block_t::name()));
     }
     if (!iter.GetKey(ckey)) {
-        return error("%s: failed to find key %c:%s in %s", __func__,
-                     tiptype.first, tiptype.second, block_t::name());
+        return state.Invalid("bad-key", strprintf("%s: failed to find key %c:%s in %s", __func__,
+                                                  tiptype.first, tiptype.second, block_t::name()));
     }
     if (ckey != tiptype) {
-        return error("%s: bad key for tip %c:%s in %s", __func__, tiptype.first,
-                     tiptype.second, block_t::name());
+        return state.Invalid("bad-key-type", strprintf("%s: bad key for tip %c:%s in %s", __func__, tiptype.first,
+                                                       tiptype.second, block_t::name()));
     }
     if (!iter.GetValue(tiphash)) {
-        return error("%s: failed to read tip value in %s", __func__,
-                     block_t::name());
+        return state.Invalid("bad-value", strprintf("%s: failed to read tip value in %s", __func__,
+                                                    block_t::name()));
     }
 
     std::vector<index_t> blocks;
@@ -105,8 +105,8 @@ bool LoadTree(CDBIterator& iter, char blocktype, std::pair<char, std::string> ti
                 blocks.push_back(diskindex);
                 iter.Next();
             } else {
-                return error("%s: failed to read %s block", __func__,
-                             block_t::name());
+                return state.Invalid("bad-block", strprintf("%s: failed to read %s block", __func__,
+                                                            block_t::name()));
             }
         } else {
             break;
@@ -119,7 +119,7 @@ bool LoadTree(CDBIterator& iter, char blocktype, std::pair<char, std::string> ti
                   return a.getHeight() < b.getHeight();
               });
     if (!altintegration::LoadTree(out, blocks, tiphash, state)) {
-        return error("%s: failed to load tree %s", __func__, block_t::name());
+        return state.Invalid("bad-tree");
     }
 
     auto* tip = out.getBestChain().tip();
@@ -336,7 +336,7 @@ bool checkCoinbaseTxWithPopRewards(const CTransaction& tx, const CAmount& nFees,
 
     if (tx.vout.size() < rewards.size()) {
         return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-pop-vouts-size",
-            strprintf("checkCoinbaseTxWithPopRewards(): coinbase has incorrect size of pop vouts (actual vouts size=%d vs expected vouts=%d)", tx.vout.size(), rewards.size()));
+                             strprintf("checkCoinbaseTxWithPopRewards(): coinbase has incorrect size of pop vouts (actual vouts size=%d vs expected vouts=%d)", tx.vout.size(), rewards.size()));
     }
 
     std::map<CScript, CAmount> cbpayouts;
@@ -359,10 +359,10 @@ bool checkCoinbaseTxWithPopRewards(const CTransaction& tx, const CAmount& nFees,
         if (p == cbpayouts.end()) {
             // we expected payout for that address
             return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-pop-missing-payout",
-                strprintf("[tx: %s] missing payout for scriptPubKey: '%s' with amount: '%d'",
-                    tx.GetHash().ToString(),
-                    HexStr(script),
-                    expectedAmount));
+                                 strprintf("[tx: %s] missing payout for scriptPubKey: '%s' with amount: '%d'",
+                                           tx.GetHash().ToString(),
+                                           HexStr(script),
+                                           expectedAmount));
         }
 
         // payout found
@@ -370,10 +370,10 @@ bool checkCoinbaseTxWithPopRewards(const CTransaction& tx, const CAmount& nFees,
         // does it have correct amount?
         if (actualAmount != expectedAmount) {
             return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS, "bad-pop-wrong-payout",
-                strprintf("[tx: %s] wrong payout for scriptPubKey: '%s'. Expected %d, got %d.",
-                    tx.GetHash().ToString(),
-                    HexStr(script),
-                    expectedAmount, actualAmount));
+                                 strprintf("[tx: %s] wrong payout for scriptPubKey: '%s'. Expected %d, got %d.",
+                                           tx.GetHash().ToString(),
+                                           HexStr(script),
+                                           expectedAmount, actualAmount));
         }
 
         nTotalPopReward += expectedAmount;
@@ -384,8 +384,8 @@ bool checkCoinbaseTxWithPopRewards(const CTransaction& tx, const CAmount& nFees,
 
     if (tx.GetValueOut() > nTotalPopReward + PoWBlockReward + nFees) {
         return state.Invalid(BlockValidationResult::BLOCK_CONSENSUS,
-            "bad-cb-pop-amount",
-            strprintf("ConnectBlock(): coinbase pays too much (actual=%d vs limit=%d)", tx.GetValueOut(), PoWBlockReward + nTotalPopReward));
+                             "bad-cb-pop-amount",
+                             strprintf("ConnectBlock(): coinbase pays too much (actual=%d vs limit=%d)", tx.GetValueOut(), PoWBlockReward + nTotalPopReward));
     }
 
     return true;
@@ -420,7 +420,7 @@ CBlockIndex* compareTipToBlock(CBlockIndex* candidate)
         return tip;
     }
 
-   int result = 0;
+    int result = 0;
     if (Params().isPopActive(tip->nHeight)) {
         result = compareForks(*tip, *candidate);
     } else {

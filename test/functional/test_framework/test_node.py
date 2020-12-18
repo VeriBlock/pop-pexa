@@ -94,6 +94,8 @@ class TestNode():
         # spam debug.log.
         self.args = [
             self.binary,
+            "-popvbknetwork=regtest",
+            "-popbtcnetwork=regtest",
             "-datadir=" + self.datadir,
             "-logtimemicros",
             "-debug",
