@@ -151,3 +151,5 @@ dist/
 .appdata
 compile_commands.json
 .idea
+*.o.tmp
+.cache
