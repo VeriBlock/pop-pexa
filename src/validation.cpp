@@ -4358,8 +4358,7 @@ bool BlockManager::LoadBlockIndex(
             pindexBestInvalid = pindex;
         if (pindex->pprev)
             pindex->BuildSkip();
-        if (pindex->IsValid(BLOCK_VALID_TREE) && (pindexBestHeader == nullptr || CBlockIndexWorkComparator()(pindexBestHeader, pindex)))
-            pindexBestHeader = pindex;
+        // do not set best header here
     }
 
     // VeriBlock
