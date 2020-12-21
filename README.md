@@ -1,6 +1,6 @@
 Pexa Core integration/staging tree
 =====================================
-![CI](https://github.com/pexa/core/workflows/CI/badge.svg)
+![CI](https://github.com/VeriBlock/pop-pexa/workflows/CI/badge.svg)
 
 Official Discord: https://discord.gg/TZRJ3xp
 

@@ -85,6 +85,17 @@ jobs:
         run: |
           chmod +x ./release/pexa*
           mv ./release Pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
+          tar czvf Pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-linux-x64.tar.gz Pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}/
+      - name: upload artifacts
+        if: success()
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.ARTIFACT_HOST }}
+          username: ${{ secrets.ARTIFACT_USER }}
+          key: ${{ secrets.ARTIFACT_KEY }}
+          passphrase: ${{ secrets.ARTIFACT_KEY_PASSPHRASE }}
+          source: Pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-linux-x64.tar.gz
+          target: ${{ secrets.ARTIFACT_PATH }}
       - name: upload artifacts
         if: success()
         uses: actions/upload-artifact@v2
@@ -155,6 +166,17 @@ jobs:
         if: success()
         run: |
           mv ./release Pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
+          zip -r9 Pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-win64-qt.zip Pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}
+      - name: upload artifacts
+        if: success()
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.ARTIFACT_HOST }}
+          username: ${{ secrets.ARTIFACT_USER }}
+          key: ${{ secrets.ARTIFACT_KEY }}
+          passphrase: ${{ secrets.ARTIFACT_KEY_PASSPHRASE }}
+          source: Pexa-${{ steps.extract_branch.outputs.last_tag }}-${{ steps.extract_branch.outputs.branch }}.${{ steps.extract_branch.outputs.commits_ahead }}-${{ steps.extract_branch.outputs.git_hash }}-win64-qt.zip
+          target: ${{ secrets.ARTIFACT_PATH }}
       - name: upload artifacts
         if: success()
         uses: actions/upload-artifact@v2
