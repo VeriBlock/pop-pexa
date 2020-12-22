@@ -96,6 +96,7 @@ class TestNode():
             self.binary,
             "-popvbknetwork=regtest",
             "-popbtcnetwork=regtest",
+            "-poplogverbosity=info",
             "-datadir=" + self.datadir,
             "-logtimemicros",
             "-debug",

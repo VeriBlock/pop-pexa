@@ -84,7 +84,7 @@ class PopE2E(PexaTestFramework):
         containingblock = self.nodes[0].generate(nblocks=1)
         containingblock = self.nodes[0].getblock(containingblock[0])
 
-        assert len(containingblock['pop']['data']['vtbs']) == vtbs_amount
+        assert len(containingblock['pop']['data']['vtbs']) == vtbs_amount, "expected {} VTBs, got {}".format(vtbs_amount, containingblock)
         assert len(containingblock['pop']['data']['vbkblocks']) == vbk_blocks_amount + vtbs_amount + 1
 
         assert lastblock >= 6
