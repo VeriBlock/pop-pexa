@@ -299,7 +299,7 @@ PopRewards getPopRewards(const CBlockIndex& pindexPrev, const CChainParams& para
     (void)ret;
     assert(ret);
 
-    auto rewards = pop.altTree->getPopPayout(blockHash.asVector());
+    auto rewards = pop.popRewardsCalculator->getPopPayout(blockHash.asVector());
     int halvings = (pindexPrev.nHeight + 1) / params.GetConsensus().nSubsidyHalvingInterval;
     PopRewards btcRewards{};
     //erase rewards, that pay 0 satoshis and halve rewards

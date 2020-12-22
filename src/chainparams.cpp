@@ -18,8 +18,7 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 
-#define VBK_GAMMA  0xb1
-#define VBK_1  0xc0
+#define VBK_1  0xd0
 #define VBK_VERSION (VBK_1 + 0x1)
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
