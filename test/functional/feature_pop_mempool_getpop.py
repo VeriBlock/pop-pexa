@@ -74,7 +74,7 @@ class PopPayouts(PexaTestFramework):
         self.apm = MockMiner()
 
         self._test_case_vbk(113)
-        self._test_case_vbk(236)
+        self._test_case_vbk(152)
         self._test_case_vbk(75)
 
         self._test_case_atv(42)
